@@ -1,1 +1,94 @@
-/* You can add global styles to this file, and also import other style files */
+/* Définition de la charte graphique de l'application */
+
+:root {
+  /* ===== CHARTE GRAPHIQUE ==== */
+    /*Couleurs principales */
+    --bleu-refuge: #1B5FA8;
+    --orange-refuge: #F5A623;
+    --blanc: #FFFFFF;
+    --gris-clair: #F0F0F0;
+    --noir-doux: #1A1A1A;
+    --gris-text-small: #555555;
+
+    /* États */
+    --vert-succes: #2ECC71;
+    --rouge-alerte: #E74C3C;
+    --orange-warning: #F5A623;
+
+    /* Badge Disponible */
+    --badge-disponible-bg: #D5F5E3;
+    --badge-disponible-text: #27AE60;
+
+    /* Badge Indisponible */
+    --badge-indisponible-bg: #FADBD8;
+    --badge-indisponible-text: #E74C3C;
+
+    /* Badge En retard */
+    --badge-retard-bg: #FDEBD0;
+    --badge-retard-text: #E67E22;
+
+    /* Badge En cours */
+    --badge-encours-bg: #D6EAF8;
+    --badge-encours-text: #1B5FA8;
+
+  /* ===== TYPOGRAPHIE ===== */
+    /* Desktop */
+    --h1-size: 32px;
+    --h2-size: 24px;
+    --h3-size: 18px;
+    --body-size: 16px;
+    --bouton-size: 16px;
+    --text-small-size: 14px;
+    --liens-size: 16px;
+
+    /* Mobile */
+    --h1-mobile-size: 24px;
+    --h2-mobile-size: 20px;
+    --h3-mobile-size: 16px;
+    --body-mobile-size: 14px;
+    --bouton-mobile-size: 14px;
+    --text-small-mobile-size: 12px;
+    --liens-mobile-size: 14px;
+
+    /* Poids */
+    --font-bold: 700;
+    --font-semibold: 600;
+    --font-regular: 400;
+
+    /* Famille */
+    --font-family: 'Poppins', sans-serif;
+}
+
+/* ===== CLASSES TYPO ===== */
+
+  h1 { font-size: var(--h1-size); font-weight: var(--font-bold); }
+  h2 { font-size: var(--h2-size); font-weight: var(--font-semibold); }
+  h3 { font-size: var(--h3-size); font-weight: var(--font-semibold); }
+  p  { font-size: var(--body-size); font-weight: var(--font-regular); }
+
+  .btn { font-size: var(--bouton-size); font-weight: var(--font-bold); }
+  .text-small { font-size: var(--text-small-size); font-weight: var(--font-regular); }
+  a { font-size: var(--liens-size); }
+
+  /* ===== RESPONSIVE MOBILE ===== */
+
+  @media (max-width: 768px) {
+      h1 { font-size: var(--h1-mobile-size); }
+      h2 { font-size: var(--h2-mobile-size); }
+      h3 { font-size: var(--h3-mobile-size); }
+      p  { font-size: var(--body-mobile-size); }
+
+      .btn { font-size: var(--bouton-mobile-size); }
+      .text-small { font-size: var(--text-small-mobile-size); }
+      a { font-size: var(--liens-mobile-size); }
+
+}
+
+/* police de toute l'application */
+* {
+  font-family: var(--font-family);
+}
+
+body {
+  background-color: var(--gris-clair);
+}
