@@ -1,0 +1,67 @@
+/* ── HERO ── */
+
+.hero-scene h1 {
+    color: var(--bleu-refuge);
+}
+
+.hero-scene .subtitle {
+    color: var(--orange-refuge);
+}
+
+.hero-scene p {
+    color: var(--noir-doux);
+}
+
+.hero-scene .btn-catalogue {
+    background-color: var(--bleu-refuge);
+    color: var(--blanc);
+    border: none;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.hero-scene .btn-catalogue:hover {
+    background-color: var(--blanc);
+    color: var(--bleu-refuge);
+    border: 1px solid var(--bleu-refuge);
+}
+
+/* ── MOSAIQUE IMAGES ── */
+.couverture-miniature .img-fluid {
+    border-radius: 10px;
+    object-fit: cover;
+    width: 100%;
+    height: 210px;
+    box-shadow: 0 4px 12px var(--noir-doux);
+}
+
+/* ── NOUVEAUTÉS ── */
+.nouveaute {
+    background-color: var(--blanc);
+    border-radius: 16px;
+    padding: 30px;
+}
+
+.nouveaute h2 {
+    color: var(--bleu-refuge);
+}
+
+.nouveaute .img-fluid {
+    border-radius: 10px;
+    object-fit: cover;
+    width: 100%;
+    height: 400px;
+    box-shadow: 0 4px 12px var(--noir-doux);
+}
+
+img {
+    transition: transform 0.3s ease;
+}
+
+img:hover {
+    transform: scale(1.05);
+}
+
+.conteneur {
+    overflow: hidden; //l'image ne deborde pas son container
+}
