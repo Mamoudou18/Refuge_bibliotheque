@@ -1,15 +1,17 @@
 /* ── HERO ── */
-
 .hero-scene h1 {
     color: var(--bleu-refuge);
+    font-size: clamp(1.5rem, 4vw, 3rem);
 }
 
 .hero-scene .subtitle {
     color: var(--orange-refuge);
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
 }
 
 .hero-scene p {
     color: var(--noir-doux);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
 }
 
 .hero-scene .btn-catalogue {
@@ -18,6 +20,7 @@
     border: none;
     border-radius: 15px;
     padding: 10px;
+    width: 100%;
 }
 
 .hero-scene .btn-catalogue:hover {
@@ -63,5 +66,59 @@ img:hover {
 }
 
 .conteneur {
-    overflow: hidden; //l'image ne deborde pas son container
+    overflow: hidden;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+
+    /* Hero */
+    .hero-scene {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .hero-scene .btn-catalogue {
+        width: 100%;
+    }
+
+    /* Mosaique : 2 colonnes sur mobile */
+    .couverture-miniature .img-fluid {
+        height: 150px;
+    }
+
+    /* Nouveautés */
+    .nouveaute {
+        padding: 15px;
+    }
+
+    .nouveaute .img-fluid {
+        height: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* Mosaique : images encore plus petites */
+    .couverture-miniature .img-fluid {
+        height: 110px;
+    }
+
+    .nouveaute .img-fluid {
+        height: 200px;
+    }
+}
+
+#carouselNouveautes .carousel-control-prev,
+#carouselNouveautes .carousel-control-next {
+    width: 40px;
+    height: 40px;
+    background-color: var(--orange-refuge);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#carouselNouveautes .carousel-indicators button {
+    background-color: var(--noir-doux);
 }
