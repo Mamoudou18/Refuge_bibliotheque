@@ -1,0 +1,61 @@
+h1 {
+    color: var(--bleu-refuge);
+}
+
+hr {
+    border-bottom: 1px solid;
+    border-color: var(--orange-refuge);
+    opacity: 1;
+}
+.recherche {
+    border: 1px solid var(--bleu-refuge);
+    border-radius: 15px;
+}
+
+.filtre {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    .tous {
+        background-color: var(--bleu-refuge);
+        color: var(--blanc);
+        border-radius: 10px;
+    }
+
+    .btn-filtre {
+        border: 1px solid var(--gris-text-small);
+        border-radius: 10px;
+        color: var(--gris-text-small);
+    }
+}
+
+.card-img-top {
+    height: 300px;
+    object-fit: cover;
+}
+
+.card-title {
+    color: var(--bleu-refuge);
+    font-size: 1rem;
+    word-break: break-word;
+}
+
+.badge-roman {
+    background-color: var(--orange-refuge);
+}
+
+.badge-bd {
+    background-color: var(--bleu-refuge);
+}
+
+.btn-decouvrir {
+    border: 1px solid var(--orange-refuge);
+    border-radius: 10px;
+    color: var(--orange-refuge);
+}
+
+.btn-decouvrir:hover {
+    color: var(--blanc);
+    background-color: var(--orange-refuge);
+}
