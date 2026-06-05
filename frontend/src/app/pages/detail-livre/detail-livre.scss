@@ -1,0 +1,40 @@
+h1 {
+    color: var(--bleu-refuge);
+}
+
+hr {
+    border-bottom: 1px solid;
+    border-color: var(--orange-refuge);
+    opacity: 1;
+}
+
+.card-title {
+    color: var(--bleu-refuge)
+}
+
+.badge-roman {
+    background-color: var(--orange-refuge);
+}
+
+.badge-disponible {
+    background: var(--badge-disponible-bg);
+    color: var(--badge-disponible-text);
+    border-radius: 20px;
+    padding: 2px 10px;
+    width: fit-content;
+}
+
+.btn-emprunter {
+    background-color: var(--bleu-refuge);
+    color: var(--blanc);
+    border-radius: 10px;
+}
+
+.btn-emprunter:hover {
+    background-color: var(--orange-refuge);
+    color: var(--blanc);
+}
+
+.text-bleu {
+    color: var(--bleu-refuge);
+}
