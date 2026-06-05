@@ -1,0 +1,116 @@
+h1 {
+  color: var(--bleu-refuge);
+  margin-bottom: 2px;
+}
+
+hr {
+  border-bottom: 1px solid;
+  border-color: var(--orange-refuge);
+  opacity: 1;
+  margin-bottom: 40px;
+}
+
+.bloc {
+  background: var(--blanc);
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--bleu-refuge);
+  margin-bottom: 20px;
+}
+
+.ligne {
+  flex: 1;
+  border-top: 1px solid var(--orange-refuge);
+  opacity: 1;
+}
+
+/* 2 colonnes pour emprunts */
+.emprunts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+.historique-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+/* CARTE : horizontal */
+.card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 100px;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.card-encours {
+  border: 2px solid var(--badge-encours-bg);
+  width: 100%;
+}
+
+.card-retard {
+  border: 2px solid var(--badge-retard-bg);
+  width: 100%;
+}
+
+.card-rendu {
+  border: 2px solid var(--vert-succes);
+  width: 100%;
+}
+
+/* INFOS */
+.card-info h3 {
+  color: var(--bleu-refuge);
+  margin-bottom: 6px;
+}
+
+.date-retard {
+  color: var(--rouge-alerte);
+}
+
+/* BADGES */
+.badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badge-retard {
+  background: var(--badge-retard-bg);
+  color: var(--badge-retard-text);
+  border: 1px solid var(--badge-retard-text);
+}
+
+.badge-ok {
+  background: var(--badge-encours-bg);
+  color: var(--badge-encours-text);
+  border: 1px solid var(--badge-encours-text);
+}
+
+.badge-rendu {
+  background: var(--vert-succes);
+  color: var(--blanc);
+}
+
+.couverture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+}
