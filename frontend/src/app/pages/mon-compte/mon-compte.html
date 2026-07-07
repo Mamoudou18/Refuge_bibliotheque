@@ -1,1 +1,832 @@
-<p>mon-compte works!</p>
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <i class="bi bi-person-gear"></i>
+            <h1>Mon compte</h1>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <div class="nav-section">
+                <a class="nav-link" [class.active]="activeSection === 'accueil'" (click)="showSection('accueil')">
+                    <i class="bi bi-house"></i><span>Accueil</span>
+                </a>
+                <a class="nav-link" [class.active]="activeSection === 'mes_emprunts'" (click)="showSection('mes_emprunts')">
+                    <i class="bi bi-clock-history"></i><span>Mes emprunts</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <h2 class="nav-label">Administration</h2>
+                <a class="nav-link" [class.active]="activeSection === 'livres'" (click)="showSection('livres')">
+                    <i class="bi bi-book"></i><span>Gestion des Livres</span>
+                </a>
+                <a class="nav-link" [class.active]="activeSection === 'membres'" (click)="showSection('membres')">
+                    <i class="bi bi-people"></i><span>Gestion des Membres</span>
+                </a>
+                <a class="nav-link" [class.active]="activeSection === 'emprunts'" (click)="showSection('emprunts')">
+                    <i class="bi bi-clock-history"></i><span>Gestion des emprunts</span>
+                </a>
+                <a class="nav-link" [class.active]="activeSection === 'statistiques'" (click)="showSection('statistiques')">
+                    <i class="bi bi-bar-chart"></i><span>Statistiques</span>
+                </a>
+            </div>
+
+            <hr>
+            
+            <div class="nav-section">
+                <a class="nav-link" [class.active]="activeSection === 'parametres'" (click)="showSection('parametres')">
+                    <i class="bi bi-gear"></i><span>Paramètres</span>
+                </a>
+            </div>
+
+        </nav>
+
+        <div class="sidebar-user">
+            <div class="user-avatar">A</div>
+            <div class="user-info">
+                <span class="user-name">Amadi Diallo</span>
+                <span class="user-role">Administrateur</span>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- CONTENU PRINCIPAL -->
+    <div class="dashboard-content">
+        <!-- ACCUEIL -->
+        @if (activeSection === 'accueil') {
+            <div class="section-page">
+                <div class="page-header">
+                    <h1><i class="bi bi-house"></i> Tableau de bord</h1>
+                    <p>Bienvenue, Amadi. Voici un résumé de l'activité de la bibliothèque.</p>
+                    <hr/>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="bi bi-book"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">1 240</div>
+                            <div class="stat-label">Livres total</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i class="bi bi-people"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">326</div>
+                            <div class="stat-label">Membres</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange"><i class="bi bi-clock-history"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">58</div>
+                            <div class="stat-label">Emprunts en cours</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red"><i class="bi bi-exclamation-circle"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">En retard</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-bloc">
+                    <div class="section-title">
+                        <h3><i class="bi bi-lightning-charge"></i> Actions rapides</h3>
+                        <span class="ligne"></span>
+                    </div>
+                    <div class="actions-grid">
+                        <a class="btn-action blue" (click)="showSection('livres')">
+                            <i class="bi bi-book"></i> Gestion des Livres
+                        </a>
+                        <a class="btn-action green" (click)="showSection('membres')">
+                            <i class="bi bi-people"></i> Gestion des Membres
+                        </a>
+                        <a class="btn-action orange" (click)="showSection('emprunts')">
+                            <i class="bi bi-clock-history"></i> Gestion des Emprunts
+                        </a>
+                    </div>
+                </div>
+
+                <div class="admin-bloc">
+                    <div class="section-title">
+                        <h3><i class="bi bi-table"></i> Emprunts récents</h3>
+                        <span class="ligne"></span>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Membre</th><th>Livre</th><th>Date emprunt</th><th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Marie Dupont</td><td>Harry Potter T1</td><td>12/05/2025</td>
+                                    <td><span class="badge badge-encours">En cours</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Jean Koné</td><td>Le Petit Prince</td><td>08/05/2025</td>
+                                    <td><span class="badge badge-bientot">Bientôt</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Sara Fall</td><td>L'Alchimiste</td><td>01/05/2025</td>
+                                    <td><span class="badge badge-retard">En retard</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Paul Mendy</td><td>1984 — Orwell</td><td>29/04/2025</td>
+                                    <td><span class="badge badge-retard">En retard</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="admin-bloc">
+                    <div class="section-title">
+                        <h3><i class="bi bi-exclamation-triangle"></i> Alertes retards</h3>
+                        <span class="ligne"></span>
+                    </div>
+                    <div class="alert-item">
+                        <i class="bi bi-alarm-fill"></i>
+                        <div>
+                            <p>Sara Fall — L'Alchimiste</p>
+                            <span>En retard depuis 12 jours — Dû le 03/05/2025</span>
+                        </div>
+                    </div>
+                    <div class="alert-item">
+                        <i class="bi bi-alarm-fill"></i>
+                        <div>
+                            <p>Paul Mendy — 1984</p>
+                            <span>En retard depuis 15 jours — Dû le 30/04/2025</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <!-- MES EMPRUNTS -->
+        @if (activeSection === 'mes_emprunts') {
+            <div class="section-page">
+                <div class="page-header">
+                    <h1><i class="bi bi-clock-history"></i> Mes emprunts</h1>
+                    <p>Suivi de vos emprunts en cours et de votre historique.</p>
+                    <hr/>
+                </div>
+
+                <div class="admin-bloc">
+                    <div class="section-title">
+                        <h3><i class="bi bi-clock"></i> Emprunts en cours</h3>
+                        <span class="ligne"></span>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr><th>Livre</th><th>Date emprunt</th><th>Date retour prévue</th><th>Statut</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Harry Potter T1</td><td>12/05/2025</td><td>26/05/2025</td>
+                                    <td><span class="badge badge-encours">En cours</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Le Seigneur des Anneaux</td><td>05/05/2025</td><td>19/05/2025</td>
+                                    <td><span class="badge badge-bientot">Bientôt</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="admin-bloc">
+                    <div class="section-title">
+                        <h3><i class="bi bi-alarm"></i> Livres à rendre bientôt</h3>
+                        <span class="ligne"></span>
+                    </div>
+                    <div class="bientot-item">
+                        <i class="bi bi-alarm-fill"></i>
+                        <div>
+                            <p>Le Seigneur des Anneaux</p>
+                            <span>À rendre dans 2 jours — 19/05/2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-bloc">
+                    <div class="section-title">
+                        <h3><i class="bi bi-archive"></i> Historique</h3>
+                        <span class="ligne"></span>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr><th>Livre</th><th>Date emprunt</th><th>Date retour</th><th>Statut</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>L'Alchimiste</td><td>01/03/2025</td><td>15/03/2025</td>
+                                    <td><span class="badge badge-ok">Rendu</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Le Petit Prince</td><td>10/02/2025</td><td>24/02/2025</td>
+                                    <td><span class="badge badge-ok">Rendu</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+        <!-- PARAMETRES -->
+        @if (activeSection === 'parametres') {
+            <div class="section-page">
+                <div class="page-header">
+                    <h1><i class="bi bi-gear"></i> Paramètres</h1>
+                    <p>Gérez vos informations personnelles et votre mot de passe.</p>
+                    <hr/>
+                </div>
+
+                <div class="admin-bloc">
+                    <div class="section-title">
+                        <h3><i class="bi bi-person-circle"></i> Informations personnelles</h3>
+                        <span class="ligne"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Nom complet</label>
+                        <input type="text" value="Amadi Diallo" />
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" value="amadi.diallo@email.com" />
+                    </div>
+                    <div class="form-group">
+                        <label>Téléphone</label>
+                        <input type="tel" value="+224 77 000 00 00" />
+                    </div>
+                    <button class=" btn btn-save">
+                        <i class="bi bi-check-lg"></i> Enregistrer
+                    </button>
+                </div>
+
+                <div class="admin-bloc">
+                    <div class="section-title">
+                        <h3><i class="bi bi-lock"></i> Changer le mot de passe</h3>
+                        <span class="ligne"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Mot de passe actuel</label>
+                        <input type="password" placeholder="••••••••" />
+                    </div>
+                    <div class="form-group">
+                        <label>Nouveau mot de passe</label>
+                        <input type="password" placeholder="••••••••" />
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmer le nouveau mot de passe</label>
+                        <input type="password" placeholder="••••••••" />
+                    </div>
+                    <button class="btn btn-save">
+                        <i class="bi bi-shield-lock"></i> Mettre à jour
+                    </button>
+                </div>
+            </div>
+        }
+
+        <!-- GESTIONS DES LIVRES -->
+        @if (activeSection === 'livres') {
+        <div class="section-page">
+                <div class="page-header">
+                    <h1><i class="bi bi-book"></i>Gestion Livres</h1>
+                    <p>Catalogue complet des livres disponibles.</p>
+                    <hr/>
+                </div>
+                <div class="admin-bloc">
+                    <div class="section-title">
+                        <h3><i class="bi bi-list-ul"></i> Liste des livres</h3>
+                        <span class="ligne"></span>
+                    </div>
+
+                    <!-- Bouton ajouter -->
+                    <button class="btn btn-save w-100">
+                        <i class="bi bi-plus-lg"></i> Ajouter un livre
+                    </button>
+
+                    <!-- Recherche -->
+                    <input type="text" class="input-recherche" placeholder="Rechercher..." />
+
+                    <!-- Filtres -->
+                    <div class="filtres-bar">
+                        <button class="btn-filtre active">Tous les livres</button>
+                        <button class="btn-filtre">Disponible</button>
+                        <button class="btn-filtre">Indisponible</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr><th>Titre</th><th>Auteur</th><th>Genre</th><th>Disponibilité</th><th>Actions</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Harry Potter T1</td><td>J.K. Rowling</td><td>Fantasy</td>
+                                    <td><span class="badge badge-retard">Emprunté</span></td>
+                                    <td class="actions-cell">
+                                        <div class="actions-wrapper">
+                                            <button class="btn-icon"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn-icon danger"><i class="bi bi-x-lg"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Le Petit Prince</td><td>Antoine de Saint-Exupéry</td><td>Conte</td>
+                                    <td><span class="badge badge-ok">Disponible</span></td>
+                                    <td class="actions-cell">
+                                        <div class="actions-wrapper">
+                                            <button class="btn-icon"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn-icon danger"><i class="bi bi-x-lg"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>L'Alchimiste</td><td>Paulo Coelho</td><td>Roman</td>
+                                    <td><span class="badge badge-retard">Emprunté</span></td>
+                                    <td class="actions-cell">
+                                        <div class="actions-wrapper">
+                                            <button class="btn-icon"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn-icon danger"><i class="bi bi-x-lg"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>1984</td><td>George Orwell</td><td>Science-fiction</td>
+                                    <td><span class="badge badge-ok">Disponible</span></td>
+                                    <td class="actions-cell">
+                                        <div class="actions-wrapper">
+                                            <button class="btn-icon"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn-icon danger"><i class="bi bi-x-lg"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Le Seigneur des Anneaux</td><td>J.R.R. Tolkien</td><td>Fantasy</td>
+                                    <td><span class="badge badge-ok">Disponible</span></td>
+                                    <td class="actions-cell">
+                                        <div class="actions-wrapper">
+                                            <button class="btn-icon"><i class="bi bi-pencil"></i></button>
+                                            <button class="btn-icon danger"><i class="bi bi-x-lg"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
+        }
+
+        <!-- GESTIONS DES MEMBRES -->
+        @if (activeSection === 'membres') {
+            <div class="section-page">
+                <div class="page-header">
+                    <h1><i class="bi bi-people"></i>Gestion Membres</h1>
+                    <p>Gestion des membres de la bibliothèque.</p>
+                    <hr/>
+                </div>
+                <div class="admin-bloc">
+                    <div class="section-title">
+                        <h3><i class="bi bi-list-ul"></i> Liste des membres</h3>
+                        <span class="ligne"></span>
+                    </div>
+
+                    <!-- Bouton ajouter -->
+                    <button class="btn btn-save w-100">
+                        <i class="bi bi-plus-lg"></i> Ajouter un membre
+                    </button>
+
+                    <!-- Recherche -->
+                    <input type="text" class="input-recherche" placeholder="Rechercher..." />
+
+                    <!-- Filtres -->
+                    <div class="filtres-bar">
+                        <button class="btn-filtre active">Tous</button>
+                        <button class="btn-filtre">Actif</button>
+                        <button class="btn-filtre">Inactif</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Emprunts actifs</th><th>Statut</th><th>Actions</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Amadi Diallo</td><td>amadi@email.com</td><td>Administrateur</td><td>2</td>
+                                    <td class="statut-cell">
+                                        <div class="statut-wrapper">
+                                            <span class="statut-label actif">Actif</span>
+                                        </div>
+                                    </td>
+                                    <td class="actions-cell">
+                                        <div class="actions-wrapper">
+                                            <label class="switch">
+                                                <input type="checkbox" checked />
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Marie Dupont</td><td>marie@email.com</td><td>Membre</td><td>1</td>
+                                    <td class="statut-cell">
+                                        <div class="statut-wrapper">
+                                            <span class="statut-label actif">Actif</span>
+                                        </div>
+                                    </td>
+                                    <td class="actions-cell">
+                                        <div class="actions-wrapper">
+                                            <label class="switch">
+                                                <input type="checkbox" checked />
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Sara Fall</td><td>sara@email.com</td><td>Membre</td><td>1</td>
+                                    <td class="statut-cell">
+                                        <div class="statut-wrapper">
+                                            <span class="statut-label inactif">Inactif</span>
+                                        </div>
+                                    </td>
+                                    <td class="actions-cell">
+                                        <div class="actions-wrapper">
+                                            <label class="switch">
+                                                <input type="checkbox" />
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Paul Mendy</td><td>paul@email.com</td><td>Membre</td><td>1</td>
+                                    <td class="statut-cell">
+                                        <div class="statut-wrapper">
+                                            <span class="statut-label inactif">Inactif</span>
+                                        </div>
+                                    </td>
+                                    <td class="actions-cell">
+                                        <div class="actions-wrapper">
+                                            <label class="switch">
+                                                <input type="checkbox" />
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Jean Koné</td><td>jean@email.com</td><td>Membre</td><td>1</td>
+                                    <td class="statut-cell">
+                                        <div class="statut-wrapper">
+                                            <span class="statut-label actif">Actif</span>
+                                        </div>
+                                    </td>
+                                    <td class="actions-cell">
+                                        <div class="actions-wrapper">
+                                            <label class="switch">
+                                                <input type="checkbox" checked />
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- GESTIONS DES EMPRUNTS (ADMIN) -->
+        @if (activeSection === 'emprunts') {
+            <div class="section-page">
+                <div class="page-header">
+                    <h1><i class="bi bi-clock-history"></i> Gestion des emprunts</h1>
+                    <p>Suivi et gestion de tous les emprunts de la bibliothèque.</p>
+                    <hr/>
+                </div>
+
+                <!-- STATS RAPIDES -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="bi bi-clock-history"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">58</div>
+                            <div class="stat-label">Emprunts en cours</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange"><i class="bi bi-hourglass-split"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">Retours sous 3 jours</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red"><i class="bi bi-exclamation-triangle"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">4</div>
+                            <div class="stat-label">En retard</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i class="bi bi-check-circle"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">132</div>
+                            <div class="stat-label">Retournés ce mois</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LISTE DES EMPRUNTS -->
+                <div class="admin-bloc">
+                    <div class="section-title">
+                        <h3><i class="bi bi-journal-bookmark"></i> Liste des emprunts</h3>
+                        <span class="ligne"></span>
+                    </div>
+
+                    <!-- Bouton ajouter -->
+                    <button class="btn btn-save w-100">
+                        <i class="bi bi-plus-lg"></i> Nouvel emprunt
+                    </button>
+
+                    <!-- Recherche -->
+                    <input type="text" class="input-recherche" placeholder="Rechercher par membre ou livre..." />
+
+                    <!-- Filtres -->
+                    <div class="filtres-bar">
+                        <button class="btn-filtre active">Tous</button>
+                        <button class="btn-filtre">En cours</button>
+                        <button class="btn-filtre">Bientôt dus</button>
+                        <button class="btn-filtre">En retard</button>
+                        <button class="btn-filtre">Retournés</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Membre</th><th>Livre</th><th>Date emprunt</th><th>Date retour prévue</th><th>Statut</th><th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Amadi Diallo</td>
+                                    <td>Le Seigneur des Anneaux</td>
+                                    <td>10/06/2026</td>
+                                    <td>24/06/2026</td>
+                                    <td><span class="badge badge-encours">En cours</span></td>
+                                    <td class="actions-cell">
+                                        <div class="actions-wrapper">
+                                            <button class="btn-icon" title="Prolonger">
+                                                <i class="bi bi-arrow-clockwise"></i>
+                                            </button>
+                                            <button class="btn-icon" title="Marquer retourné">
+                                                <i class="bi bi-check-lg"></i>
+                                            </button>
+                                            <button class="btn-icon danger" title="Supprimer">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Marie Dupont</td>
+                                    <td>Le Petit Prince</td>
+                                    <td>28/06/2026</td>
+                                    <td>10/07/2026</td>
+                                    <td><span class="badge badge-bientot">Bientôt dû</span></td>
+                                    <td class="actions-cell">
+                                        <div class="actions-wrapper">
+                                            <button class="btn-icon" title="Prolonger">
+                                                <i class="bi bi-arrow-clockwise"></i>
+                                            </button>
+                                            <button class="btn-icon" title="Marquer retourné">
+                                                <i class="bi bi-check-lg"></i>
+                                            </button>
+                                            <button class="btn-icon danger" title="Supprimer">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Sara Fall</td>
+                                    <td>L'Alchimiste</td>
+                                    <td>15/06/2026</td>
+                                    <td>29/06/2026</td>
+                                    <td><span class="badge badge-retard">En retard</span></td>
+                                    <td class="actions-cell">
+                                        <div class="actions-wrapper">
+                                            <button class="btn-icon" title="Prolonger">
+                                                <i class="bi bi-arrow-clockwise"></i>
+                                            </button>
+                                            <button class="btn-icon" title="Marquer retourné">
+                                                <i class="bi bi-check-lg"></i>
+                                            </button>
+                                            <button class="btn-icon danger" title="Supprimer">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Paul Mendy</td>
+                                    <td>1984</td>
+                                    <td>01/06/2026</td>
+                                    <td>15/06/2026</td>
+                                    <td><span class="badge badge-ok">Retourné</span></td>
+                                    <td class="actions-cell">
+                                        <div class="actions-wrapper">
+                                            <button class="btn-icon danger" title="Supprimer">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- STATISTIQUES -->
+        @if (activeSection === 'statistiques') {
+            <div class="section-page">
+                <div class="page-header">
+                    <h1><i class="bi bi-bar-chart"></i> Statistiques</h1>
+                    <p>Vue d'ensemble des activités de la bibliothèque.</p>
+                    <hr/>
+                </div>
+
+                <!-- Chiffres clés généraux -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="bi bi-book"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">1 240</div>
+                            <div class="stat-label">Livres total</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i class="bi bi-people"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">326</div>
+                            <div class="stat-label">Membres</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange"><i class="bi bi-clock-history"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">58</div>
+                            <div class="stat-label">Emprunts en cours</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red"><i class="bi bi-exclamation-circle"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">En retard</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activité du mois -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="bi bi-arrow-down-circle"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">184</div>
+                            <div class="stat-label">Emprunts ce mois</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green"><i class="bi bi-arrow-up-circle"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">176</div>
+                            <div class="stat-label">Retours ce mois</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange"><i class="bi bi-bookmark-star"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">23</div>
+                            <div class="stat-label">Réservations actives</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red"><i class="bi bi-graph-down"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value">4%</div>
+                            <div class="stat-label">Taux de retard</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top livres empruntés -->
+                <div class="admin-bloc">
+                    <div class="section-title">
+                        <h3><i class="bi bi-trophy"></i> Top livres empruntés</h3>
+                        <span class="ligne"></span>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr><th>#</th><th>Livre</th><th>Auteur</th><th>Nb emprunts</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>Harry Potter T1</td><td>J.K. Rowling</td><td>42</td></tr>
+                                <tr><td>2</td><td>Le Petit Prince</td><td>Antoine de Saint-Exupéry</td><td>38</td></tr>
+                                <tr><td>3</td><td>L'Alchimiste</td><td>Paulo Coelho</td><td>31</td></tr>
+                                <tr><td>4</td><td>1984</td><td>George Orwell</td><td>27</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Répartition par genre -->
+                <div class="admin-bloc">
+                    <div class="section-title">
+                        <h3><i class="bi bi-tags"></i> Répartition par genre</h3>
+                        <span class="ligne"></span>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr><th>Genre</th><th>Nombre de livres</th><th>% du catalogue</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Fantasy</td><td>412</td><td>33%</td></tr>
+                                <tr><td>Roman</td><td>298</td><td>24%</td></tr>
+                                <tr><td>Science-fiction</td><td>210</td><td>17%</td></tr>
+                                <tr><td>Conte</td><td>150</td><td>12%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Membres en retard -->
+                <div class="admin-bloc">
+                    <div class="section-title">
+                        <h3><i class="bi bi-exclamation-triangle"></i> Membres en retard</h3>
+                        <span class="ligne"></span>
+                    </div>
+                    <div class="alert-item">
+                        <i class="bi bi-alarm-fill"></i>
+                        <div>
+                            <p>Sara Fall — L'Alchimiste</p>
+                            <span>En retard depuis 12 jours</span>
+                        </div>
+                    </div>
+                    <div class="alert-item">
+                        <i class="bi bi-alarm-fill"></i>
+                        <div>
+                            <p>Paul Mendy — 1984</p>
+                            <span>En retard depuis 15 jours</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nouveaux membres -->
+                <div class="admin-bloc">
+                    <div class="section-title">
+                        <h3><i class="bi bi-person-plus"></i> Nouveaux membres ce mois-ci</h3>
+                        <span class="ligne"></span>
+                    </div>
+                    <div class="bientot-item">
+                        <i class="bi bi-person-check-fill"></i>
+                        <div>
+                            <p>Aïssatou Diop</p>
+                            <span>Inscrite le 2 juillet 2026</span>
+                        </div>
+                    </div>
+                    <div class="bientot-item">
+                        <i class="bi bi-person-check-fill"></i>
+                        <div>
+                            <p>Moussa Ba</p>
+                            <span>Inscrit le 28 juin 2026</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+
+</div>

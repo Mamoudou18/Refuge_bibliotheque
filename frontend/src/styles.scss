@@ -33,22 +33,23 @@
 
   /* ===== TYPOGRAPHIE ===== */
     /* Desktop */
-    --h1-size: 32px;
-    --h2-size: 24px;
-    --h3-size: 18px;
-    --body-size: 16px;
-    --bouton-size: 16px;
-    --text-small-size: 14px;
-    --liens-size: 16px;
+    --h1-size: 2rem;        /* 32px */
+    --h2-size: 1.5rem;      /* 24px */
+    --h3-size: 1.125rem;    /* 18px */
+    --body-size: 1rem;      /* 16px */
+    --bouton-size: 1rem;    /* 16px */
+    --text-small-size: 0.875rem; /* 14px */
+    --liens-size: 1rem;     /* 16px */
 
     /* Mobile */
-    --h1-mobile-size: 24px;
-    --h2-mobile-size: 20px;
-    --h3-mobile-size: 16px;
-    --body-mobile-size: 14px;
-    --bouton-mobile-size: 14px;
-    --text-small-mobile-size: 12px;
-    --liens-mobile-size: 14px;
+    --h1-mobile-size: 1.5rem;    /* 24px */
+    --h2-mobile-size: 1.25rem;   /* 20px */
+    --h3-mobile-size: 1rem;      /* 16px */
+    --body-mobile-size: 0.875rem; /* 14px */
+    --bouton-mobile-size: 0.875rem; /* 14px */
+    --text-small-mobile-size: 0.75rem; /* 12px */
+    --liens-mobile-size: 0.875rem; /* 14px */
+
 
     /* Poids */
     --font-bold: 700;
@@ -89,6 +90,11 @@
   font-family: var(--font-family);
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
   background-color: var(--gris-clair);
 }
@@ -108,5 +114,4 @@ app-header {
 
 main {
   flex: 1;
-  overflow-y: auto;
 }
