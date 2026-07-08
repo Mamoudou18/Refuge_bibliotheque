@@ -10,6 +10,7 @@
     --noir-doux: #1A1A1A;
     --gris-text-small: #555555;
 
+    
     /* États */
     --vert-succes: #2ECC71;
     --rouge-alerte: #E74C3C;
@@ -58,6 +59,9 @@
 
     /* Famille */
     --font-family: 'Poppins', sans-serif;
+
+  /* autres couleurs */
+  --gris-moyen:#999;
 }
 
 /* ===== CLASSES TYPO ===== */
@@ -84,6 +88,9 @@
       a { font-size: var(--liens-mobile-size); }
 
 }
+
+
+
 
 /* police de toute l'application */
 * {
