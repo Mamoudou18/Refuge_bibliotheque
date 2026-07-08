@@ -1,0 +1,14 @@
+@use '../auth-partage' as *;
+
+
+.forgot-password {
+    align-self: flex-end;
+    font-size: var(--text-small-size);
+    color: var(--bleu-refuge);
+    text-decoration: underline;
+    margin-top: -0.5rem;
+
+    &:hover {
+        color: var(--orange-refuge);
+    }
+}
