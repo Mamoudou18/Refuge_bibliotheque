@@ -77,3 +77,6 @@ INSERT INTO statut_emprunt (libelle) VALUES
     ('en retard'),
     ('prolonge'),
     ('rendu');
+
+    ALTER TABLE membre
+ADD COLUMN date_naissance DATE;
