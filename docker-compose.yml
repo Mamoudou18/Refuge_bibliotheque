@@ -97,16 +97,24 @@ services:
       - refuge_network
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      target: dev
     container_name: refuge_frontend
     restart: always
     volumes:
+      - ./frontend:/app
+      - /app/node_modules
       - frontend_dist:/shared
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_INTERVAL: "2000"
     healthcheck:
-      test: ["CMD-SHELL", "test -f /shared/index.html"]
+      test: ["CMD-SHELL", "test -f /shared/browser/index.html"]
       interval: 5s
       timeout: 3s
-      retries: 10
+      retries: 5
+      start_period: 1m30s
     networks:
       - refuge_network
 

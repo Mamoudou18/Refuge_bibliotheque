@@ -11,7 +11,7 @@ class AuthController
         $validation = (new Validation())
             ->required($body, ['nom', 'prenom', 'email', 'mot_de_passe', 'confirmPassword', 'numero_tel'])
             ->email($body, 'email')
-            ->minLength($body, 'mot_de_passe', 6)
+            ->motDePasse($body, 'mot_de_passe')
             ->same($body, 'mot_de_passe', 'confirmPassword')
             ->phone($body, 'numero_tel')
             ->date($body, 'date_naissance')

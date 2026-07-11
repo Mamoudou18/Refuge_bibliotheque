@@ -147,3 +147,25 @@
         }
     }
 }
+
+.password-wrapper {
+  position: relative;
+
+  input {
+    width: 100%;
+    padding-right: 2.5rem;
+  }
+
+  .toggle-icon {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d;
+
+    &:hover {
+      color: #333;
+    }
+  }
+}

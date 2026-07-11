@@ -122,3 +122,8 @@ app-header {
 main {
   flex: 1;
 }
+
+// masquer l'oeil de edge
+input[type="password"]::-ms-reveal {
+    display: none;
+}

@@ -37,6 +37,24 @@ class Validation
         }
         return $this;
     }
+
+    public function motDePasse(array $data, string $champ): self
+    {
+        if (!empty($data[$champ])) {
+            $valeur = $data[$champ];
+            $valid = strlen($valeur) >= 10
+                && preg_match('/[a-z]/', $valeur)
+                && preg_match('/[A-Z]/', $valeur)
+                && preg_match('/[0-9]/', $valeur)
+                && preg_match('/[^a-zA-Z0-9]/', $valeur);
+
+            if (!$valid) {
+                $this->erreurs[] = "Le mot de passe doit contenir au moins 10 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.";
+            }
+        }
+        return $this;
+    }
+    
     public function same(array $data, string $champ, string $champConfirmation): self
     {
         if (isset($data[$champ]) && isset($data[$champConfirmation])
@@ -58,7 +76,10 @@ class Validation
         if (!empty($data[$champ])) {
             $d = DateTime::createFromFormat($format, $data[$champ]);
             $erreurs = DateTime::getLastErrors();
-            if (!$d || $erreurs['warning_count'] > 0 || $erreurs['error_count'] > 0) {
+
+            $hasErrors = $erreurs !== false && ($erreurs['warning_count'] > 0 || $erreurs['error_count'] > 0);
+
+            if (!$d || $hasErrors) {
                 $this->erreurs[] = "Le champ '$champ' doit être une date valide au format jj/mm/aaaa";
             }
         }

@@ -5,43 +5,90 @@
             <hr/>
         </div>
 
-        <form class="auth-form auth-form--grid">
+        <form class="auth-form auth-form--grid" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
             <div class="form-group">
                 <label for="prenom">Prénom <span class="required">*</span></label>
-                <input type="text" id="prenom" name="prenom" placeholder="Mamoudou" required>
+                <input type="text" id="prenom" formControlName="prenom" placeholder="Mamoudou">
+                @if (registerForm.get('prenom')?.invalid && registerForm.get('prenom')?.touched) {
+                    <small class="error-text text-danger ">Le prénom est requis.</small>
+                }
             </div>
 
             <div class="form-group">
                 <label for="nom">Nom <span class="required">*</span></label>
-                <input type="text" id="nom" name="nom" placeholder="Keita" required>
+                <input type="text" id="nom" formControlName="nom" placeholder="Keita">
+                @if (registerForm.get('nom')?.invalid && registerForm.get('nom')?.touched) {
+                    <small class="error-text text-danger">Le nom est requis.</small>
+                }
             </div>
 
             <div class="form-group">
                 <label for="email">Email <span class="required">*</span></label>
-                <input type="email" id="email" name="email" placeholder="monemail@gmail.com" required>
+                <input type="email" id="email" formControlName="email" placeholder="monemail@gmail.com">
+                @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+                    <small class="error-text text-danger">Email invalide.</small>
+                }
             </div>
 
             <div class="form-group">
-                <label for="telephone">Téléphone <span class="required">*</span></label>
-                <input type="tel" id="telephone" name="telephone" placeholder="00 00 00 00 00" required>
+                <label for="numero_tel">Téléphone <span class="required">*</span></label>
+                <input type="tel" id="numero_tel" formControlName="numero_tel" placeholder="00 00 00 00 00">
+                @if (registerForm.get('numero_tel')?.invalid && registerForm.get('numero_tel')?.touched) {
+                    <small class="error-text text-danger">Téléphone requis.</small>
+                }
             </div>
 
             <div class="form-group form-group--full">
-                <label for="naissance">Date de naissance</label>
-                <input type="date" id="naissance" name="naissance">
+                <label for="date_naissance">Date de naissance</label>
+                <input type="date" id="date_naissance" formControlName="date_naissance">
             </div>
-
+            
             <div class="form-group">
-                <label for="password">Mot de passe <span class="required">*</span></label>
-                <input type="password" id="password" name="password" placeholder="••••••••••••••" required>
+                <label for="mot_de_passe">Mot de passe <span class="required">*</span></label>
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        id="mot_de_passe"
+                        formControlName="mot_de_passe"
+                        placeholder="••••••••••••••"
+                        #pwd1
+                    >
+                    <i class="bi bi-eye toggle-icon" #icon1 (click)="togglePassword(pwd1, icon1)"></i>
+                </div>
+                @if (registerForm.get('mot_de_passe')?.invalid && registerForm.get('mot_de_passe')?.touched) {
+                    <small class="error-text text-danger">
+                        10 caractères min., avec majuscule, minuscule, chiffre et caractère spécial.
+                    </small>
+                }
             </div>
 
             <div class="form-group">
                 <label for="confirmPassword">Confirmer mot de passe <span class="required">*</span></label>
-                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="••••••••••••••" required>
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        formControlName="confirmPassword"
+                        placeholder="••••••••••••••"
+                        #pwd2
+                    >
+                    <i class="bi bi-eye toggle-icon" #icon2 (click)="togglePassword(pwd2, icon2)"></i>
+                </div>
+                @if (registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched) {
+                    <small class="error-text text-danger">Les mots de passe ne correspondent pas.</small>
+                }
             </div>
 
-            <button type="submit" class="btn-primary form-group--full">Créer un compte</button>
+            @if (errorMessage) {
+                <div class="form-group--full">
+                    <small class="error-text text-danger">{{ errorMessage }}</small>
+                </div>
+            }
+
+            <button type="submit" class="btn-primary form-group--full" [disabled]="isLoading">
+                {{ isLoading ? 'Création...' : 'Créer un compte' }}
+            </button>
         </form>
 
         <div class="separator">
@@ -52,7 +99,7 @@
 
         <p class="switch-auth">
             Vous avez déjà un compte ?
-            <a href="/connexion"><i class="bi bi-box-arrow-in-right"></i> Se connecter</a>
+            <a routerLink="/connexion"><i class="bi bi-box-arrow-in-right"></i> Se connecter</a>
         </p>
     </div>
 </div>
