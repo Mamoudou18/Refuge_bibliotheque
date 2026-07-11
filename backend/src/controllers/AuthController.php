@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../models/Membre.php';
+require_once __DIR__ . '/../models/Token.php';
 require_once __DIR__ . '/../helpers/Validation.php';
 require_once __DIR__ . '/../helpers/DateHelper.php';
 
@@ -39,5 +40,44 @@ class AuthController
         ]);
 
         Response::success($nouveauMembre, 'Compte créé avec succès', 201);
+    }
+
+    public static function login(array $body): void
+    {
+        $validation = (new Validation())
+            ->required($body, ['email', 'mot_de_passe'])
+            ->email($body, 'email');
+
+        if ($validation->fails()) {
+            Response::validationError($validation->getErrors());
+            return;
+        }
+
+        $membreModel = new Membre();
+        $membre = $membreModel->findByEmail($body['email']);
+
+        if (!$membre || !password_verify($body['mot_de_passe'], $membre['mot_de_passe'])) {
+            Response::error('Email ou mot de passe incorrect', 401);
+            return;
+        }
+
+        if (!$membre['is_actif']) {
+            Response::error('Ce compte est désactivé', 403);
+            return;
+        }
+
+        $tokenModel = new Token();
+        $apiToken = $tokenModel->createConnexionToken($membre['id_membre']);
+
+        if (!empty($membre['date_naissance'])) {
+            $membre['date_naissance'] = (new DateTime($membre['date_naissance']))->format('d/m/Y');
+        }
+
+        unset($membre['mot_de_passe']);
+
+        Response::success([
+            'token'  => $apiToken,
+            'membre' => $membre,
+        ], 'Connexion réussie');
     }
 }

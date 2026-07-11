@@ -26,6 +26,8 @@ $action = $segments[1] ?? null;
 try {
     if ($resource === 'auth' && $action === 'register' && $method === 'POST') {
         AuthController::register($body);
+    } elseif ($resource === 'auth' && $action === 'login' && $method === 'POST') {
+        AuthController::login($body);
     } else {
         Response::error('Route non trouvée', 404);
     }

@@ -16,6 +16,20 @@ class Membre
         return (bool) $stmt->fetch();
     }
 
+    public function findByEmail(string $email): ?array
+    {
+        $stmt = $this->db->prepare("
+            SELECT id_membre, nom, prenom, email, mot_de_passe, numero_tel, date_naissance, id_role, is_actif, date_inscription
+            FROM membre
+            WHERE email = :email
+            LIMIT 1
+        ");
+        $stmt->execute(['email' => $email]);
+        $membre = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $membre ?: null;
+    }
+
     public function create(array $data): array
     {
         $stmt = $this->db->prepare("

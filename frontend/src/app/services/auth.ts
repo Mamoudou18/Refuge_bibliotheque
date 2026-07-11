@@ -23,4 +23,8 @@ export class AuthService {
   inscrireUtilisateur(donnees: InscriptionData): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/register`, donnees);
   }
+
+  connexionUtilisateur(donnees: { email: string; mot_de_passe: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/login`, donnees);
+  }
 }

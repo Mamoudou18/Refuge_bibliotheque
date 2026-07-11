@@ -5,20 +5,44 @@
             <hr/>
         </div>
 
-        <form class="auth-form">
+        <form class="auth-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
             <div class="form-group">
                 <label for="email">Email <span class="required">*</span></label>
-                <input type="email" id="email" name="email" placeholder="monemail@gmail.com" required>
+                <input type="email" id="email" formControlName="email" placeholder="monemail@gmail.com">
+                @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+                    <small class="error-text text-danger">Email invalide.</small>
+                }
             </div>
 
             <div class="form-group">
-                <label for="password">Mot de passe <span class="required">*</span></label>
-                <input type="password" id="password" name="password" placeholder="••••••••••••••" required>
+                <label for="mot_de_passe">Mot de passe <span class="required">*</span></label>
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        id="mot_de_passe"
+                        formControlName="mot_de_passe"
+                        placeholder="••••••••••••••"
+                        #pwd1
+                    >
+                    <i class="bi bi-eye toggle-icon" #icon1 (click)="togglePassword(pwd1, icon1)"></i>
+                </div>
+                @if (loginForm.get('mot_de_passe')?.invalid && loginForm.get('mot_de_passe')?.touched) {
+                    <small class="error-text text-danger">Mot de passe requis.</small>
+                }
             </div>
 
-            <a href="/mot-de-passe-oublie" class="forgot-password">Mot de passe oublié ?</a>
+            <a routerLink="/mot-de-passe-oublie" class="forgot-password">Mot de passe oublié ?</a>
 
-            <button type="submit" class="btn-primary">Se connecter</button>
+            @if (errorMessage) {
+                <div class="form-group--full">
+                    <small class="error-text text-danger">{{ errorMessage }}</small>
+                </div>
+            }
+
+            <button type="submit" class="btn-primary" [disabled]="isLoading">
+                {{ isLoading ? 'Connexion...' : 'Se connecter' }}
+            </button>
         </form>
 
         <div class="separator">
@@ -29,6 +53,6 @@
 
         <p class="switch-auth">Pas encore de compte ?</p>
 
-        <a href="/inscription" class="btn-secondary">Créer un compte</a>
+        <a routerLink="/inscription" class="btn-secondary">Créer un compte</a>
     </div>
 </div>
