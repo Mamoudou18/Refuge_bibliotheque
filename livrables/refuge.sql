@@ -1,4 +1,4 @@
--- Active: 1783595465876@@127.0.0.1@5432@refugeBibliotheque_db
+-- Active: 1783617840296@@127.0.0.1@5432@refugeBibliotheque_db
 
 CREATE TABLE role (
     id_role SERIAL PRIMARY KEY,
@@ -80,3 +80,7 @@ INSERT INTO statut_emprunt (libelle) VALUES
 
     ALTER TABLE membre
 ADD COLUMN date_naissance DATE;
+
+UPDATE token
+SET date_expiration = NOW() - INTERVAL '1 minute'
+WHERE api_token = 'dc885f376791df9e9ed58805f97a75103330aa2436f54f10f409b108da2b79ba';

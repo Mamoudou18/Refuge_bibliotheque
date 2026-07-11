@@ -39,7 +39,8 @@ class Auth
             exit;
         }
 
-        if (strtotime($result['date_expiration']) < time()) {
+        $dateExpiration = new DateTime($result['date_expiration']);
+        if ($dateExpiration < new DateTime()) {
             Response::error('Non authentifié : session expirée', 401);
             exit;
         }

@@ -80,4 +80,36 @@ class AuthController
             'membre' => $membre,
         ], 'Connexion réussie');
     }
+
+    public static function logout(array $membreConnecte): void
+    {
+        $token = self::getBearerTokenFromHeader();
+
+        if (!$token) {
+            Response::error('Token manquant', 400);
+            return;
+        }
+
+        $tokenModel = new Token();
+        $success = $tokenModel->invalidate($token);
+
+        if (!$success) {
+            Response::error('Token invalide ou déjà déconnecté', 400);
+            return;
+        }
+
+        Response::success(null, 'Déconnexion réussie');
+    }
+
+    private static function getBearerTokenFromHeader(): ?string
+    {
+        $headers = getallheaders();
+        $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? null;
+
+        if (!$authHeader || !str_starts_with($authHeader, 'Bearer ')) {
+            return null;
+        }
+
+        return trim(str_replace('Bearer ', '', $authHeader));
+    }
 }

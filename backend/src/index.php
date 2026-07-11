@@ -10,6 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once __DIR__ . '/config/Database.php';
+require_once __DIR__ . '/middlewares/Auth.php';
 require_once __DIR__ . '/helpers/Response.php';
 require_once __DIR__ . '/controllers/AuthController.php';
 
@@ -28,6 +29,9 @@ try {
         AuthController::register($body);
     } elseif ($resource === 'auth' && $action === 'login' && $method === 'POST') {
         AuthController::login($body);
+    } elseif ($resource === 'auth' && $action === 'logout' && $method === 'POST') {
+    $membre = Auth::check(); // vérifie que le token est valide avant de le désactiver
+    AuthController::logout($membre);
     } else {
         Response::error('Route non trouvée', 404);
     }
