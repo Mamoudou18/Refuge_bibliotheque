@@ -1,7 +1,7 @@
 <header class="header-sticky" role="banner">
     <nav class="navbar navbar-expand-lg" aria-label="Navigation principale">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/home">
+            <a class="navbar-brand" routerLink="/home">
                 <img src="/images/LogoRefuge.png" alt="Refuge - Retour à l'accueil">
             </a>
             <button class="navbar-toggler" type="button" 
@@ -15,27 +15,27 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/home">
+                        <a class="nav-link" routerLink="/home" routerLinkActive="active" aria-current="page">
                             <i class="bi bi-house-door" aria-hidden="true"></i>Accueil
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/catalogue">
+                        <a class="nav-link" routerLink="/catalogue" routerLinkActive="active">
                             <i class="bi bi-book" aria-hidden="true"></i>Catalogue
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/emprunt">
+                        <a class="nav-link" routerLink="/emprunt" routerLinkActive="active">
                             <i class="bi bi-journal-check" aria-hidden="true"></i>Emprunts
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/connexion">
+                        <a class="nav-link" routerLink="/connexion" routerLinkActive="active">
                             <i class="bi bi-person-check" aria-hidden="true"></i>Connexion
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/inscription">
+                        <a class="nav-link" routerLink="/inscription" routerLinkActive="active">
                             <i class="bi bi-person-plus" aria-hidden="true"></i>Inscription
                         </a>
                     </li>
@@ -49,12 +49,12 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
-                                <a class="dropdown-item" href="/mon-compte">
+                                <a class="dropdown-item" routerLink="/mon-compte">
                                     <i class="bi bi-person-gear" aria-hidden="true"></i>Mon Compte
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="/deconnexion">
+                                <a class="dropdown-item" routerLink="/deconnexion">
                                     <i class="bi bi-box-arrow-right" aria-hidden="true"></i>Déconnexion
                                 </a>
                             </li>
