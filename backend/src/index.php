@@ -14,7 +14,10 @@ require_once __DIR__ . '/middlewares/Auth.php';
 require_once __DIR__ . '/helpers/Response.php';
 require_once __DIR__ . '/controllers/AuthController.php';
 require_once __DIR__ . '/controllers/AdminMembreController.php';
+require_once __DIR__ . '/controllers/AdminLivreController.php';
+require_once __DIR__ . '/controllers/LivreController.php';
 require_once __DIR__ . '/models/Membre.php';
+require_once __DIR__ . '/models/Livre.php';
 
 $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 $path = preg_replace('#^api/#', '', $path);
@@ -28,13 +31,20 @@ $action = $segments[1] ?? null;
 $subAction = $segments[2] ?? null;
 
 // --- Liste des ressources réservées à l'admin ---
-const ADMIN_RESOURCES = ['membres']; // ajout ici de toute future ressource admin (ex: 'stats', 'roles', ...)
+const ADMIN_RESOURCES = ['membres', 'admin']; // ajout ici de toute future ressource admin (ex: 'stats', 'livres', 'membres', ...)
+
+// Routes publiques mais nécessitant une connexion (n'importe quel membre)
+const AUTH_REQUIRED_RESOURCES = ['livres'];
 
 try {
     // --- Protection centralisée des routes admin ---
     if (in_array($resource, ADMIN_RESOURCES, true)) {
         $membreConnecte = Auth::check();
         Auth::checkRole($membreConnecte, 1); // 1 = admin
+    }
+    // --- Routes nécessitant juste d'être connecté (peu importe le rôle) ---
+    elseif (in_array($resource, AUTH_REQUIRED_RESOURCES, true)) {
+        $membreConnecte = Auth::check(); // bloque automatiquement si non connecté
     }
 
     if ($resource === 'auth' && $action === 'register' && $method === 'POST') {
@@ -44,12 +54,34 @@ try {
     } elseif ($resource === 'auth' && $action === 'logout' && $method === 'POST') {
         $membre = Auth::check();
         AuthController::logout($membre);
-
+    } 
+    
     // --- Routes admin ---
-    } elseif ($resource === 'membres' && $action === null && $method === 'GET') {
+    elseif ($resource === 'membres' && $action === null && $method === 'GET') {
         AdminMembreController::index();
     } elseif ($resource === 'membres' && is_numeric($action) && $subAction === 'statut' && $method === 'PATCH') {
         AdminMembreController::updateStatut($body, (int)$action);
+
+    }
+
+    // --- Routes livres (admin) : CRUD complet, admin only ---
+    elseif ($resource === 'admin' && $action === 'livres' && $subAction === null && $method === 'GET') {
+        AdminLivreController::index();
+    } elseif ($resource === 'admin' && $action === 'livres' && is_numeric($subAction) && $method === 'GET') {
+        AdminLivreController::show((int)$subAction);
+    } elseif ($resource === 'admin' && $action === 'livres' && $subAction === null && $method === 'POST') {
+        AdminLivreController::store($body);
+    } elseif ($resource === 'admin' && $action === 'livres' && is_numeric($subAction) && $method === 'PUT') {
+        AdminLivreController::update($body, (int)$subAction);
+    } elseif ($resource === 'admin' && $action === 'livres' && is_numeric($subAction) && $method === 'DELETE') {
+        AdminLivreController::destroy((int)$subAction);
+    }
+
+    // --- Routes livres (publiques) : lecture seule, connexion requise ---
+    elseif ($resource === 'livres' && $action === null && $method === 'GET') {
+        LivreController::index();
+    } elseif ($resource === 'livres' && is_numeric($action) && $method === 'GET') {
+        LivreController::show((int)$action);
 
     } else {
         Response::error('Route non trouvée', 404);
