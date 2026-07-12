@@ -33,7 +33,10 @@ hr {
 
 .card-img-top {
     height: 300px;
-    object-fit: cover;
+    width: 100%;
+    object-fit: contain;
+    background-color: var(--gris-clair, #f0f0f0); // comble l'espace vide autour
+    padding: 8px; // évite que l'image touche les bords
 }
 
 .card-title {

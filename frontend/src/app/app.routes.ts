@@ -7,11 +7,13 @@ import { Connexion } from './pages/connexion/connexion';
 import { Inscription } from './pages/inscription/inscription';
 import { MonCompte } from './pages/mon-compte/mon-compte';
 import { Deconnexion } from './pages/deconnexion/deconnexion';
+import { authGuard } from './services/auth-guard';
+
 
 export const routes: Routes = [
     { path: '', redirectTo: 'home',pathMatch: 'full'},
     { path: 'home', component: Home},
-    { path: 'catalogue', component: Catalogue},
+    { path: 'catalogue', component: Catalogue, canActivate: [authGuard]},
     { path: 'detail-livre', component: DetailLivre},
     { path: 'emprunt', component: Emprunts},
     { path: 'connexion', component: Connexion},

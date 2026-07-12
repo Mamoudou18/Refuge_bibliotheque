@@ -1,11 +1,86 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { LivreService } from '../../services/livre';
+import { Livre } from '../../utils/token.util';
 
 @Component({
   selector: 'app-catalogue',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './catalogue.html',
   styleUrl: './catalogue.scss',
 })
-export class Catalogue {
+export class Catalogue implements OnInit {
+  livres: Livre[] = [];
+  livresFiltres: Livre[] = [];
+  recherche: string = '';
+  categorieActive: string = 'Tous';
+  isLoading: boolean = true;
+  erreur: string = '';
 
+  categories: string[] = ['Tous', 'Roman', 'Conte', 'BD', 'Jeunesse', 'Doc'];
+
+  constructor(private livreService: LivreService) {}
+
+  ngOnInit(): void {
+    this.chargerLivres();
+  }
+
+  chargerLivres(): void {
+    this.isLoading = true;
+    this.livreService.getLivres().subscribe({
+      next: (data) => {
+        this.livres = data;
+        this.livresFiltres = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.erreur = 'Erreur lors du chargement des livres.';
+        this.isLoading = false;
+        console.error(err);
+      }
+    });
+  }
+
+  filtrerParCategorie(categorie: string): void {
+    this.categorieActive = categorie;
+    this.appliquerFiltres();
+  }
+
+  onRechercheChange(): void {
+    this.appliquerFiltres();
+  }
+
+  appliquerFiltres(): void {
+    let resultat = this.livres;
+
+    if (this.categorieActive !== 'Tous') {
+      resultat = resultat.filter(
+        (livre) => livre.categorie?.toLowerCase() === this.categorieActive.toLowerCase()
+      );
+    }
+
+    if (this.recherche.trim() !== '') {
+      const terme = this.recherche.toLowerCase();
+      resultat = resultat.filter(
+        (livre) =>
+          livre.titre.toLowerCase().includes(terme) ||
+          livre.auteur.toLowerCase().includes(terme)
+      );
+    }
+
+    this.livresFiltres = resultat;
+  }
+
+  getBadgeClass(categorie: string | null): string {
+    const map: { [key: string]: string } = {
+      'Roman': 'badge-roman',
+      'BD': 'badge-bd',
+      'Jeunesse': 'badge-jeunesse',
+      'Doc': 'badge-doc'
+    };
+    return categorie ? (map[categorie] || 'badge-roman') : 'badge-roman';
+  }
 }
