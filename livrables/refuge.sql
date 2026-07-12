@@ -81,6 +81,23 @@ INSERT INTO statut_emprunt (libelle) VALUES
     ALTER TABLE membre
 ADD COLUMN date_naissance DATE;
 
-UPDATE token
-SET date_expiration = NOW() - INTERVAL '1 minute'
-WHERE api_token = 'dc885f376791df9e9ed58805f97a75103330aa2436f54f10f409b108da2b79ba';
+-- création compte admin
+INSERT INTO membre (
+    nom, 
+    prenom, 
+    email, 
+    mot_de_passe, 
+    numero_tel, 
+    is_actif, 
+    id_role, 
+    date_inscription
+) VALUES (
+    'TRAORE',
+    'Lamine',
+    'lamine.traoreadmin@gmail.com',
+    'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', -- mot de passe hashé généré via script php
+    '0751466320',
+    TRUE,
+    1,
+    NOW()
+);

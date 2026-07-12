@@ -45,8 +45,12 @@ export class Connexion {
     this.authService.connexionUtilisateur(this.loginForm.value).subscribe({
       next: (response) => {
         this.isLoading = false;
-        // stocker le token / rediriger
-        this.router.navigate(['/']);
+
+        if (this.authService.isAdmin()) {
+          this.router.navigate(['/mon-compte']);
+        } else {
+          this.router.navigate(['/']);
+        }
       },
       error: (err) => {
         this.isLoading = false;
@@ -54,4 +58,5 @@ export class Connexion {
       }
     });
   }
+
 }

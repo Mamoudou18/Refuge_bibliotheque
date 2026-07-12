@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap, catchError, finalize } from 'rxjs';
-import { setToken, getToken, removeToken, setMembre, removeMembre, Membre } from '../utils/token.util';
+import { Observable, tap, finalize } from 'rxjs';
+import { setToken, getToken, getMembre, removeToken, setMembre, removeMembre, Membre } from '../utils/token.util';
 
 export interface InscriptionData {
   nom: string;
@@ -54,5 +54,14 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return !!getToken();
+  }
+
+  getMembreConnecte(): Membre | null {
+    return getMembre();
+  }
+
+  isAdmin(): boolean {
+    const membre = getMembre();
+    return membre?.id_role === 1;
   }
 }

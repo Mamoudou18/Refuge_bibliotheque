@@ -61,7 +61,12 @@ export class Inscription {
     this.authService.inscrireUtilisateur(formValue).subscribe({
       next: () => {
         this.isLoading = false;
-        this.router.navigate(['/connexion']);
+
+        if (this.authService.isAdmin()) {
+          this.router.navigate(['/mon-compte'], { queryParams: { section: 'membres' } });
+        } else {
+          this.router.navigate(['/connexion']);
+        }
       },
       error: (err) => {
         this.isLoading = false;

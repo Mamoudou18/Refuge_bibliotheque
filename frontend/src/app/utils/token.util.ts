@@ -13,6 +13,18 @@ export interface Membre {
   date_inscription: string;
 }
 
+export interface MembreAdmin {
+  id_membre: number;
+  nom: string;
+  prenom: string;
+  email: string;
+  numero_tel: string;
+  is_actif: boolean;
+  id_role: number;
+  role: string;
+  date_inscription: string;
+}
+
 export function setToken(token: string): void {
   localStorage.setItem(TOKEN_KEY, token);
 }

@@ -14,42 +14,44 @@
                 <a class="nav-link" [class.active]="activeSection === 'accueil'" (click)="showSection('accueil')">
                     <i class="bi bi-house"></i><span>Accueil</span>
                 </a>
-                <a class="nav-link" [class.active]="activeSection === 'mes_emprunts'" (click)="showSection('mes_emprunts')">
-                    <i class="bi bi-clock-history"></i><span>Mes emprunts</span>
+
+                @if (!isAdmin) {
+                    <a class="nav-link" [class.active]="activeSection === 'mes_emprunts'" (click)="showSection('mes_emprunts')">
+                        <i class="bi bi-clock-history"></i><span>Mes emprunts</span>
+                    </a>
+                }
+                
+                <a class="nav-link" [class.active]="activeSection === 'parametres'" (click)="showSection('profil')">
+                    <i class="bi bi-gear"></i><span> Mon profil</span>
                 </a>
+
             </div>
 
-            <div class="nav-section">
-                <h2 class="nav-label">Administration</h2>
-                <a class="nav-link" [class.active]="activeSection === 'livres'" (click)="showSection('livres')">
-                    <i class="bi bi-book"></i><span>Gestion des Livres</span>
-                </a>
-                <a class="nav-link" [class.active]="activeSection === 'membres'" (click)="showSection('membres')">
-                    <i class="bi bi-people"></i><span>Gestion des Membres</span>
-                </a>
-                <a class="nav-link" [class.active]="activeSection === 'emprunts'" (click)="showSection('emprunts')">
-                    <i class="bi bi-clock-history"></i><span>Gestion des emprunts</span>
-                </a>
-                <a class="nav-link" [class.active]="activeSection === 'statistiques'" (click)="showSection('statistiques')">
-                    <i class="bi bi-bar-chart"></i><span>Statistiques</span>
-                </a>
-            </div>
-
-            <hr>
-            
-            <div class="nav-section">
-                <a class="nav-link" [class.active]="activeSection === 'parametres'" (click)="showSection('parametres')">
-                    <i class="bi bi-gear"></i><span>Paramètres</span>
-                </a>
-            </div>
+            @if (isAdmin) {
+                <div class="nav-section">
+                    <h2 class="nav-label">Administration</h2>
+                    <a class="nav-link" [class.active]="activeSection === 'livres'" (click)="showSection('livres')">
+                        <i class="bi bi-book"></i><span>Gestion des Livres</span>
+                    </a>
+                    <a class="nav-link" [class.active]="activeSection === 'membres'" (click)="showSection('membres')">
+                        <i class="bi bi-people"></i><span>Gestion des Membres</span>
+                    </a>
+                    <a class="nav-link" [class.active]="activeSection === 'emprunts'" (click)="showSection('emprunts')">
+                        <i class="bi bi-clock-history"></i><span>Gestion des emprunts</span>
+                    </a>
+                    <a class="nav-link" [class.active]="activeSection === 'statistiques'" (click)="showSection('statistiques')">
+                        <i class="bi bi-bar-chart"></i><span>Statistiques</span>
+                    </a>
+                </div>
+            }
 
         </nav>
 
         <div class="sidebar-user">
-            <div class="user-avatar">A</div>
+            <div class="user-avatar">{{ membre?.prenom?.charAt(0) }}</div>
             <div class="user-info">
-                <span class="user-name">Amadi Diallo</span>
-                <span class="user-role">Administrateur</span>
+                <span class="user-name">{{ membre?.prenom }} {{ membre?.nom }}</span>
+                <span class="user-role">{{ isAdmin ? 'Administrateur' : 'Membre' }}</span>
             </div>
         </div>
 
@@ -243,8 +245,8 @@
                 </div>
             </div>
         }
-        <!-- PARAMETRES -->
-        @if (activeSection === 'parametres') {
+        <!-- MON PROFIL -->
+        @if (activeSection === 'profil') {
             <div class="section-page">
                 <div class="page-header">
                     <h1><i class="bi bi-gear"></i> Paramètres</h1>
@@ -392,124 +394,80 @@
 
         <!-- GESTIONS DES MEMBRES -->
         @if (activeSection === 'membres') {
-            <div class="section-page">
-                <div class="page-header">
-                    <h1><i class="bi bi-people"></i>Gestion Membres</h1>
-                    <p>Gestion des membres de la bibliothèque.</p>
-                    <hr/>
-                </div>
-                <div class="admin-bloc">
-                    <div class="section-title">
-                        <h3><i class="bi bi-list-ul"></i> Liste des membres</h3>
-                        <span class="ligne"></span>
-                    </div>
-
-                    <!-- Bouton ajouter -->
-                    <button class="btn btn-save w-100">
-                        <i class="bi bi-plus-lg"></i> Ajouter un membre
-                    </button>
-
-                    <!-- Recherche -->
-                    <input type="text" class="input-recherche" placeholder="Rechercher..." />
-
-                    <!-- Filtres -->
-                    <div class="filtres-bar">
-                        <button class="btn-filtre active">Tous</button>
-                        <button class="btn-filtre">Actif</button>
-                        <button class="btn-filtre">Inactif</button>
-                    </div>
-
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Emprunts actifs</th><th>Statut</th><th>Actions</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Amadi Diallo</td><td>amadi@email.com</td><td>Administrateur</td><td>2</td>
-                                    <td class="statut-cell">
-                                        <div class="statut-wrapper">
-                                            <span class="statut-label actif">Actif</span>
-                                        </div>
-                                    </td>
-                                    <td class="actions-cell">
-                                        <div class="actions-wrapper">
-                                            <label class="switch">
-                                                <input type="checkbox" checked />
-                                                <span class="slider"></span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Marie Dupont</td><td>marie@email.com</td><td>Membre</td><td>1</td>
-                                    <td class="statut-cell">
-                                        <div class="statut-wrapper">
-                                            <span class="statut-label actif">Actif</span>
-                                        </div>
-                                    </td>
-                                    <td class="actions-cell">
-                                        <div class="actions-wrapper">
-                                            <label class="switch">
-                                                <input type="checkbox" checked />
-                                                <span class="slider"></span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Sara Fall</td><td>sara@email.com</td><td>Membre</td><td>1</td>
-                                    <td class="statut-cell">
-                                        <div class="statut-wrapper">
-                                            <span class="statut-label inactif">Inactif</span>
-                                        </div>
-                                    </td>
-                                    <td class="actions-cell">
-                                        <div class="actions-wrapper">
-                                            <label class="switch">
-                                                <input type="checkbox" />
-                                                <span class="slider"></span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Paul Mendy</td><td>paul@email.com</td><td>Membre</td><td>1</td>
-                                    <td class="statut-cell">
-                                        <div class="statut-wrapper">
-                                            <span class="statut-label inactif">Inactif</span>
-                                        </div>
-                                    </td>
-                                    <td class="actions-cell">
-                                        <div class="actions-wrapper">
-                                            <label class="switch">
-                                                <input type="checkbox" />
-                                                <span class="slider"></span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Jean Koné</td><td>jean@email.com</td><td>Membre</td><td>1</td>
-                                    <td class="statut-cell">
-                                        <div class="statut-wrapper">
-                                            <span class="statut-label actif">Actif</span>
-                                        </div>
-                                    </td>
-                                    <td class="actions-cell">
-                                        <div class="actions-wrapper">
-                                            <label class="switch">
-                                                <input type="checkbox" checked />
-                                                <span class="slider"></span>
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+        <div class="section-page">
+            <div class="page-header">
+            <h1><i class="bi bi-people"></i>Gestion Membres</h1>
+            <p>Gestion des membres de la bibliothèque.</p>
+            <hr/>
             </div>
+            <div class="admin-bloc">
+            <div class="section-title">
+                <h3><i class="bi bi-list-ul"></i> Liste des membres</h3>
+                <span class="ligne"></span>
+            </div>
+
+            <button class="btn btn-save w-100" routerLink="/inscription">
+                <i class="bi bi-plus-lg"></i> Ajouter un membre
+            </button>
+
+            <input
+                type="text"
+                class="input-recherche"
+                placeholder="Rechercher..."
+                [(ngModel)]="rechercheTerme"
+                (ngModelChange)="onRecherche()"
+            />
+
+            <div class="filtres-bar">
+                <button class="btn-filtre" [class.active]="filtreActuel === 'tous'" (click)="setFiltre('tous')">Tous</button>
+                <button class="btn-filtre" [class.active]="filtreActuel === 'actif'" (click)="setFiltre('actif')">Actif</button>
+                <button class="btn-filtre" [class.active]="filtreActuel === 'inactif'" (click)="setFiltre('inactif')">Inactif</button>
+            </div>
+
+            @if (loading) {
+                <p>Chargement...</p>
+            }
+            @if (errorMsg) {
+                <p class="text-danger">{{ errorMsg }}</p>
+            }
+
+            <div class="table-responsive">
+                <table>
+                <thead>
+                    <tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Statut</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    @for (membre of membresFiltres; track membre.id_membre) {
+                    <tr>
+                        <td>{{ membre.prenom }} {{ membre.nom }}</td>
+                        <td>{{ membre.email }}</td>
+                        <td>{{ membre.role }}</td>
+                        <td class="statut-cell">
+                        <div class="statut-wrapper">
+                            <span class="statut-label" [class.actif]="membre.is_actif" [class.inactif]="!membre.is_actif">
+                            {{ membre.is_actif ? 'Actif' : 'Inactif' }}
+                            </span>
+                        </div>
+                        </td>
+                        <td class="actions-cell">
+                        <div class="actions-wrapper">
+                            <label class="switch">
+                            <input
+                                type="checkbox"
+                                [checked]="membre.is_actif"
+                                (change)="toggleStatut(membre)"
+                            />
+                            <span class="slider"></span>
+                            </label>
+                        </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
         }
 
         <!-- GESTIONS DES EMPRUNTS (ADMIN) -->
