@@ -25,6 +25,20 @@ export interface MembreAdmin {
   date_inscription: string;
 }
 
+export interface Livre {
+  id_livre: number;
+  titre: string;
+  auteur: string;
+  annee_publication: number | null;
+  categorie: string | null;
+  description: string | null;
+  nb_exemplaires: number;
+  nb_disponibles: number;
+  url_couverture: string | null;
+  date_ajout: string;
+  date_maj: string | null;
+}
+
 export function setToken(token: string): void {
   localStorage.setItem(TOKEN_KEY, token);
 }

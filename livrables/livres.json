@@ -1,0 +1,152 @@
+[
+  {
+    "titre": "Le Petit Prince",
+    "auteur": "Antoine de Saint-Exupéry",
+    "annee_publication": 1943,
+    "categorie": "Conte",
+    "description": "Après une panne d'avion dans le désert du Sahara, un pilote fait la rencontre d'un mystérieux petit garçon venu d'un astéroïde lointain. Au fil de leurs échanges, le petit prince lui raconte ses voyages à travers différentes planètes et lui parle de sa rose qu'il a laissée chez lui. Une œuvre intemporelle sur l'amitié, l'amour et ce qui compte vraiment dans la vie.",
+    "nb_exemplaires": 5,
+    "nb_disponibles": 5,
+    "url_couverture": ""
+  },
+  {
+    "titre": "Les Trois Brigands",
+    "auteur": "Tomi Ungerer",
+    "annee_publication": 1962,
+    "categorie": "Album jeunesse",
+    "description": "Trois brigands masqués, armés d'une hache, d'un soufflet et d'un pistolet, terrorisent les voyageurs et amassent un immense trésor. Mais tout bascule le jour où ils attaquent la calèche d'une petite orpheline nommée Tiffany. Touchés par sa gentillesse, ils décident de changer de vie et d'utiliser leur fortune pour aider les enfants abandonnés.",
+    "nb_exemplaires": 4,
+    "nb_disponibles": 4,
+    "url_couverture": ""
+  },
+  {
+    "titre": "Fables de La Fontaine",
+    "auteur": "Jean de La Fontaine",
+    "annee_publication": 1668,
+    "categorie": "Poésie",
+    "description": "Un recueil de fables mettant en scène des animaux qui parlent et agissent comme des humains. À travers des histoires courtes comme Le Corbeau et le Renard, La Cigale et la Fourmi ou Le Lièvre et la Tortue, l'auteur délivre des leçons de morale intemporelles avec humour et poésie.",
+    "nb_exemplaires": 6,
+    "nb_disponibles": 6,
+    "url_couverture": ""
+  },
+  {
+    "titre": "Matilda",
+    "auteur": "Roald Dahl",
+    "annee_publication": 1988,
+    "categorie": "Roman jeunesse",
+    "description": "Matilda est une petite fille surdouée dont les parents ne s'intéressent absolument pas à elle. À l'école, elle doit également affronter la terrible directrice Mademoiselle Legourdin. Heureusement, elle découvre qu'elle possède un pouvoir extraordinaire qui va lui permettre de rétablir la justice autour d'elle.",
+    "nb_exemplaires": 4,
+    "nb_disponibles": 4,
+    "url_couverture": ""
+  },
+  {
+    "titre": "Charlie et la Chocolaterie",
+    "auteur": "Roald Dahl",
+    "annee_publication": 1964,
+    "categorie": "Roman jeunesse",
+    "description": "Charlie Bucket, un petit garçon issu d'une famille très pauvre, a la chance de trouver un des cinq tickets d'or lui permettant de visiter la mystérieuse et fabuleuse chocolaterie de Monsieur Willy Wonka. Une aventure pleine de surprises et de gourmandise l'attend, ainsi que quatre autres enfants moins bien intentionnés.",
+    "nb_exemplaires": 5,
+    "nb_disponibles": 5,
+    "url_couverture": ""
+  },
+  {
+    "titre": "Le Petit Nicolas",
+    "auteur": "Sempé Goscinny",
+    "annee_publication": 1959,
+    "categorie": "Roman jeunesse",
+    "description": "À travers les yeux de Nicolas, un jeune écolier français, on découvre avec humour et tendresse les aventures du quotidien avec ses copains de classe : Alceste, Clotaire, Geoffroy, et tous les autres. Un classique de la littérature jeunesse française plein de fraîcheur et de nostalgie.",
+    "nb_exemplaires": 5,
+    "nb_disponibles": 5,
+    "url_couverture": ""
+  },
+  {
+    "titre": "Contes d'Amadou Koumba",
+    "auteur": "Birago Diop",
+    "annee_publication": 1947,
+    "categorie": "Conte",
+    "description": "Ce recueil rassemble des contes traditionnels sénégalais recueillis et transcrits par Birago Diop, poète et conteur, à partir des récits de son griot Amadou Koumba. On y retrouve la sagesse, l'humour et la richesse de la tradition orale africaine, mettant en scène des animaux et des personnages emblématiques du folklore ouest-africain.",
+    "nb_exemplaires": 4,
+    "nb_disponibles": 4,
+    "url_couverture": ""
+  },
+  {
+    "titre": "Tibili le Petit Garçon qui ne voulait pas aller à l'école",
+    "auteur": "Marie Léonard, Andrée Prigent",
+    "annee_publication": 2003,
+    "categorie": "Album jeunesse",
+    "description": "Une histoire ivoirienne pleine de charme qui raconte le parcours d'un petit garçon récalcitrant à l'idée d'aller à l'école. Un album qui aborde avec légèreté et humour l'importance de l'éducation, très populaire dans les écoles francophones d'Afrique de l'Ouest.",
+    "nb_exemplaires": 4,
+    "nb_disponibles": 4,
+    "url_couverture": ""
+  },
+  {
+    "titre": "Aya de Yopougon",
+    "auteur": "Marguerite Abouet",
+    "annee_publication": 2005,
+    "categorie": "Bande dessinée",
+    "description": "Dans le quartier populaire de Yopougon à Abidjan, à la fin des années 1970, Aya, dix-neuf ans, rêve de devenir médecin tandis que ses amies préfèrent penser aux garçons et à la fête. Une bande dessinée pétillante qui a remporté le prix du premier album au Festival d'Angoulême 2006.",
+    "nb_exemplaires": 3,
+    "nb_disponibles": 3,
+    "url_couverture": ""
+  },
+  {
+    "titre": "Sous l'orage",
+    "auteur": "Seydou Badian",
+    "annee_publication": 1957,
+    "categorie": "Roman",
+    "description": "Ce roman malien raconte l'histoire de Kany, une jeune fille tiraillée entre les traditions de sa famille qui veut la marier à un riche commerçant et son amour pour Samou, un jeune enseignant. Un classique de la littérature africaine qui explore le conflit entre modernité et tradition.",
+    "nb_exemplaires": 3,
+    "nb_disponibles": 3,
+    "url_couverture": ""
+  },
+  {
+    "titre": "L'Enfant noir",
+    "auteur": "Camara Laye",
+    "annee_publication": 1953,
+    "categorie": "Roman autobiographique",
+    "description": "Camara Laye raconte son enfance en Guinée, à Kouroussa, au sein d'une famille où son père est un forgeron-orfèvre respecté aux pouvoirs presque magiques. Le roman dépeint avec tendresse et nostalgie les traditions mandingues, les rites d'initiation et la vie villageoise, jusqu'au départ du jeune Camara pour Conakry puis pour la France afin de poursuivre ses études.",
+    "nb_exemplaires": 3,
+    "nb_disponibles": 3,
+    "url_couverture": ""
+  },
+  {
+    "titre": "Le Bon Gros Géant",
+    "auteur": "Roald Dahl",
+    "annee_publication": 1982,
+    "categorie": "Roman jeunesse",
+    "description": "Sophie, une petite orpheline, est emmenée une nuit par un géant mystérieux. Elle découvre alors qu'il n'est pas comme les autres géants mangeurs d'enfants : le Bon Gros Géant collecte des rêves pour les distribuer aux enfants pendant leur sommeil. Ensemble, ils vont tenter d'arrêter les méchants géants qui terrorisent les humains.",
+    "nb_exemplaires": 4,
+    "nb_disponibles": 4,
+    "url_couverture": ""
+  },
+  {
+    "titre": "Poil de Carotte",
+    "auteur": "Jules Renard",
+    "annee_publication": 1894,
+    "categorie": "Roman",
+    "description": "Poil de Carotte est un jeune garçon roux, mal-aimé par sa mère et souvent moqué à cause de sa chevelure. À travers des scènes de la vie quotidienne, souvent drôles mais aussi touchantes, Jules Renard dépeint avec réalisme l'enfance et les difficultés familiales.",
+    "nb_exemplaires": 3,
+    "nb_disponibles": 3,
+    "url_couverture": ""
+  },
+  {
+    "titre": "Ayanda la Petite Fille qui ne voulait pas grandir",
+    "auteur": "Véronique Tadjo",
+    "annee_publication": 2009,
+    "categorie": "Roman jeunesse",
+    "description": "Ayanda est une petite fille heureuse, jusqu’au jour où son père, qui a été enrôlé comme soldat, disparaît. En révolte contre le monde cruel des adultes, elle décide de rester petite. Elle recommencera à grandir pour aider sa famille frappée par la maladie et deviendra géante pour chasser les bandits qui terrorisent le village. Enfin, victorieuse et apaisée, elle retrouvera une taille normale et reprendra le fil de sa vie.",
+    "nb_exemplaires": 0,
+    "nb_disponibles": 0,
+    "url_couverture": ""
+  },
+  {
+    "titre": "Un sac de billes",
+    "auteur": "Joseph Joffo",
+    "annee_publication": 1973,
+    "categorie": "Roman autobiographique",
+    "description": "Joseph et son frère Maurice, deux jeunes garçons juifs, doivent fuir Paris occupé par les nazis pour rejoindre la zone libre. Un récit autobiographique poignant sur la fuite, la débrouillardise et la résilience de deux enfants pendant la Seconde Guerre mondiale.",
+    "nb_exemplaires": 3,
+    "nb_disponibles": 3,
+    "url_couverture": ""
+  }
+]

@@ -1,3 +1,5 @@
+@use 'modals';
+
 /* Définition de la charte graphique de l'application */
 
 :root {
@@ -88,8 +90,6 @@
       a { font-size: var(--liens-mobile-size); }
 
 }
-
-
 
 
 /* police de toute l'application */

@@ -83,16 +83,17 @@ class Livre
             RETURNING *
         ");
 
-        $nbExemplaires = $data['nb_exemplaires'] ?? 1;
+        $nbExemplaires = !empty($data['nb_exemplaires']) ? (int)$data['nb_exemplaires'] : 1;
+        $nbDisponibles = !empty($data['nb_disponibles']) ? (int)$data['nb_disponibles'] : $nbExemplaires;
 
         $stmt->execute([
             'titre' => $data['titre'],
             'auteur' => $data['auteur'],
-            'annee_publication' => $data['annee_publication'] ?? null,
+            'annee_publication' => !empty($data['annee_publication']) ? (int)$data['annee_publication'] : null,
             'categorie' => $data['categorie'] ?? null,
             'description' => $data['description'] ?? null,
             'nb_exemplaires' => $nbExemplaires,
-            'nb_disponibles' => $data['nb_disponibles'] ?? $nbExemplaires,
+            'nb_disponibles' => $nbDisponibles,
             'url_couverture' => $data['url_couverture'] ?? null,
         ]);
 
@@ -120,11 +121,11 @@ class Livre
         $stmt->execute([
             'titre' => $data['titre'],
             'auteur' => $data['auteur'],
-            'annee_publication' => $data['annee_publication'] ?? null,
+            'annee_publication' => !empty($data['annee_publication']) ? (int)$data['annee_publication'] : null,
             'categorie' => $data['categorie'] ?? null,
             'description' => $data['description'] ?? null,
-            'nb_exemplaires' => $data['nb_exemplaires'],
-            'nb_disponibles' => $data['nb_disponibles'],
+            'nb_exemplaires' => (int)($data['nb_exemplaires'] ?? 0),
+            'nb_disponibles' => (int)($data['nb_disponibles'] ?? 0),
             'url_couverture' => $data['url_couverture'] ?? null,
             'id' => $idLivre,
         ]);

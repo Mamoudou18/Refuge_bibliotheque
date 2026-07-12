@@ -516,15 +516,18 @@
     input, select, textarea {
         width: 100%;
         padding: 0.625rem 0.875rem;
-        border: 1.5px solid var(--gris-clair);
+        border: 1.5px solid var(--bleu-refuge);
         border-radius: 8px;
         font-size: var(--body-size);
         color: var(--noir-doux);
         background: var(--blanc);
         transition: border-color 0.2s;
         outline: none;
+
         &:focus {
-            border-color: var(--bleu-refuge);
+        outline: none;
+        border-color: var(--bleu-refuge);
+        box-shadow: 0 0 0 3px rgba(27, 95, 168, 0.15);
         }
     }
 }

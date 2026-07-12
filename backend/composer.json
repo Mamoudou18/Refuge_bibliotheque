@@ -1,0 +1,12 @@
+{
+    "name": "mamoudoutraore/backend",
+    "authors": [
+        {
+            "name": "Mamoudou18",
+            "email": "mamoudou.traore180422@gmail.com"
+        }
+    ],
+    "require": {
+        "cloudinary/cloudinary_php": "^3.1"
+    }
+}

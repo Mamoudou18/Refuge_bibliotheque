@@ -303,92 +303,202 @@
         <!-- GESTIONS DES LIVRES -->
         @if (activeSection === 'livres') {
         <div class="section-page">
-                <div class="page-header">
-                    <h1><i class="bi bi-book"></i>Gestion Livres</h1>
-                    <p>Catalogue complet des livres disponibles.</p>
-                    <hr/>
+            <div class="page-header">
+                <h1><i class="bi bi-book"></i>Gestion Livres</h1>
+                <p>Catalogue complet des livres disponibles.</p>
+                <hr/>
+            </div>
+            <div class="admin-bloc">
+                <div class="section-title">
+                    <h3><i class="bi bi-list-ul"></i> Liste des livres</h3>
+                    <span class="ligne"></span>
                 </div>
-                <div class="admin-bloc">
-                    <div class="section-title">
-                        <h3><i class="bi bi-list-ul"></i> Liste des livres</h3>
-                        <span class="ligne"></span>
-                    </div>
 
-                    <!-- Bouton ajouter -->
-                    <button class="btn btn-save w-100">
-                        <i class="bi bi-plus-lg"></i> Ajouter un livre
+                <!-- Bouton ajouter -->
+                <button class="btn btn-save w-100" (click)="ouvrirModalAjout()">
+                    <i class="bi bi-plus-lg"></i> Ajouter un livre
+                </button>
+
+                <!-- Recherche -->
+                <input
+                    type="text"
+                    class="input-recherche"
+                    placeholder="Rechercher..."
+                    [(ngModel)]="rechercheLivre"
+                    (ngModelChange)="onRechercheLivreChange()"
+                />
+
+                <!-- Filtres -->
+                <div class="filtres-bar">
+                    <button
+                        class="btn-filtre"
+                        [class.active]="filtreActifLivre === 'tous'"
+                        (click)="filtrerLivres('tous')"
+                    >Tous les livres</button>
+                    <button
+                        class="btn-filtre"
+                        [class.active]="filtreActifLivre === 'disponible'"
+                        (click)="filtrerLivres('disponible')"
+                    >Disponible</button>
+                    <button
+                        class="btn-filtre"
+                        [class.active]="filtreActifLivre === 'indisponible'"
+                        (click)="filtrerLivres('indisponible')"
+                    >Indisponible</button>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr><th>Titre</th><th>Auteur</th><th>Genre</th><th>Disponibilité</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody>
+                            @for (livre of livresFiltres; track livre.id_livre) {
+                            <tr>
+                                <td>{{ livre.titre }}</td>
+                                <td>{{ livre.auteur }}</td>
+                                <td>{{ livre.categorie || '-' }}</td>
+                                <td>
+                                    @if (livre.nb_disponibles > 0) {
+                                    <span class="badge badge-ok">Disponible ({{ livre.nb_disponibles }}/{{ livre.nb_exemplaires }})</span>
+                                    } @else {
+                                    <span class="badge badge-retard">Indisponible</span>
+                                    }
+                                </td>
+                                <td class="actions-cell">
+                                    <div class="actions-wrapper">
+                                        <button class="btn-icon" (click)="ouvrirModalModification(livre)">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn-icon danger" (click)="demanderSuppressionLivre(livre)">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            } @empty {
+                            <tr>
+                                <td colspan="5" style="text-align:center;">Aucun livre trouvé.</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        }
+
+        <!-- MODAL AJOUT / MODIFICATION LIVRE -->
+        @if (showModalLivre) {
+        <div class="modal-overlay" (click)="fermerModalLivre()">
+            <div class="modal-content" (click)="$event.stopPropagation()">
+                <div class="modal-header">
+                    <h3>
+                        <i class="bi" [class.bi-plus-lg]="!modeEditionLivre" [class.bi-pencil]="modeEditionLivre"></i>
+                        {{ modeEditionLivre ? 'Modifier le livre' : 'Ajouter un livre' }}
+                    </h3>
+                    <button class="btn-close-modal" (click)="fermerModalLivre()">
+                        <i class="bi bi-x-lg"></i>
                     </button>
-
-                    <!-- Recherche -->
-                    <input type="text" class="input-recherche" placeholder="Rechercher..." />
-
-                    <!-- Filtres -->
-                    <div class="filtres-bar">
-                        <button class="btn-filtre active">Tous les livres</button>
-                        <button class="btn-filtre">Disponible</button>
-                        <button class="btn-filtre">Indisponible</button>
-                    </div>
-
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr><th>Titre</th><th>Auteur</th><th>Genre</th><th>Disponibilité</th><th>Actions</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Harry Potter T1</td><td>J.K. Rowling</td><td>Fantasy</td>
-                                    <td><span class="badge badge-retard">Emprunté</span></td>
-                                    <td class="actions-cell">
-                                        <div class="actions-wrapper">
-                                            <button class="btn-icon"><i class="bi bi-pencil"></i></button>
-                                            <button class="btn-icon danger"><i class="bi bi-x-lg"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Le Petit Prince</td><td>Antoine de Saint-Exupéry</td><td>Conte</td>
-                                    <td><span class="badge badge-ok">Disponible</span></td>
-                                    <td class="actions-cell">
-                                        <div class="actions-wrapper">
-                                            <button class="btn-icon"><i class="bi bi-pencil"></i></button>
-                                            <button class="btn-icon danger"><i class="bi bi-x-lg"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>L'Alchimiste</td><td>Paulo Coelho</td><td>Roman</td>
-                                    <td><span class="badge badge-retard">Emprunté</span></td>
-                                    <td class="actions-cell">
-                                        <div class="actions-wrapper">
-                                            <button class="btn-icon"><i class="bi bi-pencil"></i></button>
-                                            <button class="btn-icon danger"><i class="bi bi-x-lg"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>1984</td><td>George Orwell</td><td>Science-fiction</td>
-                                    <td><span class="badge badge-ok">Disponible</span></td>
-                                    <td class="actions-cell">
-                                        <div class="actions-wrapper">
-                                            <button class="btn-icon"><i class="bi bi-pencil"></i></button>
-                                            <button class="btn-icon danger"><i class="bi bi-x-lg"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Le Seigneur des Anneaux</td><td>J.R.R. Tolkien</td><td>Fantasy</td>
-                                    <td><span class="badge badge-ok">Disponible</span></td>
-                                    <td class="actions-cell">
-                                        <div class="actions-wrapper">
-                                            <button class="btn-icon"><i class="bi bi-pencil"></i></button>
-                                            <button class="btn-icon danger"><i class="bi bi-x-lg"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
+
+                <div class="modal-body">
+                    @if (messageErreurLivre) {
+                    <div class="alert-erreur">
+                        <i class="bi bi-exclamation-triangle"></i> {{ messageErreurLivre }}
+                    </div>
+                    }
+
+                    <form (ngSubmit)="soumettreLivre()">
+                        <div class="form-group">
+                            <label>Titre *</label>
+                            <input type="text" class="form-control" [(ngModel)]="livreSelectionne.titre" name="titre" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Auteur *</label>
+                            <input type="text" class="form-control" [(ngModel)]="livreSelectionne.auteur" name="auteur" required />
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Année de publication</label>
+                                <input type="number" class="form-control" [(ngModel)]="livreSelectionne.annee_publication" name="annee_publication" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Catégorie</label>
+                                <input type="text" class="form-control" [(ngModel)]="livreSelectionne.categorie" name="categorie" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control" rows="3" [(ngModel)]="livreSelectionne.description" name="description"></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Nombre d'exemplaires</label>
+                                <input type="number" min="0" class="form-control" [(ngModel)]="livreSelectionne.nb_exemplaires" name="nb_exemplaires" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Nombre disponibles</label>
+                                <input type="number" min="0" class="form-control" [(ngModel)]="livreSelectionne.nb_disponibles" name="nb_disponibles" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Image de couverture</label>
+
+                            @if (previewImageLivre) {
+                            <div class="preview-image-container">
+                                <img [src]="previewImageLivre" alt="Aperçu couverture" class="preview-image" />
+                                <button type="button" class="btn-remove-image" (click)="supprimerImageLivre()">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </div>
+                            }
+
+                            <input type="file" accept="image/*" class="form-control" (change)="onFichierImageSelectionne($event)" />
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-cancel" (click)="fermerModalLivre()">Annuler</button>
+                            <button type="submit" class="btn btn-save" [disabled]="chargementLivre">
+                                @if (chargementLivre) {
+                                <span>Enregistrement...</span>
+                                } @else {
+                                <span>{{ modeEditionLivre ? 'Modifier' : 'Ajouter' }}</span>
+                                }
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        }
+
+        <!-- MODAL CONFIRMATION SUPPRESSION -->
+        @if (showModalSuppressionLivre) {
+        <div class="modal-overlay" (click)="annulerSuppressionLivre()">
+            <div class="modal-content modal-small" (click)="$event.stopPropagation()">
+                <div class="modal-header">
+                    <h3><i class="bi bi-exclamation-triangle"></i> Confirmer la suppression</h3>
+                    <button class="btn-close-modal" (click)="annulerSuppressionLivre()">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Êtes-vous sûr de vouloir supprimer le livre <strong>{{ livreASupprimer?.titre }}</strong> ?</p>
+                    <p class="text-muted">Cette action est irréversible.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-cancel" (click)="annulerSuppressionLivre()">Annuler</button>
+                    <button class="btn btn-danger" (click)="confirmerSuppressionLivre()">Supprimer</button>
+                </div>
+            </div>
         </div>
         }
 

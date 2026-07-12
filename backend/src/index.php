@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
@@ -19,12 +21,19 @@ require_once __DIR__ . '/controllers/LivreController.php';
 require_once __DIR__ . '/models/Membre.php';
 require_once __DIR__ . '/models/Livre.php';
 
+require_once __DIR__ . '/services/CloudinaryService.php';
+
 $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 $path = preg_replace('#^api/#', '', $path);
 $segments = explode('/', $path);
 
 $method = $_SERVER['REQUEST_METHOD'];
 $body = json_decode(file_get_contents('php://input'), true) ?? [];
+
+// --- Support du method spoofing pour PUT avec upload de fichier (FormData) ---
+if ($method === 'POST' && isset($_POST['_method']) && strtoupper($_POST['_method']) === 'PUT') {
+    $method = 'PUT';
+}
 
 $resource = $segments[0] ?? '';
 $action = $segments[1] ?? null;
@@ -55,7 +64,7 @@ try {
         $membre = Auth::check();
         AuthController::logout($membre);
     } 
-    
+
     // --- Routes admin ---
     elseif ($resource === 'membres' && $action === null && $method === 'GET') {
         AdminMembreController::index();
@@ -70,9 +79,9 @@ try {
     } elseif ($resource === 'admin' && $action === 'livres' && is_numeric($subAction) && $method === 'GET') {
         AdminLivreController::show((int)$subAction);
     } elseif ($resource === 'admin' && $action === 'livres' && $subAction === null && $method === 'POST') {
-        AdminLivreController::store($body);
+        AdminLivreController::store();
     } elseif ($resource === 'admin' && $action === 'livres' && is_numeric($subAction) && $method === 'PUT') {
-        AdminLivreController::update($body, (int)$subAction);
+        AdminLivreController::update((int)$subAction);
     } elseif ($resource === 'admin' && $action === 'livres' && is_numeric($subAction) && $method === 'DELETE') {
         AdminLivreController::destroy((int)$subAction);
     }

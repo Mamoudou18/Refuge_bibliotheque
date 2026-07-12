@@ -2,29 +2,10 @@
 
 class AdminLivreController
 {
-    public static function index(): void
+    public static function store(): void
     {
-        $livreModel = new Livre();
-        $livres = $livreModel->getAll(); // ADMIN → tous les livres
+        $body = $_POST;
 
-        Response::success(['livres' => $livres]);
-    }
-
-    public static function show(int $idLivre): void
-    {
-        $livreModel = new Livre();
-        $livre = $livreModel->findById($idLivre);
-
-        if (!$livre) {
-            Response::error('Livre introuvable', 404);
-            return;
-        }
-
-        Response::success(['livre' => $livre]);
-    }
-
-    public static function store(array $body): void
-    {
         $validation = new Validation();
         $validation
             ->required($body, ['titre', 'auteur'])
@@ -54,13 +35,26 @@ class AdminLivreController
             return;
         }
 
+        // --- Upload image si présente ---
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            try {
+                $cloudinary = new CloudinaryService();
+                $body['url_couverture'] = $cloudinary->uploadImage($_FILES['image']);
+            } catch (\RuntimeException $e) {
+                Response::error($e->getMessage(), 422);
+                return;
+            }
+        }
+
         $livre = $livreModel->create($body);
 
         Response::success(['livre' => $livre], 'Livre créé avec succès', 201);
     }
 
-    public static function update(array $body, int $idLivre): void
+    public static function update(int $idLivre): void
     {
+        $body = $_POST;
+
         $livreModel = new Livre();
         $livreExistant = $livreModel->findById($idLivre);
 
@@ -106,6 +100,26 @@ class AdminLivreController
             return;
         }
 
+        // --- Nouvelle image envoyée → remplace l'ancienne ---
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            try {
+                $cloudinary = new CloudinaryService();
+                $newImageUrl = $cloudinary->uploadImage($_FILES['image']);
+
+                if (!empty($livreExistant['url_couverture'])) {
+                    $cloudinary->deleteImageByUrl($livreExistant['url_couverture']);
+                }
+
+                $body['url_couverture'] = $newImageUrl;
+            } catch (\RuntimeException $e) {
+                Response::error($e->getMessage(), 422);
+                return;
+            }
+        } else {
+            // Pas de nouvelle image → on garde l'ancienne
+            $body['url_couverture'] = $livreExistant['url_couverture'] ?? null;
+        }
+
         $livreMaj = $livreModel->update($idLivre, $body);
 
         Response::success(['livre' => $livreMaj], 'Livre mis à jour avec succès');
@@ -121,8 +135,34 @@ class AdminLivreController
             return;
         }
 
+        if (!empty($livreExistant['url_couverture'])) {
+            $cloudinary = new CloudinaryService();
+            $cloudinary->deleteImageByUrl($livreExistant['url_couverture']);
+        }
+
         $livreModel->delete($idLivre);
 
         Response::success([], 'Livre supprimé avec succès');
+    }
+
+    public static function index(): void
+    {
+        $livreModel = new Livre();
+        $livres = $livreModel->getAll();
+
+        Response::success(['livres' => $livres]);
+    }
+
+    public static function show(int $idLivre): void
+    {
+        $livreModel = new Livre();
+        $livre = $livreModel->findById($idLivre);
+
+        if (!$livre) {
+            Response::error('Livre introuvable', 404);
+            return;
+        }
+
+        Response::success(['livre' => $livre]);
     }
 }
