@@ -14,7 +14,7 @@ export const routes: Routes = [
     { path: '', redirectTo: 'home',pathMatch: 'full'},
     { path: 'home', component: Home},
     { path: 'catalogue', component: Catalogue, canActivate: [authGuard]},
-    { path: 'detail-livre', component: DetailLivre},
+    { path: 'detail-livre/:id', component: DetailLivre, canActivate: [authGuard]},
     { path: 'emprunt', component: Emprunts},
     { path: 'connexion', component: Connexion},
     { path: 'inscription', component: Inscription},
