@@ -35,8 +35,8 @@ hr {
     height: 300px;
     width: 100%;
     object-fit: contain;
-    background-color: var(--gris-clair, #f0f0f0); // comble l'espace vide autour
-    padding: 8px; // évite que l'image touche les bords
+    background-color: var(--gris-clair, #f0f0f0);
+    padding: 8px;
 }
 
 .card-title {
@@ -45,11 +45,12 @@ hr {
     word-break: break-word;
 }
 
-.badge-roman {
+.badge-roman{
     background-color: var(--orange-refuge);
 }
 
-.badge-bd {
+.badge-bd,
+.badge-jeunesse {
     background-color: var(--bleu-refuge);
 }
 
@@ -62,4 +63,40 @@ hr {
 .btn-decouvrir:hover {
     color: var(--blanc);
     background-color: var(--orange-refuge);
+}
+
+// --- Styles carrousel ---
+.carousel {
+    padding: 0 40px;
+}
+
+.carousel-inner {
+    padding-bottom: 10px;
+}
+
+.carousel-indicators {
+    position: relative;
+    margin-top: 20px;
+
+    button {
+        background-color: var(--bleu-refuge);
+        opacity: 0.4;
+
+        &.active {
+            opacity: 1;
+        }
+    }
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 40px;
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: var(--bleu-refuge);
+        border-radius: 50%;
+        padding: 20px;
+        background-size: 50%;
+    }
 }

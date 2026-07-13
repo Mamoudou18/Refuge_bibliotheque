@@ -15,6 +15,7 @@ import { Livre } from '../../utils/token.util';
 export class Catalogue implements OnInit {
   livres: Livre[] = [];
   livresFiltres: Livre[] = [];
+  groupesLivres: Livre[][] = [];
   recherche: string = '';
   categorieActive: string = 'Tous';
   isLoading: boolean = true;
@@ -34,6 +35,7 @@ export class Catalogue implements OnInit {
       next: (data) => {
         this.livres = data;
         this.livresFiltres = data;
+        this.groupesLivres = this.chunkArray(data, 4);
         this.isLoading = false;
       },
       error: (err) => {
@@ -72,6 +74,15 @@ export class Catalogue implements OnInit {
     }
 
     this.livresFiltres = resultat;
+    this.groupesLivres = this.chunkArray(resultat, 4);
+  }
+
+  chunkArray(arr: Livre[], taille: number): Livre[][] {
+    const resultat: Livre[][] = [];
+    for (let i = 0; i < arr.length; i += taille) {
+      resultat.push(arr.slice(i, i + taille));
+    }
+    return resultat;
   }
 
   getBadgeClass(categorie: string | null): string {
