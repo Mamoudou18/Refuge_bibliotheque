@@ -14,12 +14,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once __DIR__ . '/config/Database.php';
 require_once __DIR__ . '/middlewares/Auth.php';
 require_once __DIR__ . '/helpers/Response.php';
+
+//Controllers
 require_once __DIR__ . '/controllers/AuthController.php';
 require_once __DIR__ . '/controllers/AdminMembreController.php';
 require_once __DIR__ . '/controllers/AdminLivreController.php';
+require_once __DIR__ . '/controllers/AdminEmpruntController.php';
 require_once __DIR__ . '/controllers/LivreController.php';
+require_once __DIR__ . '/controllers/EmpruntController.php';
+
+// Models
 require_once __DIR__ . '/models/Membre.php';
 require_once __DIR__ . '/models/Livre.php';
+require_once __DIR__ . '/models/Emprunt.php';
 
 require_once __DIR__ . '/services/CloudinaryService.php';
 
@@ -39,11 +46,14 @@ $resource = $segments[0] ?? '';
 $action = $segments[1] ?? null;
 $subAction = $segments[2] ?? null;
 
+/** @var array|null $membreConnecte */
+$membreConnecte = null;
+
 // --- Liste des ressources réservées à l'admin ---
 const ADMIN_RESOURCES = ['membres', 'admin']; // ajout ici de toute future ressource admin (ex: 'stats', 'livres', 'membres', ...)
 
 // Routes publiques mais nécessitant une connexion (n'importe quel membre)
-const AUTH_REQUIRED_RESOURCES = ['livres'];
+const AUTH_REQUIRED_RESOURCES = ['livres', 'emprunts'];
 
 try {
     // --- Protection centralisée des routes admin ---
@@ -51,6 +61,7 @@ try {
         $membreConnecte = Auth::check();
         Auth::checkRole($membreConnecte, 1); // 1 = admin
     }
+
     // --- Routes nécessitant juste d'être connecté (peu importe le rôle) ---
     elseif (in_array($resource, AUTH_REQUIRED_RESOURCES, true)) {
         $membreConnecte = Auth::check(); // bloque automatiquement si non connecté
@@ -92,7 +103,31 @@ try {
     } elseif ($resource === 'livres' && is_numeric($action) && $method === 'GET') {
         LivreController::show((int)$action);
 
-    } else {
+    } 
+
+    // --- Routes emprunts (admin) ---
+    elseif ($resource === 'admin' && $action === 'emprunts' && $subAction === null && $method === 'POST') {
+        AdminEmpruntController::store($body);
+    }
+    elseif ($resource === 'admin' && $action === 'emprunts' && $subAction === null && $method === 'GET') {
+        AdminEmpruntController::index();
+    } elseif ($resource === 'admin' && $action === 'emprunts' && is_numeric($subAction) && $method === 'GET') {
+        AdminEmpruntController::show((int)$subAction);
+    } elseif ($resource === 'admin' && $action === 'emprunts' && is_numeric($subAction) && $method === 'PATCH') {
+        AdminEmpruntController::retourner((int)$subAction);
+    }
+
+    // --- Routes emprunts (membre connecté) ---
+    elseif ($resource === 'emprunts' && $action === null && $method === 'GET') {
+        EmpruntController::mine($membreConnecte);
+    } elseif ($resource === 'emprunts' && $action === null && $method === 'POST') {
+        EmpruntController::store($body, $membreConnecte);
+
+    } elseif ($resource === 'emprunts' && is_numeric($action) && $subAction === 'prolonger' && $method === 'PATCH') {
+        EmpruntController::prolonger((int)$action, $membreConnecte);
+    }
+
+    else {
         Response::error('Route non trouvée', 404);
     }
 } catch (Throwable $e) {

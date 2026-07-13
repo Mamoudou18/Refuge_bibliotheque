@@ -139,4 +139,32 @@ class Livre
         $stmt = $this->db->prepare("DELETE FROM livre WHERE id_livre = :id");
         $stmt->execute(['id' => $idLivre]);
     }
+
+    public function decrementerDisponibles(int $idLivre): void
+    {
+        $stmt = $this->db->prepare("
+            UPDATE livre
+            SET nb_disponibles = nb_disponibles - 1,
+                date_maj = NOW()
+            WHERE id_livre = :id
+            AND nb_disponibles > 0
+        ");
+        $stmt->execute(['id' => $idLivre]);
+
+        if ($stmt->rowCount() === 0) {
+            throw new Exception("Aucun exemplaire disponible pour ce livre.");
+        }
+    }
+
+    public function incrementerDisponibles(int $idLivre): void
+    {
+        $stmt = $this->db->prepare("
+            UPDATE livre
+            SET nb_disponibles = LEAST(nb_disponibles + 1, nb_exemplaires),
+                date_maj = NOW()
+            WHERE id_livre = :id
+        ");
+        $stmt->execute(['id' => $idLivre]);
+    }
 }
+

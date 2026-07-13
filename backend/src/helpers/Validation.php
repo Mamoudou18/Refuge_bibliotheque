@@ -106,4 +106,12 @@ class Validation
     {
         return $this->erreurs;
     }
+
+    public function integer(array $data, string $champ): self
+    {
+        if (!empty($data[$champ]) && !filter_var($data[$champ], FILTER_VALIDATE_INT)) {
+            $this->erreurs[] = "Le champ '$champ' doit être un nombre entier";
+        }
+        return $this;
+    }
 }
