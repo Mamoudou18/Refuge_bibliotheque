@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MembreService } from '../../services/membre';
 import { LivreService } from '../../services/livre';
-import { MembreAdmin, Membre, Livre, getMembre } from '../../utils/token.util';
+import { EmpruntService } from '../../services/emprunt.service';
+import { MembreAdmin, Membre, Livre, getMembre, Emprunt } from '../../utils/token.util';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -47,10 +48,29 @@ export class MonCompte implements OnInit {
   fichierImageLivre: File | null = null;
   previewImageLivre: string | null = null;
 
+
+  // ===== EMPRUNTS =====
+  emprunts: Emprunt[] = [];
+  empruntsFiltres: Emprunt[] = [];
+  rechercheEmprunt: string = '';
+  filtreActifEmprunt: 'tous' | 'en_cours' | 'retourne' | 'en_retard' = 'tous';
+  chargementEmprunt: boolean = false;
+  errorMsgEmprunt: string = '';
+
+  showModalEmprunt: boolean = false;
+  nouvelEmprunt: { id_membre: number | null; id_livre: number | null } = {
+    id_membre: null,
+    id_livre: null
+  };
+  messageErreurEmprunt: string = '';
+
+  empruntASupprimer: Emprunt | null = null;
+
   constructor(
     private membreService: MembreService,
     private livreService: LivreService,
-    private route: ActivatedRoute
+    private empruntService: EmpruntService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -81,6 +101,10 @@ export class MonCompte implements OnInit {
 
     if (section === 'livres' && this.livres.length === 0) {
       this.chargerLivres();
+    }
+
+    if (section === 'emprunts' && this.emprunts.length === 0) {
+      this.chargerEmprunts();
     }
   }
 
@@ -339,6 +363,127 @@ export class MonCompte implements OnInit {
         console.error('Erreur suppression', err);
         alert(err.error?.message || 'Erreur lors de la suppression.');
         this.annulerSuppressionLivre();
+      }
+    });
+  }
+
+  // ==========================================
+  // ===== GESTION DES EMPRUNTS =====
+  // ==========================================
+
+  chargerEmprunts(): void {
+    this.chargementEmprunt = true;
+    this.errorMsgEmprunt = '';
+    this.empruntService.getEmpruntsAdmin().subscribe({
+      next: (data) => {
+        this.emprunts = data;
+        this.appliquerFiltresEmprunts();
+        this.chargementEmprunt = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMsgEmprunt = 'Erreur lors du chargement des emprunts.';
+        this.chargementEmprunt = false;
+      }
+    });
+  }
+
+  appliquerFiltresEmprunts(): void {
+    let resultat = [...this.emprunts];
+
+    if (this.filtreActifEmprunt === 'en_cours') {
+      resultat = resultat.filter(e => e.date_retour_effective === null && !this.estEnRetard(e));
+    } else if (this.filtreActifEmprunt === 'retourne') {
+      resultat = resultat.filter(e => e.date_retour_effective !== null);
+    } else if (this.filtreActifEmprunt === 'en_retard') {
+      resultat = resultat.filter(e => this.estEnRetard(e));
+    }
+
+    if (this.rechercheEmprunt.trim() !== '') {
+      const terme = this.rechercheEmprunt.toLowerCase();
+      resultat = resultat.filter(e =>
+        e.titre_livre.toLowerCase().includes(terme) ||
+        e.nom.toLowerCase().includes(terme) ||
+        e.prenom.toLowerCase().includes(terme) ||
+        e.email.toLowerCase().includes(terme)
+      );
+    }
+
+    this.empruntsFiltres = resultat;
+  }
+
+  onRechercheEmpruntChange(): void {
+    this.appliquerFiltresEmprunts();
+  }
+
+  filtrerEmprunts(filtre: 'tous' | 'en_cours' | 'retourne' | 'en_retard'): void {
+    this.filtreActifEmprunt = filtre;
+    this.appliquerFiltresEmprunts();
+  }
+
+  estEnRetard(emprunt: Emprunt): boolean {
+    if (emprunt.date_retour_effective !== null) return false;
+    const aujourdHui = new Date();
+    const dateRetourPrevue = new Date(emprunt.date_retour_prevue);
+    return aujourdHui > dateRetourPrevue;
+  }
+
+  ouvrirModalEmprunt(): void {
+    this.nouvelEmprunt = { id_membre: null, id_livre: null };
+    this.messageErreurEmprunt = '';
+    this.showModalEmprunt = true;
+
+    if (this.membres.length === 0) {
+      this.chargerMembres();
+    }
+    if (this.livres.length === 0) {
+      this.chargerLivres();
+    }
+  }
+
+  fermerModalEmprunt(): void {
+    this.showModalEmprunt = false;
+    this.nouvelEmprunt = { id_membre: null, id_livre: null };
+    this.messageErreurEmprunt = '';
+  }
+
+  soumettreEmprunt(): void {
+    if (!this.nouvelEmprunt.id_membre || !this.nouvelEmprunt.id_livre) {
+      this.messageErreurEmprunt = 'Veuillez sélectionner un membre et un livre.';
+      return;
+    }
+
+    this.chargementEmprunt = true;
+
+    this.empruntService.creerEmprunt(this.nouvelEmprunt.id_membre, this.nouvelEmprunt.id_livre).subscribe({
+      next: () => {
+        this.chargerEmprunts();
+        this.chargerLivres();
+        this.fermerModalEmprunt();
+        this.chargementEmprunt = false;
+      },
+      error: (err) => {
+        this.messageErreurEmprunt = err.error?.message || 'Erreur lors de la création de l\'emprunt.';
+        this.chargementEmprunt = false;
+      }
+    });
+  }
+
+  retournerLivre(emprunt: Emprunt): void {
+    if (!confirm(`Confirmer le retour de "${emprunt.titre_livre}" ?`)) return;
+
+    this.empruntService.retournerLivre(emprunt.id_emprunt).subscribe({
+      next: (empruntMisAJour) => {
+        const index = this.emprunts.findIndex(e => e.id_emprunt === emprunt.id_emprunt);
+        if (index !== -1) {
+          this.emprunts[index] = empruntMisAJour;
+        }
+        this.appliquerFiltresEmprunts();
+        this.chargerLivres();
+      },
+      error: (err) => {
+        console.error(err);
+        alert(err.error?.message || 'Erreur lors du retour du livre.');
       }
     });
   }

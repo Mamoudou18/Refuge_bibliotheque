@@ -39,6 +39,24 @@ export interface Livre {
   date_maj: string | null;
 }
 
+export interface Emprunt {
+  id_emprunt: number;
+  id_membre: number;
+  id_livre: number;
+  date_emprunt: string;
+  date_retour_prevue: string;
+  date_retour_effective: string | null;
+  id_statut: number;
+  nb_prolongations: number;
+  titre_livre: string;
+  auteur: string;
+  url_couverture: string;
+  nom: string;
+  prenom: string;
+  email: string;
+  statut_libelle: string;
+}
+
 export function setToken(token: string): void {
   localStorage.setItem(TOKEN_KEY, token);
 }

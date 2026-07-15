@@ -589,38 +589,6 @@
                     <hr/>
                 </div>
 
-                <!-- STATS RAPIDES -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon blue"><i class="bi bi-clock-history"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">58</div>
-                            <div class="stat-label">Emprunts en cours</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon orange"><i class="bi bi-hourglass-split"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">7</div>
-                            <div class="stat-label">Retours sous 3 jours</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon red"><i class="bi bi-exclamation-triangle"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">4</div>
-                            <div class="stat-label">En retard</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon green"><i class="bi bi-check-circle"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">132</div>
-                            <div class="stat-label">Retournés ce mois</div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- LISTE DES EMPRUNTS -->
                 <div class="admin-bloc">
                     <div class="section-title">
@@ -629,110 +597,150 @@
                     </div>
 
                     <!-- Bouton ajouter -->
-                    <button class="btn btn-save w-100">
+                    <button class="btn btn-save w-100" (click)="ouvrirModalEmprunt()">
                         <i class="bi bi-plus-lg"></i> Nouvel emprunt
                     </button>
 
                     <!-- Recherche -->
-                    <input type="text" class="input-recherche" placeholder="Rechercher par membre ou livre..." />
+                    <input
+                        type="text"
+                        class="input-recherche"
+                        placeholder="Rechercher par membre ou livre..."
+                        [(ngModel)]="rechercheEmprunt"
+                        (ngModelChange)="onRechercheEmpruntChange()"
+                    />
 
                     <!-- Filtres -->
                     <div class="filtres-bar">
-                        <button class="btn-filtre active">Tous</button>
-                        <button class="btn-filtre">En cours</button>
-                        <button class="btn-filtre">Bientôt dus</button>
-                        <button class="btn-filtre">En retard</button>
-                        <button class="btn-filtre">Retournés</button>
+                        <button
+                            class="btn-filtre"
+                            [class.active]="filtreActifEmprunt === 'tous'"
+                            (click)="filtrerEmprunts('tous')"
+                        >Tous</button>
+                        <button
+                            class="btn-filtre"
+                            [class.active]="filtreActifEmprunt === 'en_cours'"
+                            (click)="filtrerEmprunts('en_cours')"
+                        >En cours</button>
+                        <button
+                            class="btn-filtre"
+                            [class.active]="filtreActifEmprunt === 'en_retard'"
+                            (click)="filtrerEmprunts('en_retard')"
+                        >En retard</button>
+                        <button
+                            class="btn-filtre"
+                            [class.active]="filtreActifEmprunt === 'retourne'"
+                            (click)="filtrerEmprunts('retourne')"
+                        >Retournés</button>
                     </div>
+
+                    @if (chargementEmprunt) {
+                        <p>Chargement...</p>
+                    }
+                    @if (errorMsgEmprunt) {
+                        <p class="text-danger">{{ errorMsgEmprunt }}</p>
+                    }
 
                     <div class="table-responsive">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Membre</th><th>Livre</th><th>Date emprunt</th><th>Date retour prévue</th><th>Statut</th><th>Actions</th>
+                                    <th>Membre</th>
+                                    <th>Livre</th>
+                                    <th>Date emprunt</th>
+                                    <th>Date retour prévue</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @for (emprunt of empruntsFiltres; track emprunt.id_emprunt) {
                                 <tr>
-                                    <td>Amadi Diallo</td>
-                                    <td>Le Seigneur des Anneaux</td>
-                                    <td>10/06/2026</td>
-                                    <td>24/06/2026</td>
-                                    <td><span class="badge badge-encours">En cours</span></td>
+                                    <td>{{ emprunt.prenom }} {{ emprunt.nom }}</td>
+                                    <td>{{ emprunt.titre_livre }}</td>
+                                    <td>{{ emprunt.date_emprunt }}</td>
+                                    <td>{{ emprunt.date_retour_prevue }}</td>
+                                    <td>
+                                        @if (emprunt.date_retour_effective) {
+                                            <span class="badge badge-ok">Retourné</span>
+                                        } @else if (estEnRetard(emprunt)) {
+                                            <span class="badge badge-retard">En retard</span>
+                                        } @else {
+                                            <span class="badge badge-bientot">En cours</span>
+                                        }
+                                    </td>
                                     <td class="actions-cell">
                                         <div class="actions-wrapper">
-                                            <button class="btn-icon" title="Prolonger">
-                                                <i class="bi bi-arrow-clockwise"></i>
-                                            </button>
-                                            <button class="btn-icon" title="Marquer retourné">
-                                                <i class="bi bi-check-lg"></i>
-                                            </button>
-                                            <button class="btn-icon danger" title="Supprimer">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
+                                            @if (!emprunt.date_retour_effective) {
+                                                <button class="btn-icon" title="Marquer retourné" (click)="retournerLivre(emprunt)">
+                                                    <i class="bi bi-check-lg"></i>
+                                                </button>
+                                            }
                                         </div>
                                     </td>
                                 </tr>
+                                } @empty {
                                 <tr>
-                                    <td>Marie Dupont</td>
-                                    <td>Le Petit Prince</td>
-                                    <td>28/06/2026</td>
-                                    <td>10/07/2026</td>
-                                    <td><span class="badge badge-bientot">Bientôt dû</span></td>
-                                    <td class="actions-cell">
-                                        <div class="actions-wrapper">
-                                            <button class="btn-icon" title="Prolonger">
-                                                <i class="bi bi-arrow-clockwise"></i>
-                                            </button>
-                                            <button class="btn-icon" title="Marquer retourné">
-                                                <i class="bi bi-check-lg"></i>
-                                            </button>
-                                            <button class="btn-icon danger" title="Supprimer">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-                                        </div>
-                                    </td>
+                                    <td colspan="6" style="text-align:center;">Aucun emprunt trouvé.</td>
                                 </tr>
-                                <tr>
-                                    <td>Sara Fall</td>
-                                    <td>L'Alchimiste</td>
-                                    <td>15/06/2026</td>
-                                    <td>29/06/2026</td>
-                                    <td><span class="badge badge-retard">En retard</span></td>
-                                    <td class="actions-cell">
-                                        <div class="actions-wrapper">
-                                            <button class="btn-icon" title="Prolonger">
-                                                <i class="bi bi-arrow-clockwise"></i>
-                                            </button>
-                                            <button class="btn-icon" title="Marquer retourné">
-                                                <i class="bi bi-check-lg"></i>
-                                            </button>
-                                            <button class="btn-icon danger" title="Supprimer">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Paul Mendy</td>
-                                    <td>1984</td>
-                                    <td>01/06/2026</td>
-                                    <td>15/06/2026</td>
-                                    <td><span class="badge badge-ok">Retourné</span></td>
-                                    <td class="actions-cell">
-                                        <div class="actions-wrapper">
-                                            <button class="btn-icon danger" title="Supprimer">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         }
+
+<!-- MODAL NOUVEL EMPRUNT -->
+@if (showModalEmprunt) {
+<div class="modal-overlay" (click)="fermerModalEmprunt()">
+    <div class="modal-content modal-small" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h3><i class="bi bi-plus-lg"></i> Nouvel emprunt</h3>
+            <button class="btn-close-modal" (click)="fermerModalEmprunt()">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            @if (messageErreurEmprunt) {
+                <p class="text-danger">{{ messageErreurEmprunt }}</p>
+            }
+
+            <div class="form-group">
+                <label>Membre</label>
+                <select class="form-control" [(ngModel)]="nouvelEmprunt.id_membre" name="id_membre">
+                    <option [ngValue]="null">-- Sélectionner un membre --</option>
+                    @for (m of membres; track m.id_membre) {
+                        <option [ngValue]="m.id_membre">{{ m.prenom }} {{ m.nom }} ({{ m.email }})</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Livre</label>
+                <select class="form-control" [(ngModel)]="nouvelEmprunt.id_livre" name="id_livre">
+                    <option [ngValue]="null">-- Sélectionner un livre --</option>
+                    @for (l of livres; track l.id_livre) {
+                        <option [ngValue]="l.id_livre" [disabled]="l.nb_disponibles === 0">
+                            {{ l.titre }} ({{ l.nb_disponibles }} disponible(s))
+                        </option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-cancel" (click)="fermerModalEmprunt()">Annuler</button>
+            <button type="button" class="btn btn-save" [disabled]="chargementEmprunt" (click)="soumettreEmprunt()">
+                @if (chargementEmprunt) {
+                    <span>Création...</span>
+                } @else {
+                    <span>Créer l'emprunt</span>
+                }
+            </button>
+        </div>
+    </div>
+</div>
+}
 
         <!-- STATISTIQUES -->
         @if (activeSection === 'statistiques') {
