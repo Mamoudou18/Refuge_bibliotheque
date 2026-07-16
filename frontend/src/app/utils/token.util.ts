@@ -1,6 +1,13 @@
 const TOKEN_KEY = 'auth_token';
 const MEMBRE_KEY = 'auth_membre';
 
+// variables globales statuts emprunt
+export const STATUT_EN_COURS = 1;
+export const STATUT_BIENTOT = 2;
+export const STATUT_EN_RETARD = 3;
+export const STATUT_PROLONGE = 4;
+export const STATUT_RENDU = 5;
+
 export interface Membre {
   id_membre: number;
   nom: string;
@@ -56,6 +63,7 @@ export interface Emprunt {
   email: string;
   statut_libelle: string;
 }
+
 
 export function setToken(token: string): void {
   localStorage.setItem(TOKEN_KEY, token);

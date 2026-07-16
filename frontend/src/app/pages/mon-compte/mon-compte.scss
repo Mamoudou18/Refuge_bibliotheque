@@ -450,6 +450,10 @@
         background: var(--badge-disponible-bg);
         color: var(--badge-disponible-text);
     }
+    &.badge-prolonge {
+        background: var(--badge-prolonger-bg);
+        color: var(--badge-prolonger-text);
+    }
 }
 // ===== ALERTES =====
 .alert-item {
@@ -547,6 +551,51 @@
     }
 }
 
+
+//=== Image couverture emprunt membre ====
+.couverture-mini {
+  width: 40px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.bientot-item .couverture-mini {
+  margin-right: 10px;
+}
+
+.btn-prolonger {
+  background-color: var(--bleu-refuge);
+  color: var(--blanc);
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-prolonger:hover:not(:disabled) {
+  background-color: var(--orange-refuge);
+}
+
+.btn-prolonger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.badge-retard {
+  background-color: var(--badge-retard-text);
+  color: var(--blanc);
+}
+
+.text-muted {
+  color: var(--gris-text-small);
+  font-size: 0.85rem;
+}
 
 // ===== RESPONSIVE =====
 @media (max-width: 992px) {

@@ -5,8 +5,9 @@ import { ActivatedRoute } from '@angular/router';
 import { MembreService } from '../../services/membre';
 import { LivreService } from '../../services/livre';
 import { EmpruntService } from '../../services/emprunt.service';
-import { MembreAdmin, Membre, Livre, getMembre, Emprunt } from '../../utils/token.util';
+import { MembreAdmin, Membre, Livre, getMembre, Emprunt, STATUT_EN_RETARD, STATUT_RENDU, STATUT_BIENTOT, STATUT_PROLONGE, STATUT_EN_COURS } from '../../utils/token.util';
 import { RouterLink } from '@angular/router';
+
 
 @Component({
   selector: 'app-mon-compte',
@@ -48,12 +49,11 @@ export class MonCompte implements OnInit {
   fichierImageLivre: File | null = null;
   previewImageLivre: string | null = null;
 
-
-  // ===== EMPRUNTS =====
+  // ===== EMPRUNTS (ADMIN) =====
   emprunts: Emprunt[] = [];
   empruntsFiltres: Emprunt[] = [];
   rechercheEmprunt: string = '';
-  filtreActifEmprunt: 'tous' | 'en_cours' | 'retourne' | 'en_retard' = 'tous';
+  filtreActifEmprunt: string = 'tous';
   chargementEmprunt: boolean = false;
   errorMsgEmprunt: string = '';
 
@@ -65,6 +65,25 @@ export class MonCompte implements OnInit {
   messageErreurEmprunt: string = '';
 
   empruntASupprimer: Emprunt | null = null;
+
+  // ===== MES EMPRUNTS (MEMBRE) =====
+  mesEmprunts: Emprunt[] = [];
+  empruntsEnCours: Emprunt[] = [];
+  empruntsBientotDus: Emprunt[] = [];
+  historiqueEmprunts: Emprunt[] = [];
+  loadingMesEmprunts: boolean = false;
+  errorMsgMesEmprunts: string = '';
+  prolongationEnCours: number | null = null;
+
+
+  filtresEmprunt: { valeur: string; libelle: string }[] = [
+    { valeur: 'tous', libelle: 'Tous les emprunts' },
+    { valeur: 'en_cours', libelle: 'En cours' },
+    { valeur: 'bientot', libelle: 'Bientôt dû(s)' },
+    { valeur: 'prolonge', libelle: 'Prolongé(s)' },
+    { valeur: 'en_retard', libelle: 'En retard' },
+    { valeur: 'rendu', libelle: 'Rendu(s)' },
+  ];
 
   constructor(
     private membreService: MembreService,
@@ -105,6 +124,10 @@ export class MonCompte implements OnInit {
 
     if (section === 'emprunts' && this.emprunts.length === 0) {
       this.chargerEmprunts();
+    }
+
+    if (section === 'mes_emprunts' && this.mesEmprunts.length === 0) {
+      this.chargerMesEmprunts();
     }
   }
 
@@ -368,7 +391,7 @@ export class MonCompte implements OnInit {
   }
 
   // ==========================================
-  // ===== GESTION DES EMPRUNTS =====
+  // ===== GESTION DES EMPRUNTS (ADMIN) =====
   // ==========================================
 
   chargerEmprunts(): void {
@@ -389,43 +412,51 @@ export class MonCompte implements OnInit {
   }
 
   appliquerFiltresEmprunts(): void {
-    let resultat = [...this.emprunts];
+      let resultat = [...this.emprunts];
 
-    if (this.filtreActifEmprunt === 'en_cours') {
-      resultat = resultat.filter(e => e.date_retour_effective === null && !this.estEnRetard(e));
-    } else if (this.filtreActifEmprunt === 'retourne') {
-      resultat = resultat.filter(e => e.date_retour_effective !== null);
-    } else if (this.filtreActifEmprunt === 'en_retard') {
-      resultat = resultat.filter(e => this.estEnRetard(e));
-    }
+      switch (this.filtreActifEmprunt) {
+        case 'en_cours':
+          resultat = resultat.filter(e => e.id_statut === STATUT_EN_COURS);
+          break;
+        case 'bientot':
+          resultat = resultat.filter(e => e.id_statut === STATUT_BIENTOT);
+          break;
+        case 'prolonge':
+          resultat = resultat.filter(e => e.id_statut === STATUT_PROLONGE);
+          break;
+        case 'en_retard':
+          resultat = resultat.filter(e => e.id_statut === STATUT_EN_RETARD);
+          break;
+        case 'rendu':
+          resultat = resultat.filter(e => e.id_statut === STATUT_RENDU);
+          break;
+        // 'tous' => pas de filtre
+      }
 
-    if (this.rechercheEmprunt.trim() !== '') {
-      const terme = this.rechercheEmprunt.toLowerCase();
-      resultat = resultat.filter(e =>
-        e.titre_livre.toLowerCase().includes(terme) ||
-        e.nom.toLowerCase().includes(terme) ||
-        e.prenom.toLowerCase().includes(terme) ||
-        e.email.toLowerCase().includes(terme)
-      );
-    }
+      if (this.rechercheEmprunt.trim() !== '') {
+        const terme = this.rechercheEmprunt.toLowerCase();
+        resultat = resultat.filter(e =>
+          e.titre_livre.toLowerCase().includes(terme) ||
+          e.nom.toLowerCase().includes(terme) ||
+          e.prenom.toLowerCase().includes(terme) ||
+          e.email.toLowerCase().includes(terme)
+        );
+      }
 
-    this.empruntsFiltres = resultat;
+      this.empruntsFiltres = resultat;
   }
 
   onRechercheEmpruntChange(): void {
     this.appliquerFiltresEmprunts();
   }
 
-  filtrerEmprunts(filtre: 'tous' | 'en_cours' | 'retourne' | 'en_retard'): void {
-    this.filtreActifEmprunt = filtre;
-    this.appliquerFiltresEmprunts();
+  filtrerEmprunts(filtre: string): void {
+      this.filtreActifEmprunt = filtre;
+      this.appliquerFiltresEmprunts();
   }
 
   estEnRetard(emprunt: Emprunt): boolean {
-    if (emprunt.date_retour_effective !== null) return false;
-    const aujourdHui = new Date();
-    const dateRetourPrevue = new Date(emprunt.date_retour_prevue);
-    return aujourdHui > dateRetourPrevue;
+    return emprunt.id_statut === STATUT_EN_RETARD;
   }
 
   ouvrirModalEmprunt(): void {
@@ -484,6 +515,76 @@ export class MonCompte implements OnInit {
       error: (err) => {
         console.error(err);
         alert(err.error?.message || 'Erreur lors du retour du livre.');
+      }
+    });
+  }
+
+  // ==========================================
+  // ===== MES EMPRUNTS (MEMBRE) =====
+  // ==========================================
+
+  chargerMesEmprunts(): void {
+    this.loading = true;
+    this.errorMsg = '';
+
+    this.empruntService.getMesEmprunts().subscribe({
+      next: (emprunts) => {
+        this.mesEmprunts = emprunts;
+
+        // En cours = tout ce qui n'est pas rendu (en_cours, bientot, en_retard, prolonge)
+        this.empruntsEnCours = emprunts.filter(e => e.id_statut !== STATUT_RENDU);
+
+        // Bientôt à rendre = uniquement statut "bientôt"
+        this.empruntsBientotDus = emprunts.filter(e => e.id_statut === STATUT_BIENTOT);
+
+        // Historique = rendus
+        this.historiqueEmprunts = emprunts.filter(e => e.id_statut === STATUT_RENDU);
+
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMsg = 'Erreur lors du chargement de vos emprunts.';
+        this.loading = false;
+      }
+    });
+  }
+
+  peutProlonger(emprunt: Emprunt): boolean {
+    // Backend interdit prolongation si: rendu, en_retard, ou déjà prolongé une fois (nb_prolongations >= MAX)
+    return emprunt.id_statut !== STATUT_RENDU
+        && emprunt.id_statut !== STATUT_EN_RETARD
+        && emprunt.nb_prolongations < 1; // MAX_PROLONGATIONS = 1 côté backend
+  }
+
+  getBadgeInfo(emprunt: Emprunt): { classe: string; libelle: string } {
+    switch (emprunt.id_statut) {
+      case STATUT_RENDU:
+        return { classe: 'badge-ok', libelle: 'Rendu' };
+      case STATUT_EN_RETARD:
+        return { classe: 'badge-retard', libelle: 'En retard' };
+      case STATUT_BIENTOT:
+        return { classe: 'badge-bientot', libelle: 'Bientôt' };
+      case STATUT_PROLONGE:
+        return { classe: 'badge-prolonge', libelle: 'Prolongé' };
+      case STATUT_EN_COURS:
+      default:
+        return { classe: 'badge-encours', libelle: 'En cours' };
+    }
+  }
+
+  prolonger(emprunt: Emprunt): void {
+    this.prolongationEnCours = emprunt.id_emprunt;
+
+    this.empruntService.prolongerEmprunt(emprunt.id_emprunt).subscribe({
+      next: () => {
+        this.prolongationEnCours = null;
+        this.chargerMesEmprunts();
+      },
+      error: (err) => {
+        console.error(err);
+        this.prolongationEnCours = null;
+        alert(err.error?.message || 'Impossible de prolonger cet emprunt.');
       }
     });
   }

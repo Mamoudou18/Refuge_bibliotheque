@@ -173,6 +173,7 @@
                 </div>
             </div>
         }
+
         <!-- MES EMPRUNTS -->
         @if (activeSection === 'mes_emprunts') {
             <div class="section-page">
@@ -182,69 +183,144 @@
                     <hr/>
                 </div>
 
-                <div class="admin-bloc">
-                    <div class="section-title">
-                        <h3><i class="bi bi-clock"></i> Emprunts en cours</h3>
-                        <span class="ligne"></span>
-                    </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr><th>Livre</th><th>Date emprunt</th><th>Date retour prévue</th><th>Statut</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Harry Potter T1</td><td>12/05/2025</td><td>26/05/2025</td>
-                                    <td><span class="badge badge-encours">En cours</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Le Seigneur des Anneaux</td><td>05/05/2025</td><td>19/05/2025</td>
-                                    <td><span class="badge badge-bientot">Bientôt</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                @if (loading) {
+                    <p>Chargement de vos emprunts...</p>
+                }
 
-                <div class="admin-bloc">
-                    <div class="section-title">
-                        <h3><i class="bi bi-alarm"></i> Livres à rendre bientôt</h3>
-                        <span class="ligne"></span>
-                    </div>
-                    <div class="bientot-item">
-                        <i class="bi bi-alarm-fill"></i>
-                        <div>
-                            <p>Le Seigneur des Anneaux</p>
-                            <span>À rendre dans 2 jours — 19/05/2025</span>
+                @if (errorMsg) {
+                    <p class="error-message">{{ errorMsg }}</p>
+                }
+
+                @if (!loading && !errorMsg) {
+
+                    <!-- EMPRUNTS EN COURS -->
+                    <div class="admin-bloc">
+                        <div class="section-title">
+                            <h3><i class="bi bi-clock"></i> Emprunts en cours</h3>
+                            <span class="ligne"></span>
                         </div>
-                    </div>
-                </div>
 
-                <div class="admin-bloc">
-                    <div class="section-title">
-                        <h3><i class="bi bi-archive"></i> Historique</h3>
-                        <span class="ligne"></span>
+                        @if (empruntsEnCours.length === 0) {
+                            <p>Aucun emprunt en cours.</p>
+                        } @else {
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Couverture</th>
+                                            <th>Livre</th>
+                                            <th>Date emprunt</th>
+                                            <th>Date retour prévue</th>
+                                            <th>Statut</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (emprunt of empruntsEnCours; track emprunt.id_emprunt) {
+                                            <tr>
+                                                <td>
+                                                    <img [src]="emprunt.url_couverture" [alt]="emprunt.titre_livre" class="couverture-mini">
+                                                </td>
+                                                <td>{{ emprunt.titre_livre }}</td>
+                                                <td>{{ emprunt.date_emprunt }}</td>
+                                                <td>{{ emprunt.date_retour_prevue }}</td>
+                                                <td>
+                                                    <span class="badge" [ngClass]="getBadgeInfo(emprunt).classe">
+                                                        {{ getBadgeInfo(emprunt).libelle }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    @if (peutProlonger(emprunt)) {
+                                                        <button
+                                                            class="btn-prolonger"
+                                                            (click)="prolonger(emprunt)"
+                                                            [disabled]="prolongationEnCours === emprunt.id_emprunt">
+                                                            @if (prolongationEnCours === emprunt.id_emprunt) {
+                                                                <i class="bi bi-hourglass-split"></i>
+                                                            } @else {
+                                                                <i class="bi bi-arrow-repeat"></i> Prolonger
+                                                            }
+                                                        </button>
+                                                    } @else if (estEnRetard(emprunt)) {
+                                                        <span class="text-muted">Non prolongeable</span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
                     </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr><th>Livre</th><th>Date emprunt</th><th>Date retour</th><th>Statut</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>L'Alchimiste</td><td>01/03/2025</td><td>15/03/2025</td>
-                                    <td><span class="badge badge-ok">Rendu</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Le Petit Prince</td><td>10/02/2025</td><td>24/02/2025</td>
-                                    <td><span class="badge badge-ok">Rendu</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+
+                    <!-- BIENTÔT DUS -->
+                    @if (empruntsBientotDus.length > 0) {
+                        <div class="admin-bloc">
+                            <div class="section-title">
+                                <h3><i class="bi bi-alarm"></i> Livres à rendre bientôt</h3>
+                                <span class="ligne"></span>
+                            </div>
+                            @for (emprunt of empruntsBientotDus; track emprunt.id_emprunt) {
+                                <div class="bientot-item">
+                                    <img [src]="emprunt.url_couverture" [alt]="emprunt.titre_livre" class="couverture-mini">
+                                    <i class="bi bi-alarm-fill"></i>
+                                    <div>
+                                        <p>{{ emprunt.titre_livre }}</p>
+                                        <span>
+                                            À rendre le {{ emprunt.date_retour_prevue | date:'dd/MM/yyyy' }}
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <!-- HISTORIQUE -->
+                    <div class="admin-bloc">
+                        <div class="section-title">
+                            <h3><i class="bi bi-archive"></i> Historique</h3>
+                            <span class="ligne"></span>
+                        </div>
+
+                        @if (historiqueEmprunts.length === 0) {
+                            <p>Aucun historique pour le moment.</p>
+                        } @else {
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Couverture</th>
+                                            <th>Livre</th>
+                                            <th>Date emprunt</th>
+                                            <th>Date retour</th>
+                                            <th>Statut</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (emprunt of historiqueEmprunts; track emprunt.id_emprunt) {
+                                            <tr>
+                                                <td>
+                                                    <img [src]="emprunt.url_couverture" [alt]="emprunt.titre_livre" class="couverture-mini">
+                                                </td>
+                                                <td>{{ emprunt.titre_livre }}</td>
+                                                <td>{{ emprunt.date_emprunt }}</td>
+                                                <td>{{ emprunt.date_retour_effective }}</td>
+                                                <td>
+                                                    <span class="badge" [ngClass]="getBadgeInfo(emprunt).classe">
+                                                        {{ getBadgeInfo(emprunt).libelle }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
                     </div>
-                </div>
+                }
             </div>
         }
+
         <!-- MON PROFIL -->
         @if (activeSection === 'profil') {
             <div class="section-page">
@@ -339,12 +415,12 @@
                         class="btn-filtre"
                         [class.active]="filtreActifLivre === 'disponible'"
                         (click)="filtrerLivres('disponible')"
-                    >Disponible</button>
+                    >Livre(s) disponible (s)</button>
                     <button
                         class="btn-filtre"
                         [class.active]="filtreActifLivre === 'indisponible'"
                         (click)="filtrerLivres('indisponible')"
-                    >Indisponible</button>
+                    >Livre(s) indisponible(s)</button>
                 </div>
 
                 <div class="table-responsive">
@@ -529,9 +605,9 @@
             />
 
             <div class="filtres-bar">
-                <button class="btn-filtre" [class.active]="filtreActuel === 'tous'" (click)="setFiltre('tous')">Tous</button>
-                <button class="btn-filtre" [class.active]="filtreActuel === 'actif'" (click)="setFiltre('actif')">Actif</button>
-                <button class="btn-filtre" [class.active]="filtreActuel === 'inactif'" (click)="setFiltre('inactif')">Inactif</button>
+                <button class="btn-filtre" [class.active]="filtreActuel === 'tous'" (click)="setFiltre('tous')">Tous les membres</button>
+                <button class="btn-filtre" [class.active]="filtreActuel === 'actif'" (click)="setFiltre('actif')"> Membre(s) actif(s)</button>
+                <button class="btn-filtre" [class.active]="filtreActuel === 'inactif'" (click)="setFiltre('inactif')">Membre(s) inactif(s)</button>
             </div>
 
             @if (loading) {
@@ -612,26 +688,13 @@
 
                     <!-- Filtres -->
                     <div class="filtres-bar">
-                        <button
-                            class="btn-filtre"
-                            [class.active]="filtreActifEmprunt === 'tous'"
-                            (click)="filtrerEmprunts('tous')"
-                        >Tous</button>
-                        <button
-                            class="btn-filtre"
-                            [class.active]="filtreActifEmprunt === 'en_cours'"
-                            (click)="filtrerEmprunts('en_cours')"
-                        >En cours</button>
-                        <button
-                            class="btn-filtre"
-                            [class.active]="filtreActifEmprunt === 'en_retard'"
-                            (click)="filtrerEmprunts('en_retard')"
-                        >En retard</button>
-                        <button
-                            class="btn-filtre"
-                            [class.active]="filtreActifEmprunt === 'retourne'"
-                            (click)="filtrerEmprunts('retourne')"
-                        >Retournés</button>
+                        @for (f of filtresEmprunt; track f.valeur) {
+                            <button
+                                class="btn-filtre"
+                                [class.active]="filtreActifEmprunt === f.valeur"
+                                (click)="filtrerEmprunts(f.valeur)"
+                            >{{ f.libelle }}</button>
+                        }
                     </div>
 
                     @if (chargementEmprunt) {
@@ -661,18 +724,14 @@
                                     <td>{{ emprunt.date_emprunt }}</td>
                                     <td>{{ emprunt.date_retour_prevue }}</td>
                                     <td>
-                                        @if (emprunt.date_retour_effective) {
-                                            <span class="badge badge-ok">Retourné</span>
-                                        } @else if (estEnRetard(emprunt)) {
-                                            <span class="badge badge-retard">En retard</span>
-                                        } @else {
-                                            <span class="badge badge-bientot">En cours</span>
-                                        }
+                                        <span class="badge" [ngClass]="getBadgeInfo(emprunt).classe">
+                                            {{ getBadgeInfo(emprunt).libelle }}
+                                        </span>
                                     </td>
                                     <td class="actions-cell">
                                         <div class="actions-wrapper">
                                             @if (!emprunt.date_retour_effective) {
-                                                <button class="btn-icon" title="Marquer retourné" (click)="retournerLivre(emprunt)">
+                                                <button class="btn-icon" title="Marquer rendu" (click)="retournerLivre(emprunt)">
                                                     <i class="bi bi-check-lg"></i>
                                                 </button>
                                             }
@@ -691,56 +750,56 @@
             </div>
         }
 
-<!-- MODAL NOUVEL EMPRUNT -->
-@if (showModalEmprunt) {
-<div class="modal-overlay" (click)="fermerModalEmprunt()">
-    <div class="modal-content modal-small" (click)="$event.stopPropagation()">
-        <div class="modal-header">
-            <h3><i class="bi bi-plus-lg"></i> Nouvel emprunt</h3>
-            <button class="btn-close-modal" (click)="fermerModalEmprunt()">
-                <i class="bi bi-x-lg"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            @if (messageErreurEmprunt) {
-                <p class="text-danger">{{ messageErreurEmprunt }}</p>
-            }
-
-            <div class="form-group">
-                <label>Membre</label>
-                <select class="form-control" [(ngModel)]="nouvelEmprunt.id_membre" name="id_membre">
-                    <option [ngValue]="null">-- Sélectionner un membre --</option>
-                    @for (m of membres; track m.id_membre) {
-                        <option [ngValue]="m.id_membre">{{ m.prenom }} {{ m.nom }} ({{ m.email }})</option>
+        <!-- MODAL NOUVEL EMPRUNT -->
+        @if (showModalEmprunt) {
+        <div class="modal-overlay" (click)="fermerModalEmprunt()">
+            <div class="modal-content modal-small" (click)="$event.stopPropagation()">
+                <div class="modal-header">
+                    <h3><i class="bi bi-plus-lg"></i> Nouvel emprunt</h3>
+                    <button class="btn-close-modal" (click)="fermerModalEmprunt()">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @if (messageErreurEmprunt) {
+                        <p class="text-danger">{{ messageErreurEmprunt }}</p>
                     }
-                </select>
-            </div>
 
-            <div class="form-group">
-                <label>Livre</label>
-                <select class="form-control" [(ngModel)]="nouvelEmprunt.id_livre" name="id_livre">
-                    <option [ngValue]="null">-- Sélectionner un livre --</option>
-                    @for (l of livres; track l.id_livre) {
-                        <option [ngValue]="l.id_livre" [disabled]="l.nb_disponibles === 0">
-                            {{ l.titre }} ({{ l.nb_disponibles }} disponible(s))
-                        </option>
-                    }
-                </select>
+                    <div class="form-group">
+                        <label>Membre</label>
+                        <select class="form-control" [(ngModel)]="nouvelEmprunt.id_membre" name="id_membre">
+                            <option [ngValue]="null">-- Sélectionner un membre --</option>
+                            @for (m of membres; track m.id_membre) {
+                                <option [ngValue]="m.id_membre">{{ m.prenom }} {{ m.nom }} ({{ m.email }})</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Livre</label>
+                        <select class="form-control" [(ngModel)]="nouvelEmprunt.id_livre" name="id_livre">
+                            <option [ngValue]="null">-- Sélectionner un livre --</option>
+                            @for (l of livres; track l.id_livre) {
+                                <option [ngValue]="l.id_livre" [disabled]="l.nb_disponibles === 0">
+                                    {{ l.titre }} ({{ l.nb_disponibles }} disponible(s))
+                                </option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel" (click)="fermerModalEmprunt()">Annuler</button>
+                    <button type="button" class="btn btn-save" [disabled]="chargementEmprunt" (click)="soumettreEmprunt()">
+                        @if (chargementEmprunt) {
+                            <span>Création...</span>
+                        } @else {
+                            <span>Créer l'emprunt</span>
+                        }
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-cancel" (click)="fermerModalEmprunt()">Annuler</button>
-            <button type="button" class="btn btn-save" [disabled]="chargementEmprunt" (click)="soumettreEmprunt()">
-                @if (chargementEmprunt) {
-                    <span>Création...</span>
-                } @else {
-                    <span>Créer l'emprunt</span>
-                }
-            </button>
-        </div>
-    </div>
-</div>
-}
+        }
 
         <!-- STATISTIQUES -->
         @if (activeSection === 'statistiques') {
