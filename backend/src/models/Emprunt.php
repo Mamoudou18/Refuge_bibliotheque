@@ -39,6 +39,8 @@ class Emprunt
      */
     public function getAll(): array
     {
+        $this->majStatuts();
+
         $stmt = $this->db->prepare("
             SELECT e.*, l.titre AS titre_livre, l.auteur, l.url_couverture,
                    m.nom, m.prenom, m.email,
@@ -60,6 +62,8 @@ class Emprunt
      */
     public function getByMembre(int $idMembre): array
     {
+        $this->majStatuts();
+
         $stmt = $this->db->prepare("
             SELECT e.*, l.titre AS titre_livre, l.auteur, l.url_couverture,
                    s.libelle AS statut_libelle
@@ -200,11 +204,11 @@ class Emprunt
             'statut_rendu' => self::STATUT_RENDU,
         ]);
 
-        // 2. "bientot" uniquement depuis "en_cours"
+        // 2. "bientot" depuis "en_cours" OU "prolonge"
         $sqlBientot = "
             UPDATE emprunt
             SET id_statut = :statut_bientot
-            WHERE id_statut = :statut_encours
+            WHERE id_statut IN (:statut_encours, :statut_prolonge)
             AND date_retour_prevue BETWEEN NOW() AND NOW() + INTERVAL '" . self::SEUIL_BIENTOT_JOURS . " days'
             AND date_retour_effective IS NULL
         ";
@@ -212,6 +216,7 @@ class Emprunt
         $stmt->execute([
             'statut_bientot' => self::STATUT_BIENTOT,
             'statut_encours' => self::STATUT_EN_COURS,
+            'statut_prolonge' => self::STATUT_PROLONGE,
         ]);
     }
 }

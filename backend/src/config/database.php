@@ -1,5 +1,8 @@
 <?php
 
+use MongoDB\Client;
+use MongoDB\Database as MongoDBDatabase;
+
 class Database {
     private static ?PDO $instance = null;
 
@@ -26,5 +29,43 @@ class Database {
         }
 
         return self::$instance;
+    }
+}
+
+class MongoConfig
+{
+    private static ?Client $client = null;
+    private static ?MongoDBDatabase $db = null;
+
+    public static function getDatabase(): MongoDBDatabase
+    {
+        if (self::$db === null) {
+            $host = getenv('MONGO_HOST') ?: 'mongo';
+            $port = getenv('MONGO_PORT') ?: '27017';
+            $dbname = getenv('MONGO_DB') ?: 'refugeBibliotheque_db';
+            $user = getenv('MONGO_USER') ?: '';
+            $password = getenv('MONGO_PASSWORD') ?: '';
+
+            try {
+                if ($user && $password) {
+                    $uri = "mongodb://{$user}:{$password}@{$host}:{$port}/?authSource=admin";
+                } else {
+                    $uri = "mongodb://{$host}:{$port}";
+                }
+
+                self::$client = new Client($uri);
+                self::$db = self::$client->selectDatabase($dbname);
+
+                // Vérifie que la connexion fonctionne réellement
+                self::$db->command(['ping' => 1]);
+
+            } catch (\Exception $e) {
+                http_response_code(500);
+                echo json_encode(['error' => 'Erreur de connexion à MongoDB: ' . $e->getMessage()]);
+                exit;
+            }
+        }
+
+        return self::$db;
     }
 }
