@@ -11,6 +11,7 @@
         <nav class="sidebar-nav">
 
             <div class="nav-section">
+
                 <a class="nav-link" [class.active]="activeSection === 'accueil'" (click)="showSection('accueil')">
                     <i class="bi bi-house"></i><span>Accueil</span>
                 </a>
@@ -60,7 +61,7 @@
     <!-- CONTENU PRINCIPAL -->
     <div class="dashboard-content">
         <!-- ACCUEIL -->
-        @if (activeSection === 'accueil') {
+        @if (activeSection === 'accueil' ) {
             <div class="section-page">
                 <div class="page-header">
                     <h1><i class="bi bi-house"></i> Tableau de bord</h1>
@@ -68,117 +69,119 @@
                     <hr/>
                 </div>
 
-                @if (loading) {
-                    <p>Chargement du tableau de bord...</p>
-                }
+                @if (isAdmin){
+                    @if (loading) {
+                        <p>Chargement du tableau de bord...</p>
+                    }
 
-                @if (errorMsg) {
-                    <p class="error-msg">{{ errorMsg }}</p>
-                }
+                    @if (errorMsg) {
+                        <p class="error-msg">{{ errorMsg }}</p>
+                    }
 
-                @if (statistiques && !loading) {
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-icon blue"><i class="bi bi-book"></i></div>
-                            <div class="stat-info">
-                                <div class="stat-value">{{ statistiques.general.livresTotal }}</div>
-                                <div class="stat-label">Livres total</div>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon green"><i class="bi bi-people"></i></div>
-                            <div class="stat-info">
-                                <div class="stat-value">{{ statistiques.general.membresTotal }}</div>
-                                <div class="stat-label">Membres</div>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon orange"><i class="bi bi-clock-history"></i></div>
-                            <div class="stat-info">
-                                <div class="stat-value">{{ statistiques.general.empruntsEnCours }}</div>
-                                <div class="stat-label">Emprunts en cours</div>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon red"><i class="bi bi-exclamation-circle"></i></div>
-                            <div class="stat-info">
-                                <div class="stat-value">{{ statistiques.general.empruntsEnRetard }}</div>
-                                <div class="stat-label">En retard</div>
-                            </div>
-                        </div>
-                    </div>
-                }
-
-                <div class="admin-bloc">
-                    <div class="section-title">
-                        <h3><i class="bi bi-lightning-charge"></i> Actions rapides</h3>
-                        <span class="ligne"></span>
-                    </div>
-                    <div class="actions-grid">
-                        <a class="btn-action blue" (click)="showSection('livres')">
-                            <i class="bi bi-book"></i> Gestion des Livres
-                        </a>
-                        <a class="btn-action green" (click)="showSection('membres')">
-                            <i class="bi bi-people"></i> Gestion des Membres
-                        </a>
-                        <a class="btn-action orange" (click)="showSection('emprunts')">
-                            <i class="bi bi-clock-history"></i> Gestion des Emprunts
-                        </a>
-                    </div>
-                </div>
-
-                <div class="admin-bloc">
-                    <div class="section-title">
-                        <h3><i class="bi bi-table"></i> Emprunts récents</h3>
-                        <span class="ligne"></span>
-                    </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Membre</th><th>Livre</th><th>Date emprunt</th><th>Statut</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @for (e of empruntsRecents; track e.id_emprunt) {
-                                    <tr>
-                                        <td>{{ e.prenom }} {{ e.nom }}</td>
-                                        <td>{{ e.titre_livre }}</td>
-                                        <td>{{ e.date_emprunt }}</td>
-                                        <td>
-                                            <span class="badge" [ngClass]="getBadgeInfo(e).classe">
-                                                {{ getBadgeInfo(e).libelle }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                }
-                                @empty {
-                                    <tr><td colspan="4">Aucun emprunt récent.</td></tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                @if (statistiques) {
-                    <div class="admin-bloc">
-                        <div class="section-title">
-                            <h3><i class="bi bi-exclamation-triangle"></i> Alertes retards</h3>
-                            <span class="ligne"></span>
-                        </div>
-                        @for (m of statistiques.membresEnRetard; track m.nom_membre + m.titre_livre) {
-                            <div class="alert-item">
-                                <i class="bi bi-alarm-fill"></i>
-                                <div>
-                                    <p>{{ m.nom_membre }} — {{ m.titre_livre }}</p>
-                                    <span>En retard depuis {{ joursRetardAbs(m.jours_retard) }} jour(s)</span>
+                    @if (statistiques && !loading) {
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon blue"><i class="bi bi-book"></i></div>
+                                <div class="stat-info">
+                                    <div class="stat-value">{{ statistiques.general.livresTotal }}</div>
+                                    <div class="stat-label">Livres total</div>
                                 </div>
                             </div>
-                        }
-                        @empty {
-                            <p>Aucune alerte de retard actuellement.</p>
-                        }
+                            <div class="stat-card">
+                                <div class="stat-icon green"><i class="bi bi-people"></i></div>
+                                <div class="stat-info">
+                                    <div class="stat-value">{{ statistiques.general.membresTotal }}</div>
+                                    <div class="stat-label">Membres</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon orange"><i class="bi bi-clock-history"></i></div>
+                                <div class="stat-info">
+                                    <div class="stat-value">{{ statistiques.general.empruntsEnCours }}</div>
+                                    <div class="stat-label">Emprunts en cours</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon red"><i class="bi bi-exclamation-circle"></i></div>
+                                <div class="stat-info">
+                                    <div class="stat-value">{{ statistiques.general.empruntsEnRetard }}</div>
+                                    <div class="stat-label">En retard</div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="admin-bloc">
+                        <div class="section-title">
+                            <h3><i class="bi bi-lightning-charge"></i> Actions rapides</h3>
+                            <span class="ligne"></span>
+                        </div>
+                        <div class="actions-grid">
+                            <a class="btn-action blue" (click)="showSection('livres')">
+                                <i class="bi bi-book"></i> Gestion des Livres
+                            </a>
+                            <a class="btn-action green" (click)="showSection('membres')">
+                                <i class="bi bi-people"></i> Gestion des Membres
+                            </a>
+                            <a class="btn-action orange" (click)="showSection('emprunts')">
+                                <i class="bi bi-clock-history"></i> Gestion des Emprunts
+                            </a>
+                        </div>
                     </div>
+
+                    <div class="admin-bloc">
+                        <div class="section-title">
+                            <h3><i class="bi bi-table"></i> Emprunts récents</h3>
+                            <span class="ligne"></span>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Membre</th><th>Livre</th><th>Date emprunt</th><th>Statut</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (e of empruntsRecents; track e.id_emprunt) {
+                                        <tr>
+                                            <td>{{ e.prenom }} {{ e.nom }}</td>
+                                            <td>{{ e.titre_livre }}</td>
+                                            <td>{{ e.date_emprunt }}</td>
+                                            <td>
+                                                <span class="badge" [ngClass]="getBadgeInfo(e).classe">
+                                                    {{ getBadgeInfo(e).libelle }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                    @empty {
+                                        <tr><td colspan="4">Aucun emprunt récent.</td></tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    @if (statistiques) {
+                        <div class="admin-bloc">
+                            <div class="section-title">
+                                <h3><i class="bi bi-exclamation-triangle"></i> Alertes retards</h3>
+                                <span class="ligne"></span>
+                            </div>
+                            @for (m of statistiques.membresEnRetard; track m.nom_membre + m.titre_livre) {
+                                <div class="alert-item">
+                                    <i class="bi bi-alarm-fill"></i>
+                                    <div>
+                                        <p>{{ m.nom_membre }} — {{ m.titre_livre }}</p>
+                                        <span>En retard depuis {{ joursRetardAbs(m.jours_retard) }} jour(s)</span>
+                                    </div>
+                                </div>
+                            }
+                            @empty {
+                                <p>Aucune alerte de retard actuellement.</p>
+                            }
+                        </div>
+                    }
                 }
             </div>
         }
