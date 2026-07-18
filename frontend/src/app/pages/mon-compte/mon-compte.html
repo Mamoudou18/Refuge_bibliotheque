@@ -801,42 +801,51 @@
         </div>
         }
 
-        <!-- STATISTIQUES -->
-        @if (activeSection === 'statistiques') {
-            <div class="section-page">
-                <div class="page-header">
-                    <h1><i class="bi bi-bar-chart"></i> Statistiques</h1>
-                    <p>Vue d'ensemble des activités de la bibliothèque.</p>
-                    <hr/>
-                </div>
+    <!-- STATISTIQUES -->
+    @if (activeSection === 'statistiques') {
+        <div class="section-page">
+            <div class="page-header">
+                <h1><i class="bi bi-bar-chart"></i> Statistiques</h1>
+                <p>Vue d'ensemble des activités de la bibliothèque.</p>
+                <hr/>
+            </div>
 
+            @if (chargementStats) {
+                <p>Chargement des statistiques...</p>
+            }
+
+            @if (errorMsgStats) {
+                <p class="error-msg">{{ errorMsgStats }}</p>
+            }
+
+            @if (statistiques && !chargementStats) {
                 <!-- Chiffres clés généraux -->
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon blue"><i class="bi bi-book"></i></div>
                         <div class="stat-info">
-                            <div class="stat-value">1 240</div>
+                            <div class="stat-value">{{ statistiques.general.livresTotal }}</div>
                             <div class="stat-label">Livres total</div>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon green"><i class="bi bi-people"></i></div>
                         <div class="stat-info">
-                            <div class="stat-value">326</div>
+                            <div class="stat-value">{{ statistiques.general.membresTotal }}</div>
                             <div class="stat-label">Membres</div>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon orange"><i class="bi bi-clock-history"></i></div>
                         <div class="stat-info">
-                            <div class="stat-value">58</div>
+                            <div class="stat-value">{{ statistiques.general.empruntsEnCours }}</div>
                             <div class="stat-label">Emprunts en cours</div>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon red"><i class="bi bi-exclamation-circle"></i></div>
                         <div class="stat-info">
-                            <div class="stat-value">7</div>
+                            <div class="stat-value">{{ statistiques.general.empruntsEnRetard }}</div>
                             <div class="stat-label">En retard</div>
                         </div>
                     </div>
@@ -847,28 +856,21 @@
                     <div class="stat-card">
                         <div class="stat-icon blue"><i class="bi bi-arrow-down-circle"></i></div>
                         <div class="stat-info">
-                            <div class="stat-value">184</div>
+                            <div class="stat-value">{{ statistiques.activite.empruntsCeMois }}</div>
                             <div class="stat-label">Emprunts ce mois</div>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon green"><i class="bi bi-arrow-up-circle"></i></div>
                         <div class="stat-info">
-                            <div class="stat-value">176</div>
+                            <div class="stat-value">{{ statistiques.activite.retoursCeMois }}</div>
                             <div class="stat-label">Retours ce mois</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon orange"><i class="bi bi-bookmark-star"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">23</div>
-                            <div class="stat-label">Réservations actives</div>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-icon red"><i class="bi bi-graph-down"></i></div>
                         <div class="stat-info">
-                            <div class="stat-value">4%</div>
+                            <div class="stat-value">{{ statistiques.activite.tauxDeRetard }}%</div>
                             <div class="stat-label">Taux de retard</div>
                         </div>
                     </div>
@@ -886,10 +888,17 @@
                                 <tr><th>#</th><th>Livre</th><th>Auteur</th><th>Nb emprunts</th></tr>
                             </thead>
                             <tbody>
-                                <tr><td>1</td><td>Harry Potter T1</td><td>J.K. Rowling</td><td>42</td></tr>
-                                <tr><td>2</td><td>Le Petit Prince</td><td>Antoine de Saint-Exupéry</td><td>38</td></tr>
-                                <tr><td>3</td><td>L'Alchimiste</td><td>Paulo Coelho</td><td>31</td></tr>
-                                <tr><td>4</td><td>1984</td><td>George Orwell</td><td>27</td></tr>
+                                @for (livre of statistiques.topLivres; track livre.titre; let i = $index) {
+                                    <tr>
+                                        <td>{{ i + 1 }}</td>
+                                        <td>{{ livre.titre }}</td>
+                                        <td>{{ livre.auteur }}</td>
+                                        <td>{{ livre.nb_emprunts }}</td>
+                                    </tr>
+                                }
+                                @empty {
+                                    <tr><td colspan="4">Aucune donnée disponible.</td></tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -907,10 +916,16 @@
                                 <tr><th>Genre</th><th>Nombre de livres</th><th>% du catalogue</th></tr>
                             </thead>
                             <tbody>
-                                <tr><td>Fantasy</td><td>412</td><td>33%</td></tr>
-                                <tr><td>Roman</td><td>298</td><td>24%</td></tr>
-                                <tr><td>Science-fiction</td><td>210</td><td>17%</td></tr>
-                                <tr><td>Conte</td><td>150</td><td>12%</td></tr>
+                                @for (cat of statistiques.repartitionCategories; track cat.categorie) {
+                                    <tr>
+                                        <td>{{ cat.categorie }}</td>
+                                        <td>{{ cat.nombre_livres }}</td>
+                                        <td>{{ cat.pourcentage }}%</td>
+                                    </tr>
+                                }
+                                @empty {
+                                    <tr><td colspan="3">Aucune donnée disponible.</td></tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -922,20 +937,18 @@
                         <h3><i class="bi bi-exclamation-triangle"></i> Membres en retard</h3>
                         <span class="ligne"></span>
                     </div>
-                    <div class="alert-item">
-                        <i class="bi bi-alarm-fill"></i>
-                        <div>
-                            <p>Sara Fall — L'Alchimiste</p>
-                            <span>En retard depuis 12 jours</span>
+                    @for (m of statistiques.membresEnRetard; track m.nom_membre + m.titre_livre) {
+                        <div class="alert-item">
+                            <i class="bi bi-alarm-fill"></i>
+                            <div>
+                                <p>{{ m.nom_membre }} — {{ m.titre_livre }}</p>
+                                <span>En retard depuis {{ joursRetardAbs(m.jours_retard) }} jour(s)</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="alert-item">
-                        <i class="bi bi-alarm-fill"></i>
-                        <div>
-                            <p>Paul Mendy — 1984</p>
-                            <span>En retard depuis 15 jours</span>
-                        </div>
-                    </div>
+                    }
+                    @empty {
+                        <p>Aucun membre en retard actuellement.</p>
+                    }
                 </div>
 
                 <!-- Nouveaux membres -->
@@ -944,23 +957,22 @@
                         <h3><i class="bi bi-person-plus"></i> Nouveaux membres ce mois-ci</h3>
                         <span class="ligne"></span>
                     </div>
-                    <div class="bientot-item">
-                        <i class="bi bi-person-check-fill"></i>
-                        <div>
-                            <p>Aïssatou Diop</p>
-                            <span>Inscrite le 2 juillet 2026</span>
+                    @for (m of statistiques.nouveauxMembres; track m.nom_complet) {
+                        <div class="bientot-item">
+                            <i class="bi bi-person-check-fill"></i>
+                            <div>
+                                <p>{{ m.nom_complet }}</p>
+                                <span>Inscrit(e) le {{ m.date_inscription }}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="bientot-item">
-                        <i class="bi bi-person-check-fill"></i>
-                        <div>
-                            <p>Moussa Ba</p>
-                            <span>Inscrit le 28 juin 2026</span>
-                        </div>
-                    </div>
+                    }
+                    @empty {
+                        <p>Aucun nouveau membre ce mois-ci.</p>
+                    }
                 </div>
-            </div>
-        }
+            }
+        </div>
+    }
 
     </div>
 

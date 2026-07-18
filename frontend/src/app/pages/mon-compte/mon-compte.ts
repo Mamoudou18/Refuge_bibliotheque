@@ -7,6 +7,8 @@ import { LivreService } from '../../services/livre';
 import { EmpruntService } from '../../services/emprunt.service';
 import { MembreAdmin, Membre, Livre, getMembre, Emprunt, STATUT_EN_RETARD, STATUT_RENDU, STATUT_BIENTOT, STATUT_PROLONGE, STATUT_EN_COURS } from '../../utils/token.util';
 import { RouterLink } from '@angular/router';
+import { StatistiqueService } from '../../services/statistique.service';
+import { Statistiques } from '../../utils/stats.util';
 
 
 @Component({
@@ -57,6 +59,7 @@ export class MonCompte implements OnInit {
   chargementEmprunt: boolean = false;
   errorMsgEmprunt: string = '';
 
+
   showModalEmprunt: boolean = false;
   nouvelEmprunt: { id_membre: number | null; id_livre: number | null } = {
     id_membre: null,
@@ -75,6 +78,11 @@ export class MonCompte implements OnInit {
   errorMsgMesEmprunts: string = '';
   prolongationEnCours: number | null = null;
 
+  // ===== STATISTIQUES (ADMIN) =====
+  statistiques: Statistiques | null = null;
+  chargementStats: boolean = false;
+  errorMsgStats: string = '';
+
 
   filtresEmprunt: { valeur: string; libelle: string }[] = [
     { valeur: 'tous', libelle: 'Tous les emprunts' },
@@ -89,6 +97,7 @@ export class MonCompte implements OnInit {
     private membreService: MembreService,
     private livreService: LivreService,
     private empruntService: EmpruntService,
+    private statistiqueService: StatistiqueService,
     private route: ActivatedRoute,
   ) {}
 
@@ -128,6 +137,10 @@ export class MonCompte implements OnInit {
 
     if (section === 'mes_emprunts' && this.mesEmprunts.length === 0) {
       this.chargerMesEmprunts();
+    }
+
+    if (section === 'statistiques' && !this.statistiques) {
+      this.chargerStatistiques();
     }
   }
 
@@ -588,4 +601,32 @@ export class MonCompte implements OnInit {
       }
     });
   }
+
+
+  // ==========================================
+  // ===== STATISTIQUES (ADMIN) =====
+  // ==========================================
+
+  chargerStatistiques(): void {
+    this.chargementStats = true;
+    this.errorMsgStats = '';
+
+    this.statistiqueService.getStatistiques().subscribe({
+      next: (data) => {
+        this.statistiques = data;
+        this.chargementStats = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMsgStats = 'Erreur lors du chargement des statistiques.';
+        this.chargementStats = false;
+      }
+    });
+  }
+
+  // Helper pour affichage propre du retard (valeur back parfois négative)
+  joursRetardAbs(jours: string): number {
+    return Math.abs(parseInt(jours, 10));
+  }
+  
 }
