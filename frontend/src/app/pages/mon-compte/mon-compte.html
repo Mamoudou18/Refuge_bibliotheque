@@ -922,25 +922,17 @@
                         <h3><i class="bi bi-tags"></i> Répartition par genre</h3>
                         <span class="ligne"></span>
                     </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr><th>Genre</th><th>Nombre de livres</th><th>% du catalogue</th></tr>
-                            </thead>
-                            <tbody>
-                                @for (cat of statistiques.repartitionCategories; track cat.categorie) {
-                                    <tr>
-                                        <td>{{ cat.categorie }}</td>
-                                        <td>{{ cat.nombre_livres }}</td>
-                                        <td>{{ cat.pourcentage }}%</td>
-                                    </tr>
-                                }
-                                @empty {
-                                    <tr><td colspan="3">Aucune donnée disponible.</td></tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+
+                    <!-- Camembert -->
+                    @if (pieChartData) {
+                        <div class="chart-container" style="max-width: 400px; margin: 0 auto 2rem;">
+                            <c-chart
+                                type="pie"
+                                [data]="pieChartData"
+                                [options]="pieChartOptions"
+                            ></c-chart>
+                        </div>
+                    }
                 </div>
 
                 <!-- Nouveaux membres -->

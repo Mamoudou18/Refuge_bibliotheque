@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChartjsComponent } from '@coreui/angular-chartjs';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MembreService } from '../../services/membre';
@@ -14,10 +15,16 @@ import { Statistiques } from '../../utils/stats.util';
 @Component({
   selector: 'app-mon-compte',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    RouterLink,
+    ChartjsComponent,
+  ],
   templateUrl: './mon-compte.html',
   styleUrl: './mon-compte.scss',
 })
+
 export class MonCompte implements OnInit {
   activeSection: string = 'accueil';
 
@@ -82,6 +89,26 @@ export class MonCompte implements OnInit {
   statistiques: Statistiques | null = null;
   chargementStats: boolean = false;
   errorMsgStats: string = '';
+
+  // Ajout pour le camembert
+  pieChartData: any = null;
+  pieChartOptions: any = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom'
+      },
+      tooltip: {
+        callbacks: {
+          label: (context: any) => {
+            const label = context.label || '';
+            const value = context.raw || 0;
+            return `${label}: ${value} livre(s)`;
+          }
+        }
+      }
+    }
+  };
 
 
   filtresEmprunt: { valeur: string; libelle: string }[] = [
@@ -621,6 +648,7 @@ export class MonCompte implements OnInit {
     this.statistiqueService.getStatistiques().subscribe({
       next: (data) => {
         this.statistiques = data;
+        this.construirePieChart();
         this.chargementStats = false;
       },
       error: (err) => {
@@ -629,6 +657,24 @@ export class MonCompte implements OnInit {
         this.chargementStats = false;
       }
     });
+  }
+
+  construirePieChart(): void {
+    if (this.statistiques?.repartitionCategories?.length) {
+      this.pieChartData = {
+        labels: this.statistiques.repartitionCategories.map(cat => cat.categorie),
+        datasets: [
+          {
+            data: this.statistiques.repartitionCategories.map(cat => cat.nombre_livres),
+            backgroundColor: [
+              '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+              '#9966FF', '#FF9F40', '#C9CBCF', '#8BC34A',
+              '#E91E63', '#00BCD4'
+            ]
+          }
+        ]
+      };
+    }
   }
 
   // Helper pour affichage propre du retard (valeur back parfois négative)
