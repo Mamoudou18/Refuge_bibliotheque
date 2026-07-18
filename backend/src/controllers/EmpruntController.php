@@ -56,6 +56,7 @@ class EmpruntController
             return;
         }
 
+        // create() gère déjà l'enregistrement dans l'historique MongoDB
         $emprunt = $empruntModel->create($idMembre, $idLivre);
 
         Response::success($emprunt, 'Emprunt créé avec succès.', 201);
@@ -93,6 +94,7 @@ class EmpruntController
             return;
         }
 
+        // prolonger() gère déjà l'enregistrement dans l'historique MongoDB
         $empruntMisAJour = $empruntModel->prolonger($idEmprunt);
 
         Response::success($empruntMisAJour, 'Emprunt prolongé avec succès.');

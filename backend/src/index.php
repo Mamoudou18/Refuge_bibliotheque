@@ -15,18 +15,27 @@ require_once __DIR__ . '/config/Database.php';
 require_once __DIR__ . '/middlewares/Auth.php';
 require_once __DIR__ . '/helpers/Response.php';
 
+// Classes Mongo (logs, historiques...)
+require_once __DIR__ . '/models/LogConnexion.php';
+require_once __DIR__ . '/models/HistoriqueEmprunt.php';
+
 //Controllers
 require_once __DIR__ . '/controllers/AuthController.php';
 require_once __DIR__ . '/controllers/AdminMembreController.php';
 require_once __DIR__ . '/controllers/AdminLivreController.php';
 require_once __DIR__ . '/controllers/AdminEmpruntController.php';
+require_once __DIR__ . '/controllers/AdminStatistiquesController.php';
 require_once __DIR__ . '/controllers/LivreController.php';
 require_once __DIR__ . '/controllers/EmpruntController.php';
+require_once __DIR__ . '/controllers/LogConnexionController.php';
+require_once __DIR__ . '/controllers/HistoriqueEmpruntController.php';
 
 // Models
 require_once __DIR__ . '/models/Membre.php';
 require_once __DIR__ . '/models/Livre.php';
 require_once __DIR__ . '/models/Emprunt.php';
+require_once __DIR__ . '/models/Statistiques.php';
+
 
 require_once __DIR__ . '/services/CloudinaryService.php';
 
@@ -50,7 +59,7 @@ $subAction = $segments[2] ?? null;
 $membreConnecte = null;
 
 // --- Liste des ressources réservées à l'admin ---
-const ADMIN_RESOURCES = ['membres', 'admin']; // ajout ici de toute future ressource admin (ex: 'stats', 'livres', 'membres', ...)
+const ADMIN_RESOURCES = ['membres', 'admin', 'stats']; // ajout ici de toute future ressource admin (ex: 'stats', 'livres', 'membres', ...)
 
 // Routes publiques mais nécessitant une connexion (n'importe quel membre)
 const AUTH_REQUIRED_RESOURCES = ['livres', 'emprunts'];
@@ -111,7 +120,7 @@ try {
     }
     elseif ($resource === 'admin' && $action === 'emprunts' && $subAction === null && $method === 'GET') {
         AdminEmpruntController::index();
-    } elseif ($resource === 'admin' && $action === 'emprunts' && is_numeric($subAction) && $method === 'GET') {
+    } elseif ($resource === 'admin' && $action === 'emprunts' && is_numeric($subAction) && ($segments[3] ?? null) === null && $method === 'GET') {
         AdminEmpruntController::show((int)$subAction);
     } elseif ($resource === 'admin' && $action === 'emprunts' && is_numeric($subAction) && $method === 'PATCH') {
         AdminEmpruntController::retourner((int)$subAction);
@@ -125,6 +134,26 @@ try {
 
     } elseif ($resource === 'emprunts' && is_numeric($action) && $subAction === 'prolonger' && $method === 'PATCH') {
         EmpruntController::prolonger((int)$action, $membreConnecte);
+    }
+    
+    // --- Routes statistiques (admin) ---
+    elseif ($resource === 'stats' && $action === null && $method === 'GET') {
+        AdminStatistiquesController::index();
+    }
+
+    // --- Routes logs de connexion (admin) ---
+    elseif ($resource === 'admin' && $action === 'logs-connexion' && $method === 'GET') {
+        LogConnexionController::index($_GET);
+    }
+
+    // --- Routes historique emprunt (admin) ---
+    elseif ($resource === 'admin' && $action === 'emprunts' && is_numeric($subAction) && ($segments[3] ?? null) === 'historique' && $method === 'GET') {
+        HistoriqueEmpruntController::indexAdmin((int)$subAction);
+    }
+
+    // --- Route historique emprunt (membre connecté) ---
+    elseif ($resource === 'emprunts' && is_numeric($action) && $subAction === 'historique' && $method === 'GET') {
+        HistoriqueEmpruntController::indexMembre((int)$action, $membreConnecte);
     }
 
     else {

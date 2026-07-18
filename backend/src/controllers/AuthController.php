@@ -4,6 +4,7 @@ require_once __DIR__ . '/../models/Membre.php';
 require_once __DIR__ . '/../models/Token.php';
 require_once __DIR__ . '/../helpers/Validation.php';
 require_once __DIR__ . '/../helpers/DateHelper.php';
+require_once __DIR__ . '/../models/LogConnexion.php';
 
 class AuthController
 {
@@ -56,18 +57,30 @@ class AuthController
         $membreModel = new Membre();
         $membre = $membreModel->findByEmail($body['email']);
 
+        $logConnexion = new LogConnexion();
+
         if (!$membre || !password_verify($body['mot_de_passe'], $membre['mot_de_passe'])) {
+            $logConnexion->enregistrer(
+                $membre['id_membre'] ?? 0,
+                $body['email'],
+                false
+            );
+
             Response::error('Email ou mot de passe incorrect', 401);
             return;
         }
 
         if (!$membre['is_actif']) {
+            $logConnexion->enregistrer($membre['id_membre'], $body['email'], false);
+
             Response::error('Ce compte est désactivé', 403);
             return;
         }
 
         $tokenModel = new Token();
         $apiToken = $tokenModel->createConnexionToken($membre['id_membre']);
+
+        $logConnexion->enregistrer($membre['id_membre'], $body['email'], true);
 
         if (!empty($membre['date_naissance'])) {
             $membre['date_naissance'] = (new DateTime($membre['date_naissance']))->format('d/m/Y');

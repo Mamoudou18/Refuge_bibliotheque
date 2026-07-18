@@ -63,6 +63,7 @@ class AdminEmpruntController
             return;
         }
 
+        // create() gère déjà l'enregistrement dans l'historique MongoDB
         $emprunt = $empruntModel->create($idMembre, $idLivre);
 
         Response::success($emprunt, 'Emprunt créé avec succès pour le membre.', 201);
@@ -96,6 +97,7 @@ class AdminEmpruntController
             return;
         }
 
+        // retourner() gère déjà l'enregistrement dans l'historique MongoDB
         $empruntMisAJour = $empruntModel->retourner($idEmprunt);
 
         $livreModel = new Livre();
