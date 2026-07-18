@@ -107,9 +107,7 @@ export class MonCompte implements OnInit {
 
     this.route.queryParams.subscribe(params => {
       const section = params['section'];
-      if (section) {
-        this.showSection(section);
-      }
+      this.showSection(section || 'accueil');
     });
   }
 
@@ -141,6 +139,15 @@ export class MonCompte implements OnInit {
 
     if (section === 'statistiques' && !this.statistiques) {
       this.chargerStatistiques();
+    }
+
+    if (section === 'accueil') {
+      if (!this.statistiques) {
+        this.chargerStatistiques();
+      }
+      if (this.empruntsRecents.length === 0) {
+        this.chargerEmpruntsRecents();
+      }
     }
   }
 
@@ -629,4 +636,36 @@ export class MonCompte implements OnInit {
     return Math.abs(parseInt(jours, 10));
   }
   
+  // ==========================================
+  // ===== ACCUEIL =====
+  // ==========================================
+
+  empruntsRecents: Emprunt[] = [];
+
+  chargerEmpruntsRecents(): void {
+    this.loading = true;
+    this.errorMsg = '';
+
+    this.empruntService.getEmpruntsAdmin().subscribe({
+      next: (data) => {
+        this.empruntsRecents = data
+          .slice()
+          .sort((a, b) => new Date(b.date_emprunt).getTime() - new Date(a.date_emprunt).getTime())
+          .slice(0, 4);
+
+        if (this.emprunts.length === 0) {
+          this.emprunts = data;
+          this.appliquerFiltresEmprunts();
+        }
+
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMsg = 'Erreur lors du chargement des emprunts récents.';
+        this.loading = false;
+      }
+    });
+  }
+
 }

@@ -68,36 +68,46 @@
                     <hr/>
                 </div>
 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon blue"><i class="bi bi-book"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">1 240</div>
-                            <div class="stat-label">Livres total</div>
+                @if (loading) {
+                    <p>Chargement du tableau de bord...</p>
+                }
+
+                @if (errorMsg) {
+                    <p class="error-msg">{{ errorMsg }}</p>
+                }
+
+                @if (statistiques && !loading) {
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon blue"><i class="bi bi-book"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value">{{ statistiques.general.livresTotal }}</div>
+                                <div class="stat-label">Livres total</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green"><i class="bi bi-people"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value">{{ statistiques.general.membresTotal }}</div>
+                                <div class="stat-label">Membres</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon orange"><i class="bi bi-clock-history"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value">{{ statistiques.general.empruntsEnCours }}</div>
+                                <div class="stat-label">Emprunts en cours</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon red"><i class="bi bi-exclamation-circle"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value">{{ statistiques.general.empruntsEnRetard }}</div>
+                                <div class="stat-label">En retard</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon green"><i class="bi bi-people"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">326</div>
-                            <div class="stat-label">Membres</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon orange"><i class="bi bi-clock-history"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">58</div>
-                            <div class="stat-label">Emprunts en cours</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon red"><i class="bi bi-exclamation-circle"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">7</div>
-                            <div class="stat-label">En retard</div>
-                        </div>
-                    </div>
-                </div>
+                }
 
                 <div class="admin-bloc">
                     <div class="section-title">
@@ -130,47 +140,46 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Marie Dupont</td><td>Harry Potter T1</td><td>12/05/2025</td>
-                                    <td><span class="badge badge-encours">En cours</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Jean Koné</td><td>Le Petit Prince</td><td>08/05/2025</td>
-                                    <td><span class="badge badge-bientot">Bientôt</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Sara Fall</td><td>L'Alchimiste</td><td>01/05/2025</td>
-                                    <td><span class="badge badge-retard">En retard</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Paul Mendy</td><td>1984 — Orwell</td><td>29/04/2025</td>
-                                    <td><span class="badge badge-retard">En retard</span></td>
-                                </tr>
+                                @for (e of empruntsRecents; track e.id_emprunt) {
+                                    <tr>
+                                        <td>{{ e.prenom }} {{ e.nom }}</td>
+                                        <td>{{ e.titre_livre }}</td>
+                                        <td>{{ e.date_emprunt }}</td>
+                                        <td>
+                                            <span class="badge" [ngClass]="getBadgeInfo(e).classe">
+                                                {{ getBadgeInfo(e).libelle }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                                @empty {
+                                    <tr><td colspan="4">Aucun emprunt récent.</td></tr>
+                                }
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <div class="admin-bloc">
-                    <div class="section-title">
-                        <h3><i class="bi bi-exclamation-triangle"></i> Alertes retards</h3>
-                        <span class="ligne"></span>
-                    </div>
-                    <div class="alert-item">
-                        <i class="bi bi-alarm-fill"></i>
-                        <div>
-                            <p>Sara Fall — L'Alchimiste</p>
-                            <span>En retard depuis 12 jours — Dû le 03/05/2025</span>
+                @if (statistiques) {
+                    <div class="admin-bloc">
+                        <div class="section-title">
+                            <h3><i class="bi bi-exclamation-triangle"></i> Alertes retards</h3>
+                            <span class="ligne"></span>
                         </div>
+                        @for (m of statistiques.membresEnRetard; track m.nom_membre + m.titre_livre) {
+                            <div class="alert-item">
+                                <i class="bi bi-alarm-fill"></i>
+                                <div>
+                                    <p>{{ m.nom_membre }} — {{ m.titre_livre }}</p>
+                                    <span>En retard depuis {{ joursRetardAbs(m.jours_retard) }} jour(s)</span>
+                                </div>
+                            </div>
+                        }
+                        @empty {
+                            <p>Aucune alerte de retard actuellement.</p>
+                        }
                     </div>
-                    <div class="alert-item">
-                        <i class="bi bi-alarm-fill"></i>
-                        <div>
-                            <p>Paul Mendy — 1984</p>
-                            <span>En retard depuis 15 jours — Dû le 30/04/2025</span>
-                        </div>
-                    </div>
-                </div>
+                }
             </div>
         }
 
@@ -929,26 +938,6 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-
-                <!-- Membres en retard -->
-                <div class="admin-bloc">
-                    <div class="section-title">
-                        <h3><i class="bi bi-exclamation-triangle"></i> Membres en retard</h3>
-                        <span class="ligne"></span>
-                    </div>
-                    @for (m of statistiques.membresEnRetard; track m.nom_membre + m.titre_livre) {
-                        <div class="alert-item">
-                            <i class="bi bi-alarm-fill"></i>
-                            <div>
-                                <p>{{ m.nom_membre }} — {{ m.titre_livre }}</p>
-                                <span>En retard depuis {{ joursRetardAbs(m.jours_retard) }} jour(s)</span>
-                            </div>
-                        </div>
-                    }
-                    @empty {
-                        <p>Aucun membre en retard actuellement.</p>
-                    }
                 </div>
 
                 <!-- Nouveaux membres -->
