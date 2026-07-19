@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { Emprunt } from '../utils/token.util';
+import { Emprunt, HistoriqueStatut, HistoriqueStatutResponse } from '../utils/token.util';
 
 interface EmpruntsResponse {
   status: string;
@@ -40,6 +40,12 @@ export class EmpruntService {
 
   retournerLivre(id_emprunt: number): Observable<Emprunt> {
     return this.http.patch<EmpruntResponse>(`${this.apiUrlAdmin}/${id_emprunt}`, {}).pipe(
+      map(res => res.data)
+    );
+  }
+
+  getHistoriqueEmprunt(idEmprunt: number): Observable<HistoriqueStatut[]> {
+    return this.http.get<HistoriqueStatutResponse>(`${this.apiUrlAdmin}/${idEmprunt}/historique`).pipe(
       map(res => res.data)
     );
   }

@@ -747,6 +747,9 @@
                                                     <i class="bi bi-check-lg"></i>
                                                 </button>
                                             }
+                                            <button class="btn-icon" title="Voir l'historique" (click)="ouvrirModalHistorique(emprunt)">
+                                                <i class="bi bi-clock-history"></i>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -811,6 +814,65 @@
                 </div>
             </div>
         </div>
+        }
+
+        <!-- MODAL HISTORIQUE EMPRUNT -->
+        @if (modalHistoriqueOuverte) {
+            <div class="modal-overlay" (click)="fermerModalHistorique()">
+                <div class="modal-content" (click)="$event.stopPropagation()">
+                    <div class="modal-header">
+                        <h3><i class="bi bi-clock-history"></i> Historique de l'emprunt</h3>
+                        <button class="btn-close" (click)="fermerModalHistorique()">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        @if (empruntSelectionne) {
+                            <div class="historique-infos">
+                                <p><strong>Membre :</strong> {{ empruntSelectionne.prenom }} {{ empruntSelectionne.nom }}</p>
+                                <p><strong>Livre :</strong> {{ empruntSelectionne.titre_livre }}</p>
+                            </div>
+                        }
+
+                        @if (chargementHistorique) {
+                            <div class="text-center">
+                                <span>Chargement...</span>
+                            </div>
+                        }
+
+                        @if (!chargementHistorique && historiqueEmprunt.length === 0) {
+                            <div class="text-center">
+                                <p>Aucun historique disponible pour cet emprunt.</p>
+                            </div>
+                        }
+
+                        @if (!chargementHistorique && historiqueEmprunt.length > 0) {
+                            <div class="timeline">
+                                @for (event of historiqueEmprunt; track event.date_changement) {
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot" [ngClass]="getStatutClass(event.nouveau_statut)"></div>
+                                        <div class="timeline-content">
+                                            <div class="timeline-header">
+                                                <span class="badge" [ngClass]="getStatutClass(event.ancien_statut)">
+                                                    {{ getStatutLabel(event.ancien_statut) }}
+                                                </span>
+                                                <i class="bi bi-arrow-right"></i>
+                                                <span class="badge" [ngClass]="getStatutClass(event.nouveau_statut)">
+                                                    {{ getStatutLabel(event.nouveau_statut) }}
+                                                </span>
+                                            </div>
+                                            <div class="timeline-date">
+                                                {{ formatDateHeure(event.date_changement) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
         }
 
     <!-- STATISTIQUES -->

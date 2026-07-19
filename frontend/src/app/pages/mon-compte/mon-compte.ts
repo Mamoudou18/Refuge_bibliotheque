@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MembreService } from '../../services/membre';
 import { LivreService } from '../../services/livre';
 import { EmpruntService } from '../../services/emprunt.service';
-import { MembreAdmin, Membre, Livre, getMembre, Emprunt, STATUT_EN_RETARD, STATUT_RENDU, STATUT_BIENTOT, STATUT_PROLONGE, STATUT_EN_COURS } from '../../utils/token.util';
+import { MembreAdmin, Membre, Livre, getMembre, Emprunt, STATUT_EN_RETARD, STATUT_RENDU, STATUT_BIENTOT, STATUT_PROLONGE, STATUT_EN_COURS, HistoriqueStatut } from '../../utils/token.util';
 import { RouterLink } from '@angular/router';
 import { StatistiqueService } from '../../services/statistique.service';
 import { Statistiques } from '../../utils/stats.util';
@@ -76,6 +76,13 @@ export class MonCompte implements OnInit {
   messageErreurEmprunt: string = '';
 
   empruntASupprimer: Emprunt | null = null;
+
+  // ===== HISTORIQUE EMPRUNT =====
+  modalHistoriqueOuverte: boolean = false;
+  empruntSelectionne: Emprunt | null = null;
+  historiqueEmprunt: HistoriqueStatut[] = [];
+  chargementHistorique: boolean = false;
+  errorMsgHistorique: string = '';
 
   // ===== MES EMPRUNTS (MEMBRE) =====
   mesEmprunts: Emprunt[] = [];
@@ -596,6 +603,66 @@ export class MonCompte implements OnInit {
         console.error(err);
         alert(err.error?.message || 'Erreur lors du retour du livre.');
       }
+    });
+  }
+
+  ouvrirModalHistorique(emprunt: Emprunt): void {
+    this.empruntSelectionne = emprunt;
+    this.modalHistoriqueOuverte = true;
+    this.historiqueEmprunt = [];
+    this.errorMsgHistorique = '';
+    this.chargementHistorique = true;
+
+    this.empruntService.getHistoriqueEmprunt(emprunt.id_emprunt).subscribe({
+      next: (data) => {
+        this.historiqueEmprunt = data;
+        this.chargementHistorique = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.errorMsgHistorique = 'Erreur lors du chargement de l\'historique.';
+        this.chargementHistorique = false;
+      }
+    });
+  }
+
+  fermerModalHistorique(): void {
+    this.modalHistoriqueOuverte = false;
+    this.empruntSelectionne = null;
+    this.historiqueEmprunt = [];
+    this.errorMsgHistorique = '';
+  }
+
+  getStatutClass(statut: string): string {
+    switch (statut) {
+      case 'en cours': return 'badge-encours';
+      case 'bientot': return 'badge-bientot';
+      case 'en retard': return 'badge-retard';
+      case 'rendu': return 'badge-ok';
+      case 'prolonge': return 'badge-prolonge';
+      default: return 'badge-encours';
+    }
+  }
+
+  getStatutLabel(statut: string): string {
+    switch (statut) {
+      case 'en cours': return 'En cours';
+      case 'bientot': return 'Bientôt dû';
+      case 'en retard': return 'En retard';
+      case 'rendu': return 'Rendu';
+      case 'prolonge': return 'Prolongé';
+      default: return statut;
+    }
+  }
+
+  formatDateHeure(dateStr: string): string {
+    const date = new Date(dateStr.replace(' ', 'T'));
+    return date.toLocaleString('fr-FR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
   }
 

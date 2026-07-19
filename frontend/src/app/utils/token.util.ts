@@ -64,6 +64,24 @@ export interface Emprunt {
   statut_libelle: string;
 }
 
+//Historique Emprunt
+export interface HistoriqueStatut {
+  id_emprunt: number;
+  id_membre: number;
+  membre: string;
+  id_livre: number;
+  titre_livre: string;
+  ancien_statut: string;
+  nouveau_statut: string;
+  date_changement: string;
+}
+
+export interface HistoriqueStatutResponse {
+  status: string;
+  message: string;
+  data: HistoriqueStatut[];
+}
+
 
 export function setToken(token: string): void {
   localStorage.setItem(TOKEN_KEY, token);
