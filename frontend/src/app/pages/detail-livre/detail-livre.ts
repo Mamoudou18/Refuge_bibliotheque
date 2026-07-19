@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LivreService } from '../../services/livre';
-import { Livre } from '../../utils/token.util';
+import { EmpruntService } from '../../services/emprunt.service';
+import { Livre, getMembre } from '../../utils/token.util';
 
 @Component({
   selector: 'app-detail-livre',
@@ -15,9 +16,16 @@ export class DetailLivre implements OnInit {
   chargement: boolean = true;
   erreur: string = '';
 
+  showModalEmprunt = false;
+  chargementEmprunt = false;
+  messageErreurEmprunt = '';
+  empruntReussi = false;
+
   constructor(
     private route: ActivatedRoute,
-    private livreService: LivreService
+    private router: Router,
+    private livreService: LivreService,
+    private empruntService: EmpruntService
   ) {}
 
   ngOnInit(): void {
@@ -57,5 +65,59 @@ export class DetailLivre implements OnInit {
       default:
         return 'badge-secondary';
     }
+  }
+
+  // ==========================================
+  // ===== GESTION DE L'EMPRUNT =====
+  // ==========================================
+
+  demanderEmprunt(): void {
+    if (!this.livre || this.livre.nb_disponibles === 0) return;
+
+    const membre = getMembre();
+    if (!membre) {
+      this.router.navigate(['/connexion']); // adaptez la route si besoin
+      return;
+    }
+
+    this.messageErreurEmprunt = '';
+    this.empruntReussi = false;
+    this.showModalEmprunt = true;
+  }
+
+  annulerEmprunt(): void {
+    this.showModalEmprunt = false;
+    this.messageErreurEmprunt = '';
+  }
+
+  confirmerEmprunt(): void {
+    if (!this.livre) return;
+
+    const membre = getMembre();
+    if (!membre) {
+      this.messageErreurEmprunt = 'Vous devez être connecté pour emprunter un livre.';
+      return;
+    }
+
+    this.chargementEmprunt = true;
+    this.messageErreurEmprunt = '';
+
+    this.empruntService.emprunterLivre(this.livre.id_livre).subscribe({
+      next: () => {
+        this.chargementEmprunt = false;
+        this.empruntReussi = true;
+        if (this.livre) {
+          this.livre.nb_disponibles -= 1;
+        }
+        setTimeout(() => {
+          this.showModalEmprunt = false;
+          this.empruntReussi = false;
+        }, 1500);
+      },
+      error: (err) => {
+        this.chargementEmprunt = false;
+        this.messageErreurEmprunt = err.error?.message || 'Erreur lors de l\'emprunt du livre.';
+      }
+    });
   }
 }
