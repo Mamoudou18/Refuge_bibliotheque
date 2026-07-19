@@ -69,7 +69,7 @@
                     <hr/>
                 </div>
 
-                @if (isAdmin){
+                @if (isAdmin) {
                     @if (loading) {
                         <p>Chargement du tableau de bord...</p>
                     }
@@ -77,7 +77,6 @@
                     @if (errorMsg) {
                         <p class="error-msg">{{ errorMsg }}</p>
                     }
-
                     @if (statistiques && !loading) {
                         <div class="stats-grid">
                             <div class="stat-card">
@@ -182,6 +181,42 @@
                             }
                         </div>
                     }
+                } @else {
+                    <!-- ACCUEIL MEMBRE -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon blue"><i class="bi bi-journal-bookmark"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value">{{ empruntsEnCours.length }}</div>
+                                <div class="stat-label">Emprunts en cours</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon red"><i class="bi bi-exclamation-circle"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value">{{ empruntsEnRetard.length }}</div>
+                                <div class="stat-label">En retard</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="admin-bloc">
+                        <div class="section-title">
+                            <h3><i class="bi bi-lightning-charge"></i> Actions rapides</h3>
+                            <span class="ligne"></span>
+                        </div>
+                        <div class="actions-grid">
+                            <a class="btn-action green" (click)="showSection('profil')">
+                                <i class="bi bi-person"></i> Mon profil
+                            </a>
+                            <a class="btn-action orange" (click)="showSection('mes_emprunts')">
+                                <i class="bi bi-clock-history"></i> Mes emprunts
+                            </a>
+                            <a class="btn-action blue" routerLink="/catalogue">
+                                <i class="bi bi-book"></i> Catalogue
+                            </a>
+                        </div>
+                    </div>
                 }
             </div>
         }

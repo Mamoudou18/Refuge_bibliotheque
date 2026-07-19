@@ -94,6 +94,7 @@ export class MonCompte implements OnInit {
   loadingMesEmprunts: boolean = false;
   errorMsgMesEmprunts: string = '';
   prolongationEnCours: number | null = null;
+  empruntsEnRetard: Emprunt[] = [];
 
   // ===== STATISTIQUES (ADMIN) =====
   statistiques: Statistiques | null = null;
@@ -211,11 +212,17 @@ export class MonCompte implements OnInit {
     }
 
     if (section === 'accueil') {
-      if (!this.statistiques) {
-        this.chargerStatistiques();
-      }
-      if (this.empruntsRecents.length === 0) {
-        this.chargerEmpruntsRecents();
+      if (this.isAdmin) {
+        if (!this.statistiques) {
+          this.chargerStatistiques();
+        }
+        if (this.empruntsRecents.length === 0) {
+          this.chargerEmpruntsRecents();
+        }
+      } else {
+        if (this.mesEmprunts.length === 0) {
+          this.chargerMesEmprunts();
+        }
       }
     }
   }
@@ -690,13 +697,9 @@ confirmerRetourLivre(): void {
       next: (emprunts) => {
         this.mesEmprunts = emprunts;
 
-        // En cours = tout ce qui n'est pas rendu (en_cours, bientot, en_retard, prolonge)
         this.empruntsEnCours = emprunts.filter(e => e.id_statut !== STATUT_RENDU);
-
-        // Bientôt à rendre = uniquement statut "bientôt"
         this.empruntsBientotDus = emprunts.filter(e => e.id_statut === STATUT_BIENTOT);
-
-        // Historique = rendus
+        this.empruntsEnRetard = emprunts.filter(e => e.id_statut === STATUT_EN_RETARD);
         this.historiqueEmprunts = emprunts.filter(e => e.id_statut === STATUT_RENDU);
 
         this.loading = false;
