@@ -126,6 +126,29 @@
             }
         }
     }
+
+        .btn-deconnexion {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 0.625rem 0.875rem;
+        margin-top: 1rem;
+        border-radius: 8px;
+        color: var(--rouge-alerte);
+        font-weight: var(--font-semibold);
+        font-size: var(--body-size);
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        i {
+            font-size: 1.1rem;
+        }
+
+        &:hover {
+            background: var(--badge-indisponible-bg);
+        }
+    }
 }
 
 // ===== CONTENU PRINCIPAL =====
