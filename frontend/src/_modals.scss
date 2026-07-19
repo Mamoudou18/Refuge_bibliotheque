@@ -1,164 +1,10 @@
-// ===== MODAL =====
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(26, 26, 26, 0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1030;
-  animation: fadeIn 0.2s ease;
-  padding: 1rem;
-}
-
-//MODAL HISTO
-
-.modal-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.modal-content {
-    background: var(--blanc);
-    border-radius: 12px;
-    width: 90%;
-    max-width: 550px;
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid #eee;
-}
-
-.modal-header h3 {
-    margin: 0;
-    font-size: 18px;
-    color: var(--bleu-refuge);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.btn-close {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    color: var(--gris-moyen);
-}
-
-.modal-body {
-    padding: 20px;
-}
-
-.historique-infos {
-    background: #f8f9fa;
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-}
-
-.historique-infos p {
-    margin: 4px 0;
-    font-size: 14px;
-}
-
-.timeline {
-    position: relative;
-    padding-left: 30px;
-}
-
-.timeline::before {
-    content: '';
-    position: absolute;
-    left: 6px;
-    top: 6px;
-    bottom: 6px;
-    width: 2px;
-    background: #e0e0e0;
-}
-
-.timeline-item {
-    position: relative;
-    padding-bottom: 24px;
-}
-
-.timeline-item:last-child {
-    padding-bottom: 0;
-}
-
-.timeline-dot {
-    position: absolute;
-    left: -30px;
-    top: 4px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    border: 3px solid var(--blanc);
-    box-shadow: 0 0 0 2px currentColor;
-}
-
-.timeline-content {
-    background: #f8f9fa;
-    padding: 12px 16px;
-    border-radius: 8px;
-}
-
-.timeline-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 6px;
-    flex-wrap: wrap;
-}
-
-.timeline-date {
-    font-size: 13px;
-    color: var(--gris-moyen);
-}
-
-.badge-statut {
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-
-
+// =========================================
+// MODALS — styles partagés pour toutes les modales
+// =========================================
 
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
-}
-
-// ===== MODAL CONTENT =====
-.modal-content {
-  background: var(--blanc);
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  animation: slideUp 0.25s ease;
-
-  &.modal-small {
-    max-width: 420px;
-  }
 }
 
 @keyframes slideUp {
@@ -172,13 +18,51 @@
   }
 }
 
+// ===== OVERLAY =====
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(26, 26, 26, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1030;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease;
+}
+
+// ===== CONTENT =====
+.modal-content {
+  background: var(--blanc);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.25s ease;
+
+  &.modal-small {
+    max-width: 420px;
+  }
+
+  // variante pour la modale historique (plus étroite)
+  &.modal-historique {
+    max-width: 550px;
+    max-height: 80vh;
+  }
+}
+
 // ===== HEADER =====
 .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1.25rem 1.5rem;
-  border-bottom: 1Opx solid var(--gris-clair);
+  border-bottom: 1px solid var(--gris-clair);
   background-color: var(--bleu-refuge);
 
   h3 {
@@ -228,12 +112,113 @@
   }
 }
 
+// ===== INFOS (bloc résumé, ex: infos historique) =====
+.historique-infos {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+
+  p {
+    margin: 4px 0;
+    font-size: 14px;
+  }
+}
+
+// ===== TIMELINE (historique emprunt) =====
+.timeline {
+  position: relative;
+  padding-left: 30px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: #e0e0e0;
+  }
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 24px;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -30px;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 3px solid var(--blanc);
+  box-shadow: 0 0 0 2px currentColor;
+}
+
+.timeline-content {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+
+.timeline-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.timeline-date {
+  font-size: 13px;
+  color: var(--gris-moyen);
+}
+
+.badge-statut {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 // ===== FORM =====
 .form-group {
-
   textarea {
     resize: vertical;
     min-height: 80px;
+  }
+
+  // input file personnalisé
+  input[type="file"] {
+    padding: 0;
+    border: none;
+    background: transparent;
+
+    &::-webkit-file-upload-button,
+    &::file-selector-button {
+      font-family: var(--font-family);
+      font-size: var(--text-small-size);
+      font-weight: var(--font-semibold);
+      color: var(--bleu-refuge);
+      background: var(--gris-clair);
+      border: 1px solid var(--bleu-refuge);
+      border-radius: 8px;
+      padding: 0.55rem 1rem;
+      margin-right: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+
+      &:hover {
+        background: var(--bleu-refuge);
+        color: var(--blanc);
+      }
+    }
   }
 }
 
@@ -279,7 +264,7 @@
     transition: background 0.15s ease;
 
     &:hover {
-      background: var(--rouge-alerte);
+      background: darken(#d9534f, 8%); // à adapter si pas de sass:color dispo
     }
   }
 }
@@ -340,7 +325,7 @@
   color: var(--blanc);
 
   &:hover:not(:disabled) {
-    background: #164e8a;
+    background: var(--orange-refuge);
   }
 }
 
@@ -349,7 +334,7 @@
   color: var(--blanc);
 
   &:hover:not(:disabled) {
-    background: var(--rouge-alerte);
+    opacity: 0.85; // pas de couleur identique en hover
   }
 }
 
@@ -408,54 +393,6 @@
       padding: 0.5rem 0.8rem;
       width: 100%;
       margin-bottom: 0.5rem;
-    }
-  }
-}
-
-// ===== INPUT FILE PERSONNALISÉ =====
-.form-group {
-  input[type="file"] {
-    padding: 0;
-    border: none;
-    background: transparent;
-
-    &::-webkit-file-upload-button {
-      font-family: var(--font-family);
-      font-size: var(--text-small-size);
-      font-weight: var(--font-semibold);
-      color: var(--bleu-refuge);
-      background: var(--gris-clair);
-      border: 1px solid var(--bleu-refuge);
-      border-radius: 8px;
-      padding: 0.55rem 1rem;
-      margin-right: 0.75rem;
-      cursor: pointer;
-      transition: all 0.15s ease;
-
-      &:hover {
-        background: var(--bleu-refuge);
-        color: var(--blanc);
-      }
-    }
-
-    // Firefox
-    &::file-selector-button {
-      font-family: var(--font-family);
-      font-size: var(--text-small-size);
-      font-weight: var(--font-semibold);
-      color: var(--bleu-refuge);
-      background: var(--gris-clair);
-      border: 1px solid var(--bleu-refuge);
-      border-radius: 8px;
-      padding: 0.55rem 1rem;
-      margin-right: 0.75rem;
-      cursor: pointer;
-      transition: all 0.15s ease;
-
-      &:hover {
-        background: var(--bleu-refuge);
-        color: var(--blanc);
-      }
     }
   }
 }

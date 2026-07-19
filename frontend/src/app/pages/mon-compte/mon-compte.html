@@ -840,10 +840,10 @@
         <!-- MODAL HISTORIQUE EMPRUNT -->
         @if (modalHistoriqueOuverte) {
             <div class="modal-overlay" (click)="fermerModalHistorique()">
-                <div class="modal-content" (click)="$event.stopPropagation()">
+                <div class="modal-content modal-historique" (click)="$event.stopPropagation()">
                     <div class="modal-header">
                         <h3><i class="bi bi-clock-history"></i> Historique de l'emprunt</h3>
-                        <button class="btn-close" (click)="fermerModalHistorique()">
+                        <button class="btn-close-modal" (click)="fermerModalHistorique()">
                             <i class="bi bi-x-lg"></i>
                         </button>
                     </div>

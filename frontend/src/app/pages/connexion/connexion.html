@@ -40,7 +40,7 @@
                 </div>
             }
 
-            <button type="submit" class="btn-primary" [disabled]="isLoading">
+            <button type="submit" class="btn-auth-primary" [disabled]="isLoading">
                 {{ isLoading ? 'Connexion...' : 'Se connecter' }}
             </button>
         </form>
@@ -53,6 +53,6 @@
 
         <p class="switch-auth">Pas encore de compte ?</p>
 
-        <a routerLink="/inscription" class="btn-secondary">Créer un compte</a>
+        <a routerLink="/inscription" class="btn-auth-secondary">Créer un compte</a>
     </div>
 </div>

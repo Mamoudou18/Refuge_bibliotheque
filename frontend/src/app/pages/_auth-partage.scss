@@ -1,3 +1,7 @@
+// =========================================
+// AUTH — page login / inscription
+// =========================================
+
 .auth-page {
     min-height: calc(100vh - 85px);
     display: flex;
@@ -15,19 +19,6 @@
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
-    .page-header {
-        h1 {
-            color: var(--bleu-refuge);
-            margin-bottom: 0.5rem;
-        }
-        hr {
-            border-bottom: 1px solid;
-            border-color: var(--orange-refuge);
-            opacity: 1;
-            margin-bottom: 40px;
-        }
-    }
-
     // Carte plus large pour l'inscription en desktop
     &--wide {
         @media (min-width: 768px) {
@@ -36,6 +27,20 @@
     }
 }
 
+.page-header {
+    h1 {
+        color: var(--bleu-refuge);
+        margin-bottom: 0.5rem;
+    }
+    hr {
+        border-bottom: 1px solid;
+        border-color: var(--orange-refuge);
+        opacity: 1;
+        margin-bottom: 40px;
+    }
+}
+
+// ===== FORM =====
 .auth-form {
     display: flex;
     flex-direction: column;
@@ -77,42 +82,44 @@
     }
 }
 
-.btn-primary {
-    background: var(--bleu-refuge);
-    color: var(--blanc);
-    border: none;
+// ===== BOUTONS (namespacés .auth- pour éviter toute collision Bootstrap) =====
+%btn-auth-base {
     padding: 0.75rem;
     border-radius: 6px;
     font-weight: var(--font-semibold);
     font-size: var(--body-size);
-    cursor: pointer;
-    transition: background 0.15s;
     width: 100%;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.btn-auth-primary {
+    @extend %btn-auth-base;
+    background: var(--bleu-refuge);
+    color: var(--blanc);
+    border: none;
 
     &:hover {
         background: var(--orange-refuge);
     }
 }
 
-.btn-secondary {
+.btn-auth-secondary {
+    @extend %btn-auth-base;
     display: block;
-    text-align: center;
     background: var(--blanc);
     color: var(--bleu-refuge);
     border: 1px solid var(--bleu-refuge);
-    padding: 0.75rem;
-    border-radius: 6px;
-    font-weight: var(--font-semibold);
-    font-size: var(--body-size);
     text-decoration: none;
-    transition: background 0.15s;
 
     &:hover {
-      background: var(--bleu-refuge);
-      color: var(--blanc);
+        background: var(--bleu-refuge);
+        color: var(--blanc);
     }
 }
 
+// ===== SEPARATOR =====
 .separator {
     display: flex;
     align-items: center;
@@ -131,6 +138,7 @@
     }
 }
 
+// ===== SWITCH AUTH (lien login <-> inscription) =====
 .switch-auth {
     text-align: center;
     font-size: var(--body-size);
@@ -148,24 +156,25 @@
     }
 }
 
+// ===== PASSWORD TOGGLE =====
 .password-wrapper {
-  position: relative;
+    position: relative;
 
-  input {
-    width: 100%;
-    padding-right: 2.5rem;
-  }
-
-  .toggle-icon {
-    position: absolute;
-    right: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #6c757d;
-
-    &:hover {
-      color: #333;
+    input {
+        width: 100%;
+        padding-right: 2.5rem;
     }
-  }
+
+    .toggle-icon {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: var(--gris-moyen);
+
+        &:hover {
+            color: var(--noir-doux);
+        }
+    }
 }
