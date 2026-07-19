@@ -45,13 +45,36 @@ hr {
     word-break: break-word;
 }
 
-.badge-roman{
+.badge {
+    padding: 6px 12px;
+    border-radius: 10px;
+    color: var(--blanc);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.badge-roman {
     background-color: var(--orange-refuge);
 }
 
-.badge-bd,
-.badge-jeunesse {
+.badge-bd {
     background-color: var(--bleu-refuge);
+}
+
+.badge-jeunesse {
+    background-color: #4BC0C0;
+}
+
+.badge-conte {
+    background-color: #a1cd42
+}
+
+.badge-poesie {
+    background-color: #e271cf
+}
+
+.badge-doc {
+    background-color: #044d4d;
 }
 
 .btn-decouvrir {

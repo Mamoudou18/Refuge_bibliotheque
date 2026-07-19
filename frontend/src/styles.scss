@@ -132,3 +132,68 @@ main {
 input[type="password"]::-ms-reveal {
     display: none;
 }
+
+
+.chart-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+}
+
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 300px;      // hauteur FIXE — c'est ça qui manque
+  min-height: 300px;
+  max-height: 300px;
+}
+
+// c-chart de @coreui/angular-chartjs rend directement un <canvas>
+.chart-wrapper c-chart {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.chart-wrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+
+  h3 {
+    margin: 0;
+  }
+}
+
+.membre-select {
+  padding: 6px 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  min-width: 220px;
+
+  &:focus {
+    outline: none;
+    border-color: #4dabf7;
+  }
+}
+
+.no-data {
+  text-align: center;
+  color: #888;
+  padding: 20px 0;
+}

@@ -14,6 +14,7 @@ interface StatsResponse {
 })
 export class StatistiqueService {
   private apiUrl = 'http://localhost:81/api/stats';
+  private apiAdminUrl = 'http://localhost:81/api/admin'
 
   constructor(private http: HttpClient) {}
 
@@ -21,5 +22,9 @@ export class StatistiqueService {
     return this.http.get<StatsResponse>(this.apiUrl).pipe(
       map(res => res.data)
     );
+  }
+
+  getLogsConnexion(): Observable<any> {
+    return this.http.get<any>(`${this.apiAdminUrl}/logs-connexion`);
   }
 }

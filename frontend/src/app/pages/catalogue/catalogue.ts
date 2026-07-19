@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LivreService } from '../../services/livre';
 import { Livre } from '../../utils/token.util';
+import { getBadgeClass } from '../../utils/categories.util';
 
 @Component({
   selector: 'app-catalogue',
@@ -22,6 +23,9 @@ export class Catalogue implements OnInit {
   erreur: string = '';
 
   categories: string[] = ['Tous', 'Roman', 'Conte', 'BD', 'Jeunesse', 'Doc'];
+
+  // couleur des badges
+  getBadgeClass = getBadgeClass;
 
   constructor(private livreService: LivreService) {}
 
@@ -83,15 +87,5 @@ export class Catalogue implements OnInit {
       resultat.push(arr.slice(i, i + taille));
     }
     return resultat;
-  }
-
-  getBadgeClass(categorie: string | null): string {
-    const map: { [key: string]: string } = {
-      'Roman': 'badge-roman',
-      'BD': 'badge-bd',
-      'Jeunesse': 'badge-jeunesse',
-      'Doc': 'badge-doc'
-    };
-    return categorie ? (map[categorie] || 'badge-roman') : 'badge-roman';
   }
 }

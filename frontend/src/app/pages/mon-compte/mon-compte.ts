@@ -10,6 +10,7 @@ import { MembreAdmin, Membre, Livre, getMembre, Emprunt, STATUT_EN_RETARD, STATU
 import { RouterLink } from '@angular/router';
 import { StatistiqueService } from '../../services/statistique.service';
 import { Statistiques } from '../../utils/stats.util';
+import { getCouleurCategorie } from '../../utils/categories.util';
 
 
 @Component({
@@ -110,6 +111,38 @@ export class MonCompte implements OnInit {
     }
   };
 
+  //logs connexion
+  logsConnexion: any[] = [];
+  membreSelectionneConnexion: number | 'tous' = 'tous';
+  optionsMembresConnexion: { id_membre: number; email: string }[] = [];
+  
+  lineChartData: any = {
+    labels: [],
+    datasets: []
+  };
+  lineChartOptions: any = {
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: {
+      padding: { top: 40, right: 10, left: 10, bottom: 0 }
+    },
+    plugins: {
+      legend: { display: true },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        position: 'nearest',
+        caretPadding: 10,
+        yAlign: 'bottom' // force le tooltip à s'afficher SOUS le point, jamais au-dessus (évite qu'il sorte en haut de la carte)
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { stepSize: 1 }
+      }
+    }
+  };
 
   filtresEmprunt: { valeur: string; libelle: string }[] = [
     { valeur: 'tous', libelle: 'Tous les emprunts' },
@@ -649,6 +682,7 @@ export class MonCompte implements OnInit {
       next: (data) => {
         this.statistiques = data;
         this.construirePieChart();
+        this.chargerLogsConnexion();
         this.chargementStats = false;
       },
       error: (err) => {
@@ -666,15 +700,107 @@ export class MonCompte implements OnInit {
         datasets: [
           {
             data: this.statistiques.repartitionCategories.map(cat => cat.nombre_livres),
-            backgroundColor: [
-              '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
-              '#9966FF', '#FF9F40', '#C9CBCF', '#8BC34A',
-              '#E91E63', '#00BCD4'
-            ]
+            backgroundColor: this.statistiques.repartitionCategories.map(
+              cat => getCouleurCategorie(cat.categorie)
+            )
           }
         ]
       };
     }
+  }
+
+  chargerLogsConnexion(): void {
+    this.statistiqueService.getLogsConnexion().subscribe({
+      next: (res: any) => {
+        this.logsConnexion = res.data;
+        this.construireOptionsMembresConnexion();
+        this.construireLineChart();
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
+  // Construit la liste unique des membres présents dans les logs (pour le select)
+  construireOptionsMembresConnexion(): void {
+    const map = new Map<number, string>();
+    this.logsConnexion.forEach(log => {
+      if (!map.has(log.id_membre)) {
+        map.set(log.id_membre, log.email);
+      }
+    });
+    this.optionsMembresConnexion = Array.from(map.entries())
+      .map(([id_membre, email]) => ({ id_membre, email }))
+      .sort((a, b) => a.email.localeCompare(b.email));
+  }
+
+  onChangementMembreConnexion(): void {
+    this.construireLineChart();
+  }
+
+  construireLineChart(): void {
+    if (!this.logsConnexion?.length) {
+      this.lineChartData = { labels: [], datasets: [] };
+      return;
+    }
+
+    // 1. Filtrer selon le membre sélectionné
+    let logsFiltres = this.logsConnexion;
+    if (this.membreSelectionneConnexion !== 'tous') {
+      logsFiltres = this.logsConnexion.filter(
+        log => log.id_membre === Number(this.membreSelectionneConnexion)
+      );
+    }
+
+    // 2. Regrouper les connexions par jour (7 derniers jours)
+    const nbJours = 7;
+    const aujourdHui = new Date();
+    const jours: string[] = [];
+    const compteurParJour: { [date: string]: number } = {};
+
+    for (let i = nbJours - 1; i >= 0; i--) {
+      const d = new Date(aujourdHui);
+      d.setDate(d.getDate() - i);
+      const cle = d.toISOString().split('T')[0];
+      jours.push(cle);
+      compteurParJour[cle] = 0;
+    }
+
+    // 3. Compter les connexions réussies par jour
+    logsFiltres.forEach(log => {
+      if (!log.succes) return;
+      const cleJour = log.date_connexion.split(' ')[0];
+      if (compteurParJour.hasOwnProperty(cleJour)) {
+        compteurParJour[cleJour]++;
+      }
+    });
+
+    // 4. Labels formatés JJ/MM
+    const labels = jours.map(j => {
+      const [annee, mois, jour] = j.split('-');
+      return `${jour}/${mois}`;
+    });
+
+    const data = jours.map(j => compteurParJour[j]);
+
+    const labelDataset = this.membreSelectionneConnexion === 'tous'
+      ? 'Connexions réussies (tous les membres)'
+      : `Connexions de ${this.optionsMembresConnexion.find(o => o.id_membre === Number(this.membreSelectionneConnexion))?.email ?? ''}`;
+
+    this.lineChartData = {
+      labels: labels,
+      datasets: [
+        {
+          label: labelDataset,
+          data: data,
+          borderColor: '#36A2EB',
+          backgroundColor: 'rgba(54, 162, 235, 0.15)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 4,
+          pointBackgroundColor: '#36A2EB'
+        }
+      ]
+    };
   }
 
   // Helper pour affichage propre du retard (valeur back parfois négative)

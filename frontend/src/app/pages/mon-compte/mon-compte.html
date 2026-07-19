@@ -935,6 +935,38 @@
                     }
                 </div>
 
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3>
+                            <i class="icon-clock"></i> Connexions des 7 derniers jours
+                        </h3>
+
+                        <select
+                            class="membre-select"
+                            [(ngModel)]="membreSelectionneConnexion"
+                            (change)="onChangementMembreConnexion()">
+                            <option value="tous">Tous les membres</option>
+                            @for (opt of optionsMembresConnexion; track opt.id_membre) {
+                                <option [value]="opt.id_membre">
+                                    {{ opt.email }}
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="chart-wrapper">
+                        @if (lineChartData?.labels?.length) {
+                            <c-chart
+                                type="line"
+                                [data]="lineChartData"
+                                [options]="lineChartOptions">
+                            </c-chart>
+                        } @else {
+                            <p class="no-data">Aucune donnée de connexion disponible.</p>
+                        }
+                    </div>
+                </div>
+                
                 <!-- Nouveaux membres -->
                 <div class="admin-bloc">
                     <div class="section-title">
