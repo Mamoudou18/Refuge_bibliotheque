@@ -605,14 +605,10 @@ confirmerRetourLivre(): void {
   const emprunt = this.empruntARetourner;
 
   this.empruntService.retournerLivre(emprunt.id_emprunt).subscribe({
-    next: (empruntMisAJour) => {
-      const index = this.emprunts.findIndex(e => e.id_emprunt === emprunt.id_emprunt);
-      if (index !== -1) {
-        this.emprunts[index] = empruntMisAJour;
-      }
-      this.appliquerFiltresEmprunts();
-      this.chargerLivres();
-      this.annulerRetourLivre();
+    next: () => {
+      this.chargerEmprunts();   // recharge toute la liste des emprunts
+      this.chargerLivres();     // recharge la liste des livres (dispo mise à jour)
+      this.annulerRetourLivre(); // ferme la modal
     },
     error: (err) => {
       console.error(err);
