@@ -896,182 +896,182 @@
             </div>
         }
 
-    <!-- STATISTIQUES -->
-    @if (activeSection === 'statistiques') {
-        <div class="section-page">
-            <div class="page-header">
-                <h1><i class="bi bi-bar-chart"></i> Statistiques</h1>
-                <p>Vue d'ensemble des activités de la bibliothèque.</p>
-                <hr/>
-            </div>
-
-            @if (chargementStats) {
-                <p>Chargement des statistiques...</p>
-            }
-
-            @if (errorMsgStats) {
-                <p class="error-msg">{{ errorMsgStats }}</p>
-            }
-
-            @if (statistiques && !chargementStats) {
-                <!-- Chiffres clés généraux -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon blue"><i class="bi bi-book"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">{{ statistiques.general.livresTotal }}</div>
-                            <div class="stat-label">Livres total</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon green"><i class="bi bi-people"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">{{ statistiques.general.membresTotal }}</div>
-                            <div class="stat-label">Membres</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon orange"><i class="bi bi-clock-history"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">{{ statistiques.general.empruntsEnCours }}</div>
-                            <div class="stat-label">Emprunts en cours</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon red"><i class="bi bi-exclamation-circle"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">{{ statistiques.general.empruntsEnRetard }}</div>
-                            <div class="stat-label">En retard</div>
-                        </div>
-                    </div>
+        <!-- STATISTIQUES -->
+        @if (activeSection === 'statistiques') {
+            <div class="section-page">
+                <div class="page-header">
+                    <h1><i class="bi bi-bar-chart"></i> Statistiques</h1>
+                    <p>Vue d'ensemble des activités de la bibliothèque.</p>
+                    <hr/>
                 </div>
 
-                <!-- Activité du mois -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon blue"><i class="bi bi-arrow-down-circle"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">{{ statistiques.activite.empruntsCeMois }}</div>
-                            <div class="stat-label">Emprunts ce mois</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon green"><i class="bi bi-arrow-up-circle"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">{{ statistiques.activite.retoursCeMois }}</div>
-                            <div class="stat-label">Retours ce mois</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon red"><i class="bi bi-graph-down"></i></div>
-                        <div class="stat-info">
-                            <div class="stat-value">{{ statistiques.activite.tauxDeRetard }}%</div>
-                            <div class="stat-label">Taux de retard</div>
-                        </div>
-                    </div>
-                </div>
+                @if (chargementStats) {
+                    <p>Chargement des statistiques...</p>
+                }
 
-                <!-- Top livres empruntés -->
-                <div class="admin-bloc">
-                    <div class="section-title">
-                        <h3><i class="bi bi-trophy"></i> Top livres empruntés</h3>
-                        <span class="ligne"></span>
-                    </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead>
-                                <tr><th>#</th><th>Livre</th><th>Auteur</th><th>Nb emprunts</th></tr>
-                            </thead>
-                            <tbody>
-                                @for (livre of statistiques.topLivres; track livre.titre; let i = $index) {
-                                    <tr>
-                                        <td>{{ i + 1 }}</td>
-                                        <td>{{ livre.titre }}</td>
-                                        <td>{{ livre.auteur }}</td>
-                                        <td>{{ livre.nb_emprunts }}</td>
-                                    </tr>
-                                }
-                                @empty {
-                                    <tr><td colspan="4">Aucune donnée disponible.</td></tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                @if (errorMsgStats) {
+                    <p class="error-msg">{{ errorMsgStats }}</p>
+                }
 
-                <!-- Répartition par genre -->
-                <div class="admin-bloc">
-                    <div class="section-title">
-                        <h3><i class="bi bi-tags"></i> Répartition par genre</h3>
-                        <span class="ligne"></span>
-                    </div>
-
-                    <!-- Camembert -->
-                    @if (pieChartData) {
-                        <div class="chart-container" style="max-width: 400px; margin: 0 auto 2rem;">
-                            <c-chart
-                                type="pie"
-                                [data]="pieChartData"
-                                [options]="pieChartOptions"
-                            ></c-chart>
-                        </div>
-                    }
-                </div>
-
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <h3>
-                            <i class="icon-clock"></i> Connexions des 7 derniers jours
-                        </h3>
-
-                        <select
-                            class="membre-select"
-                            [(ngModel)]="membreSelectionneConnexion"
-                            (change)="onChangementMembreConnexion()">
-                            <option value="tous">Tous les membres</option>
-                            @for (opt of optionsMembresConnexion; track opt.id_membre) {
-                                <option [value]="opt.id_membre">
-                                    {{ opt.email }}
-                                </option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="chart-wrapper">
-                        @if (lineChartData?.labels?.length) {
-                            <c-chart
-                                type="line"
-                                [data]="lineChartData"
-                                [options]="lineChartOptions">
-                            </c-chart>
-                        } @else {
-                            <p class="no-data">Aucune donnée de connexion disponible.</p>
-                        }
-                    </div>
-                </div>
-                
-                <!-- Nouveaux membres -->
-                <div class="admin-bloc">
-                    <div class="section-title">
-                        <h3><i class="bi bi-person-plus"></i> Nouveaux membres ce mois-ci</h3>
-                        <span class="ligne"></span>
-                    </div>
-                    @for (m of statistiques.nouveauxMembres; track m.nom_complet) {
-                        <div class="bientot-item">
-                            <i class="bi bi-person-check-fill"></i>
-                            <div>
-                                <p>{{ m.nom_complet }}</p>
-                                <span>Inscrit(e) le {{ m.date_inscription }}</span>
+                @if (statistiques && !chargementStats) {
+                    <!-- Chiffres clés généraux -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon blue"><i class="bi bi-book"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value">{{ statistiques.general.livresTotal }}</div>
+                                <div class="stat-label">Livres total</div>
                             </div>
                         </div>
-                    }
-                    @empty {
-                        <p>Aucun nouveau membre ce mois-ci.</p>
-                    }
-                </div>
-            }
-        </div>
-    }
+                        <div class="stat-card">
+                            <div class="stat-icon green"><i class="bi bi-people"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value">{{ statistiques.general.membresTotal }}</div>
+                                <div class="stat-label">Membres</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon orange"><i class="bi bi-clock-history"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value">{{ statistiques.general.empruntsEnCours }}</div>
+                                <div class="stat-label">Emprunts en cours</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon red"><i class="bi bi-exclamation-circle"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value">{{ statistiques.general.empruntsEnRetard }}</div>
+                                <div class="stat-label">En retard</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activité du mois -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon blue"><i class="bi bi-arrow-down-circle"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value">{{ statistiques.activite.empruntsCeMois }}</div>
+                                <div class="stat-label">Emprunts ce mois</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green"><i class="bi bi-arrow-up-circle"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value">{{ statistiques.activite.retoursCeMois }}</div>
+                                <div class="stat-label">Retours ce mois</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon red"><i class="bi bi-graph-down"></i></div>
+                            <div class="stat-info">
+                                <div class="stat-value">{{ statistiques.activite.tauxDeRetard }}%</div>
+                                <div class="stat-label">Taux de retard</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top livres empruntés -->
+                    <div class="admin-bloc">
+                        <div class="section-title">
+                            <h3><i class="bi bi-trophy"></i> Top livres empruntés</h3>
+                            <span class="ligne"></span>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr><th>#</th><th>Livre</th><th>Auteur</th><th>Nb emprunts</th></tr>
+                                </thead>
+                                <tbody>
+                                    @for (livre of statistiques.topLivres; track livre.titre; let i = $index) {
+                                        <tr>
+                                            <td>{{ i + 1 }}</td>
+                                            <td>{{ livre.titre }}</td>
+                                            <td>{{ livre.auteur }}</td>
+                                            <td>{{ livre.nb_emprunts }}</td>
+                                        </tr>
+                                    }
+                                    @empty {
+                                        <tr><td colspan="4">Aucune donnée disponible.</td></tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Répartition par genre -->
+                    <div class="admin-bloc">
+                        <div class="section-title">
+                            <h3><i class="bi bi-tags"></i> Répartition par genre</h3>
+                            <span class="ligne"></span>
+                        </div>
+
+                        <!-- Camembert -->
+                        @if (pieChartData) {
+                            <div class="chart-container" style="max-width: 400px; margin: 0 auto 2rem;">
+                                <c-chart
+                                    type="pie"
+                                    [data]="pieChartData"
+                                    [options]="pieChartOptions"
+                                ></c-chart>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>
+                                <i class="icon-clock"></i> Connexions des 7 derniers jours
+                            </h3>
+
+                            <select
+                                class="membre-select"
+                                [(ngModel)]="membreSelectionneConnexion"
+                                (change)="onChangementMembreConnexion()">
+                                <option value="tous">Tous les membres</option>
+                                @for (opt of optionsMembresConnexion; track opt.id_membre) {
+                                    <option [value]="opt.id_membre">
+                                        {{ opt.email }}
+                                    </option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="chart-wrapper">
+                            @if (lineChartData?.labels?.length) {
+                                <c-chart
+                                    type="line"
+                                    [data]="lineChartData"
+                                    [options]="lineChartOptions">
+                                </c-chart>
+                            } @else {
+                                <p class="no-data">Aucune donnée de connexion disponible.</p>
+                            }
+                        </div>
+                    </div>
+                    
+                    <!-- Nouveaux membres -->
+                    <div class="admin-bloc">
+                        <div class="section-title">
+                            <h3><i class="bi bi-person-plus"></i> Nouveaux membres ce mois-ci</h3>
+                            <span class="ligne"></span>
+                        </div>
+                        @for (m of statistiques.nouveauxMembres; track m.nom_complet) {
+                            <div class="bientot-item">
+                                <i class="bi bi-person-check-fill"></i>
+                                <div>
+                                    <p>{{ m.nom_complet }}</p>
+                                    <span>Inscrit(e) le {{ m.date_inscription }}</span>
+                                </div>
+                            </div>
+                        }
+                        @empty {
+                            <p>Aucun nouveau membre ce mois-ci.</p>
+                        }
+                    </div>
+                }
+            </div>
+        }
 
     </div>
 

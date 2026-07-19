@@ -304,8 +304,11 @@
     display: flex;
     gap: 0.625rem;
     margin-bottom: 1.25rem;
+    flex-wrap: wrap;
 
     .btn-filtre {
+        flex: 1 1 auto;
+        min-width: 0;
         padding: 0.5rem 1.25rem;
         border-radius: 20px;
         border: 1.5px solid var(--gris-clair);
@@ -314,6 +317,8 @@
         font-weight: var(--font-semibold);
         font-size: var(--text-small-size);
         cursor: pointer;
+        white-space: nowrap;
+        text-align: center;
         transition: all 0.2s;
 
         &:hover {
@@ -632,5 +637,16 @@
 @media (max-width: 480px) {
     .stats-grid {
         grid-template-columns: 1fr;
+    }
+
+    .filtres-bar {
+        gap: 0.5rem;
+
+        .btn-filtre {
+            flex: 1 1 calc(50% - 0.5rem); // 2 boutons par ligne
+            font-size: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            white-space: normal;
+        }
     }
 }
