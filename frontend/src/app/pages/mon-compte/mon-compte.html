@@ -743,7 +743,7 @@
                                     <td class="actions-cell">
                                         <div class="actions-wrapper">
                                             @if (!emprunt.date_retour_effective) {
-                                                <button class="btn-icon" title="Marquer rendu" (click)="retournerLivre(emprunt)">
+                                                <button class="btn-icon" title="Marquer rendu" (click)="demanderRetourLivre(emprunt)">
                                                     <i class="bi bi-check-lg"></i>
                                                 </button>
                                             }
@@ -763,6 +763,27 @@
                     </div>
                 </div>
             </div>
+        }
+
+        <!-- MODAL CONFIRMATION RETOUR EMPRUNT -->
+        @if (showModalRetourEmprunt) {
+        <div class="modal-overlay" (click)="annulerRetourLivre()">
+            <div class="modal-content modal-small" (click)="$event.stopPropagation()">
+                <div class="modal-header">
+                    <h3><i class="bi bi-check-circle"></i> Confirmer le retour</h3>
+                    <button class="btn-close-modal" (click)="annulerRetourLivre()">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Confirmer le retour du livre <strong>{{ empruntARetourner?.titre_livre }}</strong> ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-cancel" (click)="annulerRetourLivre()">Annuler</button>
+                    <button class="btn btn-primary" (click)="confirmerRetourLivre()">Confirmer</button>
+                </div>
+            </div>
+        </div>
         }
 
         <!-- MODAL NOUVEL EMPRUNT -->

@@ -76,6 +76,8 @@ export class MonCompte implements OnInit {
   messageErreurEmprunt: string = '';
 
   empruntASupprimer: Emprunt | null = null;
+  empruntARetourner: Emprunt | null = null;
+  showModalRetourEmprunt: boolean = false;
 
   // ===== HISTORIQUE EMPRUNT =====
   modalHistoriqueOuverte: boolean = false;
@@ -587,24 +589,38 @@ export class MonCompte implements OnInit {
     });
   }
 
-  retournerLivre(emprunt: Emprunt): void {
-    if (!confirm(`Confirmer le retour de "${emprunt.titre_livre}" ?`)) return;
+demanderRetourLivre(emprunt: Emprunt): void {
+  this.empruntARetourner = emprunt;
+  this.showModalRetourEmprunt = true;
+}
 
-    this.empruntService.retournerLivre(emprunt.id_emprunt).subscribe({
-      next: (empruntMisAJour) => {
-        const index = this.emprunts.findIndex(e => e.id_emprunt === emprunt.id_emprunt);
-        if (index !== -1) {
-          this.emprunts[index] = empruntMisAJour;
-        }
-        this.appliquerFiltresEmprunts();
-        this.chargerLivres();
-      },
-      error: (err) => {
-        console.error(err);
-        alert(err.error?.message || 'Erreur lors du retour du livre.');
+annulerRetourLivre(): void {
+  this.empruntARetourner = null;
+  this.showModalRetourEmprunt = false;
+}
+
+confirmerRetourLivre(): void {
+  if (!this.empruntARetourner) return;
+
+  const emprunt = this.empruntARetourner;
+
+  this.empruntService.retournerLivre(emprunt.id_emprunt).subscribe({
+    next: (empruntMisAJour) => {
+      const index = this.emprunts.findIndex(e => e.id_emprunt === emprunt.id_emprunt);
+      if (index !== -1) {
+        this.emprunts[index] = empruntMisAJour;
       }
-    });
-  }
+      this.appliquerFiltresEmprunts();
+      this.chargerLivres();
+      this.annulerRetourLivre();
+    },
+    error: (err) => {
+      console.error(err);
+      alert(err.error?.message || 'Erreur lors du retour du livre.');
+      this.annulerRetourLivre();
+    }
+  });
+}
 
   ouvrirModalHistorique(emprunt: Emprunt): void {
     this.empruntSelectionne = emprunt;
