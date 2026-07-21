@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap, finalize } from 'rxjs';
 import { setToken, getToken, getMembre, removeToken, setMembre, removeMembre, Membre } from '../utils/token.util';
+import { environment } from '../../environments/environment.development';
 
 export interface InscriptionData {
   nom: string;
@@ -17,7 +18,7 @@ export interface InscriptionData {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:81/api';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

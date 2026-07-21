@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { MembreAdmin } from '../utils/token.util';
+import { environment } from '../../environments/environment.development';
 
 interface MembresResponse {
   status: string;
@@ -15,7 +16,7 @@ interface MembresResponse {
   providedIn: 'root'
 })
 export class MembreService {
-  private apiUrl = 'http://localhost:81/api/membres';
+  private apiUrl = `${environment.apiUrl}/membres`;
 
   constructor(private http: HttpClient) {}
 

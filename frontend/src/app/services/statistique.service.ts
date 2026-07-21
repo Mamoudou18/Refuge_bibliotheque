@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Statistiques } from '../utils/stats.util';
+import { environment } from '../../environments/environment.development';
 
 interface StatsResponse {
   status: string;
@@ -13,8 +14,8 @@ interface StatsResponse {
   providedIn: 'root',
 })
 export class StatistiqueService {
-  private apiUrl = 'http://localhost:81/api/stats';
-  private apiAdminUrl = 'http://localhost:81/api/admin'
+  private apiUrl = `${environment.apiUrl}/stats`;
+  private apiAdminUrl = `${environment.apiUrl}/admin`;
 
   constructor(private http: HttpClient) {}
 

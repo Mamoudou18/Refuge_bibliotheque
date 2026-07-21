@@ -1,0 +1,51 @@
+# ===== Stage 1 : build Angular =====
+FROM node:20-alpine AS frontend-build
+WORKDIR /app
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+COPY frontend/ .
+RUN npm run build -- --configuration production
+
+# ===== Stage 2 : image finale PHP-FPM + nginx =====
+FROM php:8.2-fpm-alpine
+
+# --- Dépendances PHP ---
+RUN apk add --no-cache \
+    postgresql-dev \
+    libpq \
+    autoconf \
+    gcc \
+    g++ \
+    make \
+    nginx \
+    supervisor
+
+RUN docker-php-ext-install pdo pdo_pgsql
+
+RUN pecl install mongodb \
+    && docker-php-ext-enable mongodb
+
+RUN apk del autoconf gcc g++ make
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www/html
+
+# --- Backend PHP ---
+COPY backend/ .
+RUN composer install --no-dev --optimize-autoloader
+RUN chown -R www-data:www-data /var/www/html
+
+# --- Frontend Angular buildé ---
+COPY --from=frontend-build /app/dist/frontend/browser /var/www/html/frontend/browser
+
+# --- Config nginx ---
+COPY nginx/default.fly.conf /etc/nginx/http.d/default.conf
+RUN mkdir -p /run/nginx
+
+# --- Supervisor pour lancer nginx + php-fpm ensemble ---
+COPY supervisord.conf /etc/supervisord.conf
+
+EXPOSE 8080
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

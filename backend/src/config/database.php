@@ -40,23 +40,29 @@ class MongoConfig
     public static function getDatabase(): MongoDBDatabase
     {
         if (self::$db === null) {
-            $host = getenv('MONGO_HOST') ?: 'mongo';
-            $port = getenv('MONGO_PORT') ?: '27017';
             $dbname = getenv('MONGO_DB') ?: 'refugeBibliotheque_db';
-            $user = getenv('MONGO_USER') ?: '';
-            $password = getenv('MONGO_PASSWORD') ?: '';
+            $fullUri = getenv('MONGO_URI');
 
             try {
-                if ($user && $password) {
-                    $uri = "mongodb://{$user}:{$password}@{$host}:{$port}/?authSource=admin";
+                if ($fullUri) {
+                    // Utilise l'URI complète (Atlas, mongodb+srv://, etc.)
+                    $uri = $fullUri;
                 } else {
-                    $uri = "mongodb://{$host}:{$port}";
+                    // Fallback : construction manuelle (dev local)
+                    $host = getenv('MONGO_HOST') ?: 'mongo';
+                    $port = getenv('MONGO_PORT') ?: '27017';
+                    $user = getenv('MONGO_USER') ?: '';
+                    $password = getenv('MONGO_PASSWORD') ?: '';
+
+                    if ($user && $password) {
+                        $uri = "mongodb://{$user}:{$password}@{$host}:{$port}/?authSource=admin";
+                    } else {
+                        $uri = "mongodb://{$host}:{$port}";
+                    }
                 }
 
                 self::$client = new Client($uri);
                 self::$db = self::$client->selectDatabase($dbname);
-
-                // Vérifie que la connexion fonctionne réellement
                 self::$db->command(['ping' => 1]);
 
             } catch (\Exception $e) {

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Livre } from '../utils/token.util';
+import { environment } from '../../environments/environment.development';
 
 interface LivresResponse {
   status: string;
@@ -23,8 +24,8 @@ interface LivreResponse {
   providedIn: 'root'
 })
 export class LivreService {
-  private apiUrl = 'http://localhost:81/api/livres';
-  private apiUrlAdmin = 'http://localhost:81/api/admin/livres';
+  private apiUrl = `${environment.apiUrl}/livres`;
+  private apiUrlAdmin = `${environment.apiUrl}/admin/livres`;
 
   constructor(private http: HttpClient) {}
 

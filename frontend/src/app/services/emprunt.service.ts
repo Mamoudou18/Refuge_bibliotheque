@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Emprunt, HistoriqueStatut, HistoriqueStatutResponse } from '../utils/token.util';
+import { environment } from '../../environments/environment.development';
 
 interface EmpruntsResponse {
   status: string;
@@ -19,8 +20,8 @@ interface EmpruntResponse {
   providedIn: 'root',
 })
 export class EmpruntService {
-  private apiUrl = 'http://localhost:81/api/emprunts';
-  private apiUrlAdmin = 'http://localhost:81/api/admin/emprunts';
+  private apiUrl = `${environment.apiUrl}/emprunts`;
+  private apiUrlAdmin = `${environment.apiUrl}/admin/emprunts`;
 
   constructor(private http: HttpClient) {}
 
