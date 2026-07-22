@@ -107,7 +107,7 @@ services:
       context: ./frontend
       target: dev
     container_name: refuge_frontend
-    command: sh -c "npm ci && npx ng build --watch --output-path=/shared --poll 2000"
+    command: sh -c "npm ci && npx ng build --watch --output-path=/shared --poll 2000 --configuration=development"
     restart: always
     volumes:
       - ./frontend:/app

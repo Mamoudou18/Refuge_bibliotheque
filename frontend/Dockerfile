@@ -7,7 +7,7 @@ RUN npm ci
 # Stage DEV : watch mode
 FROM base AS dev
 COPY . .
-CMD ["npx", "ng", "build", "--watch", "--output-path=/shared", "--poll", "2000"]
+CMD ["npx", "ng", "build", "--watch", "--output-path=/shared", "--poll", "2000", "--configuration=development"]
 
 # Stage PROD : build unique
 FROM base AS prod-build
