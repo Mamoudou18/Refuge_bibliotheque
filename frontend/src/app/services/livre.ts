@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Livre } from '../utils/token.util';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 interface LivresResponse {
   status: string;

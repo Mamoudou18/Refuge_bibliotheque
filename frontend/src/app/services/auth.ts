@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap, finalize } from 'rxjs';
 import { setToken, getToken, getMembre, removeToken, setMembre, removeMembre, Membre } from '../utils/token.util';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 export interface InscriptionData {
   nom: string;

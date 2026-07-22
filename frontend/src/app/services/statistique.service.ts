@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Statistiques } from '../utils/stats.util';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 interface StatsResponse {
   status: string;
