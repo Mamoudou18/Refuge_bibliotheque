@@ -35,4 +35,4 @@ backend/src/logs/*
 !backend/src/logs/.gitkeep
 
 # vendor
-vendor/
+**/vendor/
