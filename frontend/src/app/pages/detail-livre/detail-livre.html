@@ -6,7 +6,7 @@
 
     <!-- Bouton retour -->
     <a routerLink="/catalogue" class="btn btn-outline-secondary mb-4">
-        <i class="bi bi-arrow-left"></i> Retour au catalogue
+        <i class="bi bi-arrow-left" aria-hidden="true"></i> Retour au catalogue
     </a>
 
     <!-- Chargement -->
@@ -20,20 +20,20 @@
 
     <!-- Erreur -->
     @if (!chargement && erreur) {
-        <div class="alert alert-danger">
+        <div class="alert alert-danger" role="alert">
             {{ erreur }}
         </div>
     }
 
-    <!-- Carte détail d'un livre -->
+    <!-- Fiche détail d'un livre -->
     @if (!chargement && livre) {
-        <div class="card shadow-sm p-3">
+        <article class="card shadow-sm p-3" [attr.aria-labelledby]="'titre-livre'">
             <div class="row g-0">
 
                 <!-- Image -->
                 <div class="col-12 col-md-4">
                     <img [src]="livre.url_couverture ? livre.url_couverture : '/images/default-book.webp'"
-                         [alt]="livre.titre"
+                         [alt]="'Couverture du livre ' + livre.titre"
                          class="card-img-top rounded">
                 </div>
 
@@ -42,7 +42,7 @@
 
                     <!-- Titre + badge -->
                     <div class="d-flex justify-content-between align-items-start gap-2">
-                        <h3 class="card-title mb-0">{{ livre.titre }}</h3>
+                        <h2 id="titre-livre" class="card-title mb-0">{{ livre.titre }}</h2>
                         <span class="badge flex-shrink-0" [ngClass]="getBadgeClass(livre.categorie)">
                             {{ livre.categorie }}
                         </span>
@@ -52,7 +52,7 @@
                     <p class="text-muted text-small mt-1">
                         {{ livre.auteur }}
                         @if (livre.annee_publication) {
-                            {{ livre.annee_publication }}
+                            — {{ livre.annee_publication }}
                         }
                     </p>
 
@@ -64,7 +64,7 @@
                     }
 
                     <!-- Résumé -->
-                    <h2 class="text-bleu">Résumé</h2>
+                    <h3 class="text-bleu">Résumé</h3>
                     <p>{{ livre.description }}</p>
                     <p class="text-muted text-small">Disponible : {{ livre.nb_disponibles }}/{{ livre.nb_exemplaires }} exemplaires</p>
 
@@ -73,6 +73,7 @@
                         <button type="button"
                                 class="btn btn-emprunter px-4"
                                 [disabled]="livre.nb_disponibles === 0"
+                                [attr.aria-disabled]="livre.nb_disponibles === 0"
                                 (click)="demanderEmprunt()">
                             Emprunter ce livre
                         </button>
@@ -80,23 +81,29 @@
 
                 </div>
             </div>
-        </div>
+        </article>
     }
 
     <!-- MODAL CONFIRMATION EMPRUNT -->
     @if (showModalEmprunt) {
         <div class="modal-overlay" (click)="annulerEmprunt()">
-            <div class="modal-content modal-small" (click)="$event.stopPropagation()">
+            <div class="modal-content modal-small"
+                 role="dialog"
+                 aria-modal="true"
+                 aria-labelledby="titre-modal-emprunt"
+                 (click)="$event.stopPropagation()">
 
                 @if (!empruntReussi) {
                     <div class="modal-header">
-                        <h3><i class="bi bi-book"></i> Confirmer l'emprunt</h3>
+                        <h2 id="titre-modal-emprunt">
+                            <i class="bi bi-book" aria-hidden="true"></i> Confirmer l'emprunt
+                        </h2>
                     </div>
                     <div class="modal-body">
                         <p>Voulez-vous emprunter le livre <strong>{{ livre?.titre }}</strong> ?</p>
 
                         @if (messageErreurEmprunt) {
-                            <div class="alert alert-danger">{{ messageErreurEmprunt }}</div>
+                            <div class="alert alert-danger" role="alert">{{ messageErreurEmprunt }}</div>
                         }
                     </div>
                     <div class="modal-footer">
@@ -105,7 +112,9 @@
                         </button>
                         <button class="btn btn-emprunter" (click)="confirmerEmprunt()" [disabled]="chargementEmprunt">
                             @if (chargementEmprunt) {
-                                <span class="spinner-border spinner-border-sm"></span> Emprunt en cours...
+                                <span class="spinner-border spinner-border-sm" role="status">
+                                    <span class="visually-hidden">Emprunt en cours...</span>
+                                </span> Emprunt en cours...
                             } @else {
                                 Confirmer
                             }
@@ -113,8 +122,8 @@
                     </div>
                 } @else {
                     <div class="modal-body text-center py-4">
-                        <i class="bi bi-check-circle-fill text-success" style="font-size: 2.5rem;"></i>
-                        <p class="mt-3 mb-0">Livre emprunté avec succès !</p>
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 2.5rem;" aria-hidden="true"></i>
+                        <p class="mt-3 mb-0" role="status">Livre emprunté avec succès !</p>
                     </div>
                 }
 

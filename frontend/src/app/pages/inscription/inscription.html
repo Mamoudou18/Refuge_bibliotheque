@@ -5,47 +5,76 @@
             <hr/>
         </div>
 
-        <form class="auth-form auth-form--grid" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <form class="auth-form auth-form--grid" [formGroup]="registerForm" (ngSubmit)="onSubmit()" [attr.aria-busy]="isLoading">
 
             <div class="form-group">
-                <label for="prenom">Prénom <span class="required">*</span></label>
-                <input type="text" id="prenom" formControlName="prenom" placeholder="Mamoudou">
+                <label for="prenom">Prénom <span class="required" aria-hidden="true">*</span><span class="visually-hidden"> (requis)</span></label>
+                <input
+                    type="text"
+                    id="prenom"
+                    formControlName="prenom"
+                    placeholder="Mamoudou"
+                    [attr.aria-invalid]="registerForm.get('prenom')?.invalid && registerForm.get('prenom')?.touched"
+                    [attr.aria-describedby]="registerForm.get('prenom')?.invalid && registerForm.get('prenom')?.touched ? 'prenom-error' : null"
+                >
                 @if (registerForm.get('prenom')?.invalid && registerForm.get('prenom')?.touched) {
-                    <small class="error-text text-danger ">Le prénom est requis.</small>
+                    <small id="prenom-error" class="error-text text-danger" role="alert">Le prénom est requis.</small>
                 }
             </div>
 
             <div class="form-group">
-                <label for="nom">Nom <span class="required">*</span></label>
-                <input type="text" id="nom" formControlName="nom" placeholder="Keita">
+                <label for="nom">Nom <span class="required" aria-hidden="true">*</span><span class="visually-hidden"> (requis)</span></label>
+                <input
+                    type="text"
+                    id="nom"
+                    formControlName="nom"
+                    placeholder="Keita"
+                    [attr.aria-invalid]="registerForm.get('nom')?.invalid && registerForm.get('nom')?.touched"
+                    [attr.aria-describedby]="registerForm.get('nom')?.invalid && registerForm.get('nom')?.touched ? 'nom-error' : null"
+                >
                 @if (registerForm.get('nom')?.invalid && registerForm.get('nom')?.touched) {
-                    <small class="error-text text-danger">Le nom est requis.</small>
+                    <small id="nom-error" class="error-text text-danger" role="alert">Le nom est requis.</small>
                 }
             </div>
 
             <div class="form-group">
-                <label for="email">Email <span class="required">*</span></label>
-                <input type="email" id="email" formControlName="email" placeholder="monemail@gmail.com">
+                <label for="email">Email <span class="required" aria-hidden="true">*</span><span class="visually-hidden"> (requis)</span></label>
+                <input
+                    type="email"
+                    id="email"
+                    formControlName="email"
+                    placeholder="monemail@gmail.com"
+                    [attr.aria-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+                    [attr.aria-describedby]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched ? 'email-error' : null"
+                >
                 @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
-                    <small class="error-text text-danger">Email invalide.</small>
+                    <small id="email-error" class="error-text text-danger" role="alert">Email invalide.</small>
                 }
             </div>
 
             <div class="form-group">
-                <label for="numero_tel">Téléphone <span class="required">*</span></label>
-                <input type="tel" id="numero_tel" formControlName="numero_tel" placeholder="00 00 00 00 00">
+                <label for="numero_tel">Téléphone <span class="required" aria-hidden="true">*</span><span class="visually-hidden"> (requis)</span></label>
+                <input
+                    type="tel"
+                    id="numero_tel"
+                    formControlName="numero_tel"
+                    placeholder="00 00 00 00 00"
+                    [attr.aria-invalid]="registerForm.get('numero_tel')?.invalid && registerForm.get('numero_tel')?.touched"
+                    [attr.aria-describedby]="registerForm.get('numero_tel')?.invalid && registerForm.get('numero_tel')?.touched ? 'tel-error' : null"
+                >
                 @if (registerForm.get('numero_tel')?.invalid && registerForm.get('numero_tel')?.touched) {
-                    <small class="error-text text-danger">Téléphone requis.</small>
+                    <small id="tel-error" class="error-text text-danger" role="alert">Téléphone requis.</small>
                 }
             </div>
 
             <div class="form-group form-group--full">
                 <label for="date_naissance">Date de naissance</label>
-                <input type="date" id="date_naissance" formControlName="date_naissance">
+                <input type="date" id="date_naissance" formControlName="date_naissance" aria-describedby="date-hint">
+                <small id="date-hint" class="visually-hidden">Format jour, mois, année</small>
             </div>
-            
+
             <div class="form-group">
-                <label for="mot_de_passe">Mot de passe <span class="required">*</span></label>
+                <label for="mot_de_passe">Mot de passe <span class="required" aria-hidden="true">*</span><span class="visually-hidden"> (requis)</span></label>
                 <div class="password-wrapper">
                     <input
                         type="password"
@@ -53,18 +82,28 @@
                         formControlName="mot_de_passe"
                         placeholder="••••••••••••••"
                         #pwd1
+                        [attr.aria-invalid]="registerForm.get('mot_de_passe')?.invalid && registerForm.get('mot_de_passe')?.touched"
+                        [attr.aria-describedby]="registerForm.get('mot_de_passe')?.invalid && registerForm.get('mot_de_passe')?.touched ? 'mdp-error' : null"
                     >
-                    <i class="bi bi-eye toggle-icon" #icon1 (click)="togglePassword(pwd1, icon1)"></i>
+                    <button
+                        type="button"
+                        class="toggle-icon-btn"
+                        (click)="togglePassword(pwd1, icon1)"
+                        [attr.aria-label]="pwd1.type === 'password' ? 'Afficher le mot de passe' : 'Masquer le mot de passe'"
+                        [attr.aria-pressed]="pwd1.type === 'text'"
+                    >
+                        <i class="bi bi-eye toggle-icon" #icon1 aria-hidden="true"></i>
+                    </button>
                 </div>
                 @if (registerForm.get('mot_de_passe')?.invalid && registerForm.get('mot_de_passe')?.touched) {
-                    <small class="error-text text-danger">
+                    <small id="mdp-error" class="error-text text-danger" role="alert">
                         10 caractères min., avec majuscule, minuscule, chiffre et caractère spécial.
                     </small>
                 }
             </div>
 
             <div class="form-group">
-                <label for="confirmPassword">Confirmer mot de passe <span class="required">*</span></label>
+                <label for="confirmPassword">Confirmer mot de passe <span class="required" aria-hidden="true">*</span><span class="visually-hidden"> (requis)</span></label>
                 <div class="password-wrapper">
                     <input
                         type="password"
@@ -72,17 +111,27 @@
                         formControlName="confirmPassword"
                         placeholder="••••••••••••••"
                         #pwd2
+                        [attr.aria-invalid]="registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched"
+                        [attr.aria-describedby]="registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched ? 'confirm-error' : null"
                     >
-                    <i class="bi bi-eye toggle-icon" #icon2 (click)="togglePassword(pwd2, icon2)"></i>
+                    <button
+                        type="button"
+                        class="toggle-icon-btn"
+                        (click)="togglePassword(pwd2, icon2)"
+                        [attr.aria-label]="pwd2.type === 'password' ? 'Afficher le mot de passe' : 'Masquer le mot de passe'"
+                        [attr.aria-pressed]="pwd2.type === 'text'"
+                    >
+                        <i class="bi bi-eye toggle-icon" #icon2 aria-hidden="true"></i>
+                    </button>
                 </div>
                 @if (registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched) {
-                    <small class="error-text text-danger">Les mots de passe ne correspondent pas.</small>
+                    <small id="confirm-error" class="error-text text-danger" role="alert">Les mots de passe ne correspondent pas.</small>
                 }
             </div>
 
             @if (errorMessage) {
                 <div class="form-group--full">
-                    <small class="error-text text-danger">{{ errorMessage }}</small>
+                    <small class="error-text text-danger" role="alert">{{ errorMessage }}</small>
                 </div>
             }
 
@@ -99,7 +148,7 @@
 
         <p class="switch-auth">
             Vous avez déjà un compte ?
-            <a routerLink="/connexion"><i class="bi bi-box-arrow-in-right"></i> Se connecter</a>
+            <a routerLink="/connexion"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i> Se connecter</a>
         </p>
     </div>
 </div>

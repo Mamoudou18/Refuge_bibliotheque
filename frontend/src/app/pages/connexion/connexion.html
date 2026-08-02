@@ -5,18 +5,25 @@
             <hr/>
         </div>
 
-        <form class="auth-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <form class="auth-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()" [attr.aria-busy]="isLoading">
 
             <div class="form-group">
-                <label for="email">Email <span class="required">*</span></label>
-                <input type="email" id="email" formControlName="email" placeholder="monemail@gmail.com">
+                <label for="email">Email <span class="required" aria-hidden="true">*</span><span class="visually-hidden"> (requis)</span></label>
+                <input
+                    type="email"
+                    id="email"
+                    formControlName="email"
+                    placeholder="monemail@gmail.com"
+                    [attr.aria-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+                    [attr.aria-describedby]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched ? 'email-error' : null"
+                >
                 @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-                    <small class="error-text text-danger">Email invalide.</small>
+                    <small id="email-error" class="error-text text-danger" role="alert">Email invalide.</small>
                 }
             </div>
 
             <div class="form-group">
-                <label for="mot_de_passe">Mot de passe <span class="required">*</span></label>
+                <label for="mot_de_passe">Mot de passe <span class="required" aria-hidden="true">*</span><span class="visually-hidden"> (requis)</span></label>
                 <div class="password-wrapper">
                     <input
                         type="password"
@@ -24,11 +31,21 @@
                         formControlName="mot_de_passe"
                         placeholder="••••••••••••••"
                         #pwd1
+                        [attr.aria-invalid]="loginForm.get('mot_de_passe')?.invalid && loginForm.get('mot_de_passe')?.touched"
+                        [attr.aria-describedby]="loginForm.get('mot_de_passe')?.invalid && loginForm.get('mot_de_passe')?.touched ? 'password-error' : null"
                     >
-                    <i class="bi bi-eye toggle-icon" #icon1 (click)="togglePassword(pwd1, icon1)"></i>
+                    <button
+                        type="button"
+                        class="toggle-icon-btn"
+                        (click)="togglePassword(pwd1, icon1)"
+                        [attr.aria-label]="pwd1.type === 'password' ? 'Afficher le mot de passe' : 'Masquer le mot de passe'"
+                        [attr.aria-pressed]="pwd1.type === 'text'"
+                    >
+                        <i class="bi bi-eye toggle-icon" #icon1 aria-hidden="true"></i>
+                    </button>
                 </div>
                 @if (loginForm.get('mot_de_passe')?.invalid && loginForm.get('mot_de_passe')?.touched) {
-                    <small class="error-text text-danger">Mot de passe requis.</small>
+                    <small id="password-error" class="error-text text-danger" role="alert">Mot de passe requis.</small>
                 }
             </div>
 
@@ -36,7 +53,7 @@
 
             @if (errorMessage) {
                 <div class="form-group--full">
-                    <small class="error-text text-danger">{{ errorMessage }}</small>
+                    <small class="error-text text-danger" role="alert">{{ errorMessage }}</small>
                 </div>
             }
 

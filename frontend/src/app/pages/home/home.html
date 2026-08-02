@@ -1,19 +1,19 @@
 <div class="container pt-5">
 
     <!-- HERO -->
-    <section class="hero-scene mb-5">
+    <section class="hero-scene mb-5" aria-labelledby="hero-titre">
         <div class="row align-items-center g-4">
 
             <div class="col-12 col-md-6">
                 <div style="display: inline-block;">
-                    <h1>Bienvenue sur Refuge</h1>
+                    <h1 id="hero-titre">Bienvenue sur Refuge</h1>
                     <p class="subtitle text-center">Explorez · Choisissez · Empruntez</p>
 
                     <p>Des milliers de livres à portée de clic.<br>
                     Connectez-vous et trouvez votre prochaine lecture.</p>
 
                     <div class="text-center">
-                        <a href="/catalogue" class="btn btn-catalogue px-4 mt-2">Voir le catalogue</a>
+                        <a routerLink="/catalogue" class="btn btn-catalogue px-4 mt-2">Voir le catalogue</a>
                     </div>
                 </div>
             </div>
@@ -21,16 +21,16 @@
             <div class="col-12 col-md-6">
                 <div class="row g-2 couverture-miniature">
                     <div class="col-6">
-                        <img src="/images/Astérix T1.jpeg" alt="Astérix T1" class="img-fluid rounded shadow-sm">
+                        <img src="/images/Astérix T1.jpeg" alt="Couverture du livre Astérix T1" class="img-fluid rounded shadow-sm">
                     </div>
                     <div class="col-6">
-                        <img src="/images/Tintin Tibet T1.jpeg" alt="Tintin Tibet T1" class="img-fluid rounded shadow-sm">
+                        <img src="/images/Tintin Tibet T1.jpeg" alt="Couverture du livre Tintin au Tibet T1" class="img-fluid rounded shadow-sm">
                     </div>
                     <div class="col-6">
-                        <img src="/images/LePetitPrince.jpeg" alt="Le Petit Prince" class="img-fluid rounded shadow-sm">
+                        <img src="/images/LePetitPrince.jpeg" alt="Couverture du livre Le Petit Prince" class="img-fluid rounded shadow-sm">
                     </div>
                     <div class="col-6">
-                        <img src="/images/dune.jpg" alt="Dune" class="img-fluid rounded shadow-sm">
+                        <img src="/images/dune.jpg" alt="Couverture du livre Dune" class="img-fluid rounded shadow-sm">
                     </div>
                 </div>
             </div>
@@ -39,63 +39,86 @@
     </section>
 
     <!-- NOUVEAUTÉS -->
-    <section class="nouveaute mb-5">
-        <h2 class="text-center mb-4">Nouveautés</h2>
+    <section class="nouveaute mb-5" aria-labelledby="nouveautes-titre">
+        <h2 id="nouveautes-titre" class="text-center mb-4">Nouveautés</h2>
+
         <!-- Desktop : grille classique -->
         <div class="row g-3 d-none d-md-flex">
             <div class="col-md-3">
-                <img src="/images/Armoire magique.jpeg" alt="Armoire magique" class="img-fluid rounded shadow-sm">
+                <article>
+                    <img src="/images/Armoire magique.jpeg" alt="Couverture du livre L'Armoire magique" class="img-fluid rounded shadow-sm">
+                </article>
             </div>
             <div class="col-md-3">
-                <img src="/images/Aventures de Tom.webp" alt="Aventures de Tom" class="img-fluid rounded shadow-sm">
+                <article>
+                    <img src="/images/Aventures de Tom.webp" alt="Couverture du livre Les Aventures de Tom" class="img-fluid rounded shadow-sm">
+                </article>
             </div>
             <div class="col-md-3">
-                <img src="/images/Matilda.jpeg" alt="Matilda" class="img-fluid rounded shadow-sm">
+                <article>
+                    <img src="/images/Matilda.jpeg" alt="Couverture du livre Matilda" class="img-fluid rounded shadow-sm">
+                </article>
             </div>
             <div class="col-md-3">
-                <img src="/images/le club des cinq.webp" alt="le club des cinq" class="img-fluid rounded shadow-sm">
+                <article>
+                    <img src="/images/le club des cinq.webp" alt="Couverture du livre Le Club des cinq" class="img-fluid rounded shadow-sm">
+                </article>
             </div>
         </div>
 
         <!-- Mobile : carrousel -->
-        <div id="carouselNouveautes" class="carousel slide d-md-none" data-bs-ride="carousel">
+        <div
+            id="carouselNouveautes"
+            class="carousel slide d-md-none"
+            data-bs-ride="carousel"
+            role="region"
+            aria-label="Nouveautés (carrousel mobile)"
+        >
 
-            <!-- Indicateurs EN PREMIER -->
+            <!-- Indicateurs -->
             <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselNouveautes" data-bs-slide-to="0" class="active"></button>
-                <button type="button" data-bs-target="#carouselNouveautes" data-bs-slide-to="1"></button>
-                <button type="button" data-bs-target="#carouselNouveautes" data-bs-slide-to="2"></button>
-                <button type="button" data-bs-target="#carouselNouveautes" data-bs-slide-to="3"></button>
+                <button type="button" data-bs-target="#carouselNouveautes" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Diapositive 1 : L'Armoire magique"></button>
+                <button type="button" data-bs-target="#carouselNouveautes" data-bs-slide-to="1" aria-label="Diapositive 2 : Les Aventures de Tom"></button>
+                <button type="button" data-bs-target="#carouselNouveautes" data-bs-slide-to="2" aria-label="Diapositive 3 : Matilda"></button>
+                <button type="button" data-bs-target="#carouselNouveautes" data-bs-slide-to="3" aria-label="Diapositive 4 : Le Club des cinq"></button>
             </div>
 
             <!-- Images -->
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="/images/Armoire magique.jpeg" alt="Armoire magique" class="d-block mx-auto rounded shadow-sm" style="max-height: 300px;">
+                    <article>
+                        <img src="/images/Armoire magique.jpeg" alt="Couverture du livre L'Armoire magique" class="d-block mx-auto rounded shadow-sm" style="max-height: 300px;">
+                    </article>
                 </div>
                 <div class="carousel-item">
-                    <img src="/images/Aventures de Tom.webp" alt="Aventures de Tom" class="d-block mx-auto rounded shadow-sm" style="max-height: 300px;">
+                    <article>
+                        <img src="/images/Aventures de Tom.webp" alt="Couverture du livre Les Aventures de Tom" class="d-block mx-auto rounded shadow-sm" style="max-height: 300px;">
+                    </article>
                 </div>
                 <div class="carousel-item">
-                    <img src="/images/Matilda.jpeg" alt="Matilda" class="d-block mx-auto rounded shadow-sm" style="max-height: 300px;">
+                    <article>
+                        <img src="/images/Matilda.jpeg" alt="Couverture du livre Matilda" class="d-block mx-auto rounded shadow-sm" style="max-height: 300px;">
+                    </article>
                 </div>
                 <div class="carousel-item">
-                    <img src="/images/le club des cinq.webp" alt="le club des cinq" class="d-block mx-auto rounded shadow-sm" style="max-height: 300px;">
+                    <article>
+                        <img src="/images/le club des cinq.webp" alt="Couverture du livre Le Club des cinq" class="d-block mx-auto rounded shadow-sm" style="max-height: 300px;">
+                    </article>
                 </div>
             </div>
 
             <!-- Flèches -->
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselNouveautes" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Diapositive précédente</span>
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#carouselNouveautes" data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Diapositive suivante</span>
             </button>
 
         </div>
 
-
     </section>
-
 
 </div>

@@ -26,39 +26,43 @@
                     </li>
 
                     <!-- Non connecté -->
-                    <li class="nav-item" *ngIf="!isLoggedIn">
-                        <a class="nav-link" routerLink="/connexion" routerLinkActive="active">
-                            <i class="bi bi-person-check" aria-hidden="true"></i>Connexion
-                        </a>
-                    </li>
-                    <li class="nav-item" *ngIf="!isLoggedIn">
-                        <a class="nav-link" routerLink="/inscription" routerLinkActive="active">
-                            <i class="bi bi-person-plus" aria-hidden="true"></i>Inscription
-                        </a>
-                    </li>
+                    @if (!isLoggedIn) {
+                        <li class="nav-item">
+                            <a class="nav-link" routerLink="/connexion" routerLinkActive="active">
+                                <i class="bi bi-person-check" aria-hidden="true"></i>Connexion
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" routerLink="/inscription" routerLinkActive="active">
+                                <i class="bi bi-person-plus" aria-hidden="true"></i>Inscription
+                            </a>
+                        </li>
+                    }
 
                     <!-- Connecté -->
-                    <li class="nav-item dropdown" *ngIf="isLoggedIn">
-                        <a class="nav-link dropdown-toggle" href="#" 
-                           role="button" 
-                           data-bs-toggle="dropdown" 
-                           aria-expanded="false"
-                           aria-label="Menu utilisateur">
-                            <i class="bi bi-person-circle" aria-hidden="true"></i>{{ initiales }}
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <a class="dropdown-item" routerLink="/mon-compte">
-                                    <i class="bi bi-person-gear" aria-hidden="true"></i>Mon Compte
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" routerLink="/deconnexion">
-                                    <i class="bi bi-box-arrow-right" aria-hidden="true"></i>Déconnexion
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                    @if (isLoggedIn) {
+                        <li class="nav-item dropdown">
+                            <button class="nav-link dropdown-toggle" 
+                               type="button"
+                               data-bs-toggle="dropdown" 
+                               aria-expanded="false"
+                               aria-label="Menu utilisateur">
+                                <i class="bi bi-person-circle" aria-hidden="true"></i>{{ initiales }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" routerLink="/mon-compte">
+                                        <i class="bi bi-person-gear" aria-hidden="true"></i>Mon Compte
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" routerLink="/deconnexion">
+                                        <i class="bi bi-box-arrow-right" aria-hidden="true"></i>Déconnexion
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>

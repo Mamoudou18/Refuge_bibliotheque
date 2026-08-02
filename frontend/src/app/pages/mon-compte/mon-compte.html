@@ -1,29 +1,29 @@
 <div class="dashboard-layout">
 
     <!-- SIDEBAR -->
-    <aside class="sidebar">
+    <aside class="sidebar" aria-label="Navigation du compte">
 
         <div class="sidebar-logo">
-            <i class="bi bi-person-gear"></i>
+            <i class="bi bi-person-gear" aria-hidden="true"></i>
             <h1>Mon compte</h1>
         </div>
 
-        <nav class="sidebar-nav">
+        <nav class="sidebar-nav" aria-label="Menu principal">
 
             <div class="nav-section">
 
-                <a class="nav-link" [class.active]="activeSection === 'accueil'" (click)="showSection('accueil')">
-                    <i class="bi bi-house"></i><span>Accueil</span>
+                <a class="nav-link" [class.active]="activeSection === 'accueil'" [attr.aria-current]="activeSection === 'accueil' ? 'page' : null" (click)="showSection('accueil')">
+                    <i class="bi bi-house" aria-hidden="true"></i><span>Accueil</span>
                 </a>
 
                 @if (!isAdmin) {
-                    <a class="nav-link" [class.active]="activeSection === 'mes_emprunts'" (click)="showSection('mes_emprunts')">
-                        <i class="bi bi-clock-history"></i><span>Mes emprunts</span>
+                    <a class="nav-link" [class.active]="activeSection === 'mes_emprunts'" [attr.aria-current]="activeSection === 'mes_emprunts' ? 'page' : null" (click)="showSection('mes_emprunts')">
+                        <i class="bi bi-clock-history" aria-hidden="true"></i><span>Mes emprunts</span>
                     </a>
                 }
-                
-                <a class="nav-link" [class.active]="activeSection === 'parametres'" (click)="showSection('profil')">
-                    <i class="bi bi-gear"></i><span> Mon profil</span>
+
+                <a class="nav-link" [class.active]="activeSection === 'parametres'" [attr.aria-current]="activeSection === 'parametres' ? 'page' : null" (click)="showSection('profil')">
+                    <i class="bi bi-gear" aria-hidden="true"></i><span> Mon profil</span>
                 </a>
 
             </div>
@@ -31,17 +31,17 @@
             @if (isAdmin) {
                 <div class="nav-section">
                     <h2 class="nav-label">Administration</h2>
-                    <a class="nav-link" [class.active]="activeSection === 'livres'" (click)="showSection('livres')">
-                        <i class="bi bi-book"></i><span>Gestion des Livres</span>
+                    <a class="nav-link" [class.active]="activeSection === 'livres'" [attr.aria-current]="activeSection === 'livres' ? 'page' : null" (click)="showSection('livres')">
+                        <i class="bi bi-book" aria-hidden="true"></i><span>Gestion des Livres</span>
                     </a>
-                    <a class="nav-link" [class.active]="activeSection === 'membres'" (click)="showSection('membres')">
-                        <i class="bi bi-people"></i><span>Gestion des Membres</span>
+                    <a class="nav-link" [class.active]="activeSection === 'membres'" [attr.aria-current]="activeSection === 'membres' ? 'page' : null" (click)="showSection('membres')">
+                        <i class="bi bi-people" aria-hidden="true"></i><span>Gestion des Membres</span>
                     </a>
-                    <a class="nav-link" [class.active]="activeSection === 'emprunts'" (click)="showSection('emprunts')">
-                        <i class="bi bi-clock-history"></i><span>Gestion des emprunts</span>
+                    <a class="nav-link" [class.active]="activeSection === 'emprunts'" [attr.aria-current]="activeSection === 'emprunts' ? 'page' : null" (click)="showSection('emprunts')">
+                        <i class="bi bi-clock-history" aria-hidden="true"></i><span>Gestion des emprunts</span>
                     </a>
-                    <a class="nav-link" [class.active]="activeSection === 'statistiques'" (click)="showSection('statistiques')">
-                        <i class="bi bi-bar-chart"></i><span>Statistiques</span>
+                    <a class="nav-link" [class.active]="activeSection === 'statistiques'" [attr.aria-current]="activeSection === 'statistiques' ? 'page' : null" (click)="showSection('statistiques')">
+                        <i class="bi bi-bar-chart" aria-hidden="true"></i><span>Statistiques</span>
                     </a>
                 </div>
             }
@@ -49,15 +49,15 @@
         </nav>
 
         <div class="sidebar-user">
-            <div class="user-avatar">{{ membre?.prenom?.charAt(0) }}</div>
+            <div class="user-avatar" aria-hidden="true">{{ membre?.prenom?.charAt(0) }}</div>
             <div class="user-info">
                 <span class="user-name">{{ membre?.prenom }} {{ membre?.nom }}</span>
                 <span class="user-role">{{ isAdmin ? 'Administrateur' : 'Membre' }}</span>
             </div>
         </div>
 
-        <a class=" nav btn-deconnexion" routerLink="/deconnexion" title="Se déconnecter">
-            <i class="bi bi-box-arrow-right"></i><span>Déconnexion</span> 
+        <a class=" nav btn-deconnexion" routerLink="/deconnexion" aria-label="Se déconnecter" title="Se déconnecter">
+            <i class="bi bi-box-arrow-right" aria-hidden="true"></i><span>Déconnexion</span> 
         </a>
 
     </aside>
@@ -68,44 +68,44 @@
         @if (activeSection === 'accueil' ) {
             <div class="section-page">
                 <div class="page-header">
-                    <h1><i class="bi bi-house"></i> Tableau de bord</h1>
+                    <h1><i class="bi bi-house" aria-hidden="true"></i> Tableau de bord</h1>
                     <p>Bienvenue, Amadi. Voici un résumé de l'activité de la bibliothèque.</p>
                     <hr/>
                 </div>
 
                 @if (isAdmin) {
                     @if (loading) {
-                        <p>Chargement du tableau de bord...</p>
+                        <p role="status" aria-live="polite">Chargement du tableau de bord...</p>
                     }
 
                     @if (errorMsg) {
-                        <p class="error-msg">{{ errorMsg }}</p>
+                        <p class="error-msg" role="alert">{{ errorMsg }}</p>
                     }
                     @if (statistiques && !loading) {
                         <div class="stats-grid">
                             <div class="stat-card">
-                                <div class="stat-icon blue"><i class="bi bi-book"></i></div>
+                                <div class="stat-icon blue"><i class="bi bi-book" aria-hidden="true"></i></div>
                                 <div class="stat-info">
                                     <div class="stat-value">{{ statistiques.general.livresTotal }}</div>
                                     <div class="stat-label">Livres total</div>
                                 </div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-icon green"><i class="bi bi-people"></i></div>
+                                <div class="stat-icon green"><i class="bi bi-people" aria-hidden="true"></i></div>
                                 <div class="stat-info">
                                     <div class="stat-value">{{ statistiques.general.membresTotal }}</div>
                                     <div class="stat-label">Membres</div>
                                 </div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-icon orange"><i class="bi bi-clock-history"></i></div>
+                                <div class="stat-icon orange"><i class="bi bi-clock-history" aria-hidden="true"></i></div>
                                 <div class="stat-info">
                                     <div class="stat-value">{{ statistiques.general.empruntsEnCours }}</div>
                                     <div class="stat-label">Emprunts en cours</div>
                                 </div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-icon red"><i class="bi bi-exclamation-circle"></i></div>
+                                <div class="stat-icon red"><i class="bi bi-exclamation-circle" aria-hidden="true"></i></div>
                                 <div class="stat-info">
                                     <div class="stat-value">{{ statistiques.general.empruntsEnRetard }}</div>
                                     <div class="stat-label">En retard</div>
@@ -114,34 +114,35 @@
                         </div>
                     }
 
-                    <div class="admin-bloc">
+                    <div class="admin-bloc" aria-labelledby="actions-rapides-admin">
                         <div class="section-title">
-                            <h3><i class="bi bi-lightning-charge"></i> Actions rapides</h3>
+                            <h2 id="actions-rapides-admin"><i class="bi bi-lightning-charge" aria-hidden="true"></i> Actions rapides</h2>
                             <span class="ligne"></span>
                         </div>
                         <div class="actions-grid">
                             <a class="btn-action blue" (click)="showSection('livres')">
-                                <i class="bi bi-book"></i> Gestion des Livres
+                                <i class="bi bi-book" aria-hidden="true"></i> Gestion des Livres
                             </a>
                             <a class="btn-action green" (click)="showSection('membres')">
-                                <i class="bi bi-people"></i> Gestion des Membres
+                                <i class="bi bi-people" aria-hidden="true"></i> Gestion des Membres
                             </a>
                             <a class="btn-action orange" (click)="showSection('emprunts')">
-                                <i class="bi bi-clock-history"></i> Gestion des Emprunts
+                                <i class="bi bi-clock-history" aria-hidden="true"></i> Gestion des Emprunts
                             </a>
                         </div>
                     </div>
 
-                    <div class="admin-bloc">
+                    <div class="admin-bloc" aria-labelledby="emprunts-recents">
                         <div class="section-title">
-                            <h3><i class="bi bi-table"></i> Emprunts récents</h3>
+                            <h2 id="emprunts-recents"><i class="bi bi-table" aria-hidden="true"></i> Emprunts récents</h2>
                             <span class="ligne"></span>
                         </div>
                         <div class="table-responsive">
                             <table>
+                                <caption class="visually-hidden">Liste des emprunts récents</caption>
                                 <thead>
                                     <tr>
-                                        <th>Membre</th><th>Livre</th><th>Date emprunt</th><th>Statut</th>
+                                        <th scope="col">Membre</th><th scope="col">Livre</th><th scope="col">Date emprunt</th><th scope="col">Statut</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -166,14 +167,14 @@
                     </div>
 
                     @if (statistiques) {
-                        <div class="admin-bloc">
+                        <div class="admin-bloc" aria-labelledby="alertes-retards">
                             <div class="section-title">
-                                <h3><i class="bi bi-exclamation-triangle"></i> Alertes retards</h3>
+                                <h2 id="alertes-retards"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Alertes retards</h2>
                                 <span class="ligne"></span>
                             </div>
                             @for (m of statistiques.membresEnRetard; track m.nom_membre + m.titre_livre) {
                                 <div class="alert-item">
-                                    <i class="bi bi-alarm-fill"></i>
+                                    <i class="bi bi-alarm-fill" aria-hidden="true"></i>
                                     <div>
                                         <p>{{ m.nom_membre }} — {{ m.titre_livre }}</p>
                                         <span>En retard depuis {{ joursRetardAbs(m.jours_retard) }} jour(s)</span>
@@ -189,14 +190,14 @@
                     <!-- ACCUEIL MEMBRE -->
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="stat-icon blue"><i class="bi bi-journal-bookmark"></i></div>
+                            <div class="stat-icon blue"><i class="bi bi-journal-bookmark" aria-hidden="true"></i></div>
                             <div class="stat-info">
                                 <div class="stat-value">{{ empruntsEnCours.length }}</div>
                                 <div class="stat-label">Emprunts en cours</div>
                             </div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon red"><i class="bi bi-exclamation-circle"></i></div>
+                            <div class="stat-icon red"><i class="bi bi-exclamation-circle" aria-hidden="true"></i></div>
                             <div class="stat-info">
                                 <div class="stat-value">{{ empruntsEnRetard.length }}</div>
                                 <div class="stat-label">En retard</div>
@@ -204,20 +205,20 @@
                         </div>
                     </div>
 
-                    <div class="admin-bloc">
+                    <div class="admin-bloc" aria-labelledby="actions-rapides-membre">
                         <div class="section-title">
-                            <h3><i class="bi bi-lightning-charge"></i> Actions rapides</h3>
+                            <h2 id="actions-rapides-membre"><i class="bi bi-lightning-charge" aria-hidden="true"></i> Actions rapides</h2>
                             <span class="ligne"></span>
                         </div>
                         <div class="actions-grid">
                             <a class="btn-action green" (click)="showSection('profil')">
-                                <i class="bi bi-person"></i> Mon profil
+                                <i class="bi bi-person" aria-hidden="true"></i> Mon profil
                             </a>
                             <a class="btn-action orange" (click)="showSection('mes_emprunts')">
-                                <i class="bi bi-clock-history"></i> Mes emprunts
+                                <i class="bi bi-clock-history" aria-hidden="true"></i> Mes emprunts
                             </a>
                             <a class="btn-action blue" routerLink="/catalogue">
-                                <i class="bi bi-book"></i> Catalogue
+                                <i class="bi bi-book" aria-hidden="true"></i> Catalogue
                             </a>
                         </div>
                     </div>
@@ -229,25 +230,25 @@
         @if (activeSection === 'mes_emprunts') {
             <div class="section-page">
                 <div class="page-header">
-                    <h1><i class="bi bi-clock-history"></i> Mes emprunts</h1>
+                    <h1><i class="bi bi-clock-history" aria-hidden="true"></i> Mes emprunts</h1>
                     <p>Suivi de vos emprunts en cours et de votre historique.</p>
                     <hr/>
                 </div>
 
                 @if (loading) {
-                    <p>Chargement de vos emprunts...</p>
+                    <p role="status" aria-live="polite">Chargement de vos emprunts...</p>
                 }
 
                 @if (errorMsg) {
-                    <p class="error-message">{{ errorMsg }}</p>
+                    <p class="error-message" role="alert">{{ errorMsg }}</p>
                 }
 
                 @if (!loading && !errorMsg) {
 
                     <!-- EMPRUNTS EN COURS -->
-                    <div class="admin-bloc">
+                    <div class="admin-bloc" aria-labelledby="emprunts-en-cours">
                         <div class="section-title">
-                            <h3><i class="bi bi-clock"></i> Emprunts en cours</h3>
+                            <h2 id="emprunts-en-cours"><i class="bi bi-clock" aria-hidden="true"></i> Emprunts en cours</h2>
                             <span class="ligne"></span>
                         </div>
 
@@ -256,21 +257,22 @@
                         } @else {
                             <div class="table-responsive">
                                 <table>
+                                    <caption class="visually-hidden">Emprunts actuellement en cours</caption>
                                     <thead>
                                         <tr>
-                                            <th>Couverture</th>
-                                            <th>Livre</th>
-                                            <th>Date emprunt</th>
-                                            <th>Date retour prévue</th>
-                                            <th>Statut</th>
-                                            <th>Action</th>
+                                            <th scope="col">Couverture</th>
+                                            <th scope="col">Livre</th>
+                                            <th scope="col">Date emprunt</th>
+                                            <th scope="col">Date retour prévue</th>
+                                            <th scope="col">Statut</th>
+                                            <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @for (emprunt of empruntsEnCours; track emprunt.id_emprunt) {
                                             <tr>
                                                 <td>
-                                                    <img [src]="emprunt.url_couverture" [alt]="emprunt.titre_livre" class="couverture-mini">
+                                                    <img [src]="emprunt.url_couverture" [alt]="'Couverture du livre ' + emprunt.titre_livre" class="couverture-mini">
                                                 </td>
                                                 <td>{{ emprunt.titre_livre }}</td>
                                                 <td>{{ emprunt.date_emprunt }}</td>
@@ -284,12 +286,13 @@
                                                     @if (peutProlonger(emprunt)) {
                                                         <button
                                                             class="btn-prolonger"
+                                                            [attr.aria-label]="'Prolonger l\'emprunt de ' + emprunt.titre_livre"
                                                             (click)="prolonger(emprunt)"
                                                             [disabled]="prolongationEnCours === emprunt.id_emprunt">
                                                             @if (prolongationEnCours === emprunt.id_emprunt) {
-                                                                <i class="bi bi-hourglass-split"></i>
+                                                                <i class="bi bi-hourglass-split" aria-hidden="true"></i>
                                                             } @else {
-                                                                <i class="bi bi-arrow-repeat"></i> Prolonger
+                                                                <i class="bi bi-arrow-repeat" aria-hidden="true"></i> Prolonger
                                                             }
                                                         </button>
                                                     } @else if (estEnRetard(emprunt)) {
@@ -306,15 +309,15 @@
 
                     <!-- BIENTÔT DUS -->
                     @if (empruntsBientotDus.length > 0) {
-                        <div class="admin-bloc">
+                        <div class="admin-bloc" aria-labelledby="livres-a-rendre">
                             <div class="section-title">
-                                <h3><i class="bi bi-alarm"></i> Livres à rendre bientôt</h3>
+                                <h2 id="livres-a-rendre"><i class="bi bi-alarm" aria-hidden="true"></i> Livres à rendre bientôt</h2>
                                 <span class="ligne"></span>
                             </div>
                             @for (emprunt of empruntsBientotDus; track emprunt.id_emprunt) {
                                 <div class="bientot-item">
-                                    <img [src]="emprunt.url_couverture" [alt]="emprunt.titre_livre" class="couverture-mini">
-                                    <i class="bi bi-alarm-fill"></i>
+                                    <img [src]="emprunt.url_couverture" [alt]="'Couverture du livre ' + emprunt.titre_livre" class="couverture-mini">
+                                    <i class="bi bi-alarm-fill" aria-hidden="true"></i>
                                     <div>
                                         <p>{{ emprunt.titre_livre }}</p>
                                         <span>
@@ -327,9 +330,9 @@
                     }
 
                     <!-- HISTORIQUE -->
-                    <div class="admin-bloc">
+                    <div class="admin-bloc" aria-labelledby="historique-emprunts">
                         <div class="section-title">
-                            <h3><i class="bi bi-archive"></i> Historique</h3>
+                            <h2 id="historique-emprunts"><i class="bi bi-archive" aria-hidden="true"></i> Historique</h2>
                             <span class="ligne"></span>
                         </div>
 
@@ -338,20 +341,21 @@
                         } @else {
                             <div class="table-responsive">
                                 <table>
+                                    <caption class="visually-hidden">Historique des emprunts passés</caption>
                                     <thead>
                                         <tr>
-                                            <th>Couverture</th>
-                                            <th>Livre</th>
-                                            <th>Date emprunt</th>
-                                            <th>Date retour</th>
-                                            <th>Statut</th>
+                                            <th scope="col">Couverture</th>
+                                            <th scope="col">Livre</th>
+                                            <th scope="col">Date emprunt</th>
+                                            <th scope="col">Date retour</th>
+                                            <th scope="col">Statut</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @for (emprunt of historiqueEmprunts; track emprunt.id_emprunt) {
                                             <tr>
                                                 <td>
-                                                    <img [src]="emprunt.url_couverture" [alt]="emprunt.titre_livre" class="couverture-mini">
+                                                    <img [src]="emprunt.url_couverture" [alt]="'Couverture du livre ' + emprunt.titre_livre" class="couverture-mini">
                                                 </td>
                                                 <td>{{ emprunt.titre_livre }}</td>
                                                 <td>{{ emprunt.date_emprunt }}</td>
@@ -376,52 +380,52 @@
         @if (activeSection === 'profil') {
             <div class="section-page">
                 <div class="page-header">
-                    <h1><i class="bi bi-gear"></i> Paramètres</h1>
+                    <h1><i class="bi bi-gear" aria-hidden="true"></i> Paramètres</h1>
                     <p>Gérez vos informations personnelles et votre mot de passe.</p>
                     <hr/>
                 </div>
 
-                <div class="admin-bloc">
+                <div class="admin-bloc" aria-labelledby="infos-perso">
                     <div class="section-title">
-                        <h3><i class="bi bi-person-circle"></i> Informations personnelles</h3>
+                        <h2 id="infos-perso"><i class="bi bi-person-circle" aria-hidden="true"></i> Informations personnelles</h2>
                         <span class="ligne"></span>
                     </div>
                     <div class="form-group">
-                        <label>Nom complet</label>
-                        <input type="text" value="Amadi Diallo" />
+                        <label for="profil-nom">Nom complet</label>
+                        <input id="profil-nom" type="text" value="Amadi Diallo" />
                     </div>
                     <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" value="amadi.diallo@email.com" />
+                        <label for="profil-email">Email</label>
+                        <input id="profil-email" type="email" value="amadi.diallo@email.com" />
                     </div>
                     <div class="form-group">
-                        <label>Téléphone</label>
-                        <input type="tel" value="+224 77 000 00 00" />
+                        <label for="profil-tel">Téléphone</label>
+                        <input id="profil-tel" type="tel" value="+224 77 000 00 00" />
                     </div>
                     <button class=" btn btn-save">
-                        <i class="bi bi-check-lg"></i> Enregistrer
+                        <i class="bi bi-check-lg" aria-hidden="true"></i> Enregistrer
                     </button>
                 </div>
 
-                <div class="admin-bloc">
+                <div class="admin-bloc" aria-labelledby="changer-mdp">
                     <div class="section-title">
-                        <h3><i class="bi bi-lock"></i> Changer le mot de passe</h3>
+                        <h2 id="changer-mdp"><i class="bi bi-lock" aria-hidden="true"></i> Changer le mot de passe</h2>
                         <span class="ligne"></span>
                     </div>
                     <div class="form-group">
-                        <label>Mot de passe actuel</label>
-                        <input type="password" placeholder="••••••••" />
+                        <label for="mdp-actuel">Mot de passe actuel</label>
+                        <input id="mdp-actuel" type="password" placeholder="••••••••" />
                     </div>
                     <div class="form-group">
-                        <label>Nouveau mot de passe</label>
-                        <input type="password" placeholder="••••••••" />
+                        <label for="mdp-nouveau">Nouveau mot de passe</label>
+                        <input id="mdp-nouveau" type="password" placeholder="••••••••" />
                     </div>
                     <div class="form-group">
-                        <label>Confirmer le nouveau mot de passe</label>
-                        <input type="password" placeholder="••••••••" />
+                        <label for="mdp-confirmation">Confirmer le nouveau mot de passe</label>
+                        <input id="mdp-confirmation" type="password" placeholder="••••••••" />
                     </div>
                     <button class="btn btn-save">
-                        <i class="bi bi-shield-lock"></i> Mettre à jour
+                        <i class="bi bi-shield-lock" aria-hidden="true"></i> Mettre à jour
                     </button>
                 </div>
             </div>
@@ -431,23 +435,25 @@
         @if (activeSection === 'livres') {
         <div class="section-page">
             <div class="page-header">
-                <h1><i class="bi bi-book"></i>Gestion Livres</h1>
+                <h1><i class="bi bi-book" aria-hidden="true"></i> Gestion Livres</h1>
                 <p>Catalogue complet des livres disponibles.</p>
                 <hr/>
             </div>
-            <div class="admin-bloc">
+            <div class="admin-bloc" aria-labelledby="liste-livres">
                 <div class="section-title">
-                    <h3><i class="bi bi-list-ul"></i> Liste des livres</h3>
+                    <h2 id="liste-livres"><i class="bi bi-list-ul" aria-hidden="true"></i> Liste des livres</h2>
                     <span class="ligne"></span>
                 </div>
 
                 <!-- Bouton ajouter -->
                 <button class="btn btn-save w-100" (click)="ouvrirModalAjout()">
-                    <i class="bi bi-plus-lg"></i> Ajouter un livre
+                    <i class="bi bi-plus-lg" aria-hidden="true"></i> Ajouter un livre
                 </button>
 
                 <!-- Recherche -->
+                <label for="recherche-livre" class="visually-hidden">Rechercher un livre</label>
                 <input
+                    id="recherche-livre"
                     type="text"
                     class="input-recherche"
                     placeholder="Rechercher..."
@@ -456,28 +462,32 @@
                 />
 
                 <!-- Filtres -->
-                <div class="filtres-bar">
+                <div class="filtres-bar" role="group" aria-label="Filtrer les livres par disponibilité">
                     <button
                         class="btn-filtre"
                         [class.active]="filtreActifLivre === 'tous'"
+                        [attr.aria-pressed]="filtreActifLivre === 'tous'"
                         (click)="filtrerLivres('tous')"
                     >Tous les livres</button>
                     <button
                         class="btn-filtre"
                         [class.active]="filtreActifLivre === 'disponible'"
+                        [attr.aria-pressed]="filtreActifLivre === 'disponible'"
                         (click)="filtrerLivres('disponible')"
                     >Livre(s) disponible (s)</button>
                     <button
                         class="btn-filtre"
                         [class.active]="filtreActifLivre === 'indisponible'"
+                        [attr.aria-pressed]="filtreActifLivre === 'indisponible'"
                         (click)="filtrerLivres('indisponible')"
                     >Livre(s) indisponible(s)</button>
                 </div>
 
                 <div class="table-responsive">
                     <table>
+                        <caption class="visually-hidden">Liste des livres du catalogue</caption>
                         <thead>
-                            <tr><th>Titre</th><th>Auteur</th><th>Genre</th><th>Disponibilité</th><th>Actions</th></tr>
+                            <tr><th scope="col">Titre</th><th scope="col">Auteur</th><th scope="col">Genre</th><th scope="col">Disponibilité</th><th scope="col">Actions</th></tr>
                         </thead>
                         <tbody>
                             @for (livre of livresFiltres; track livre.id_livre) {
@@ -494,11 +504,11 @@
                                 </td>
                                 <td class="actions-cell">
                                     <div class="actions-wrapper">
-                                        <button class="btn-icon" title="Modifier ce livre" (click)="ouvrirModalModification(livre)">
-                                            <i class="bi bi-pencil"></i>
+                                        <button class="btn-icon" [attr.aria-label]="'Modifier le livre ' + livre.titre" title="Modifier ce livre" (click)="ouvrirModalModification(livre)">
+                                            <i class="bi bi-pencil" aria-hidden="true"></i>
                                         </button>
-                                        <button class="btn-icon danger" title="Supprimer ce livre" (click)="demanderSuppressionLivre(livre)">
-                                            <i class="bi bi-x-lg"></i>
+                                        <button class="btn-icon danger" [attr.aria-label]="'Supprimer le livre ' + livre.titre" title="Supprimer ce livre" (click)="demanderSuppressionLivre(livre)">
+                                            <i class="bi bi-x-lg" aria-hidden="true"></i>
                                         </button>
                                     </div>
                                 </td>
@@ -518,77 +528,77 @@
         <!-- MODAL AJOUT / MODIFICATION LIVRE -->
         @if (showModalLivre) {
         <div class="modal-overlay" (click)="fermerModalLivre()">
-            <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-content" role="dialog" aria-modal="true" [attr.aria-labelledby]="'modal-livre-titre'" (click)="$event.stopPropagation()">
                 <div class="modal-header">
-                    <h3>
-                        <i class="bi" [class.bi-plus-lg]="!modeEditionLivre" [class.bi-pencil]="modeEditionLivre"></i>
+                    <h2 id="modal-livre-titre">
+                        <i class="bi" [class.bi-plus-lg]="!modeEditionLivre" [class.bi-pencil]="modeEditionLivre" aria-hidden="true"></i>
                         {{ modeEditionLivre ? 'Modifier le livre' : 'Ajouter un livre' }}
-                    </h3>
-                    <button class="btn-close-modal" (click)="fermerModalLivre()">
-                        <i class="bi bi-x-lg"></i>
+                    </h2>
+                    <button class="btn-close-modal" aria-label="Fermer la fenêtre" (click)="fermerModalLivre()">
+                        <i class="bi bi-x-lg" aria-hidden="true"></i>
                     </button>
                 </div>
 
                 <div class="modal-body">
                     @if (messageErreurLivre) {
-                    <div class="alert-erreur">
-                        <i class="bi bi-exclamation-triangle"></i> {{ messageErreurLivre }}
+                    <div class="alert-erreur" role="alert">
+                        <i class="bi bi-exclamation-triangle" aria-hidden="true"></i> {{ messageErreurLivre }}
                     </div>
                     }
 
                     <form (ngSubmit)="soumettreLivre()">
                         <div class="form-group">
-                            <label>Titre *</label>
-                            <input type="text" class="form-control" [(ngModel)]="livreSelectionne.titre" name="titre" required />
+                            <label for="livre-titre">Titre *</label>
+                            <input id="livre-titre" type="text" class="form-control" [(ngModel)]="livreSelectionne.titre" name="titre" required />
                         </div>
 
                         <div class="form-group">
-                            <label>Auteur *</label>
-                            <input type="text" class="form-control" [(ngModel)]="livreSelectionne.auteur" name="auteur" required />
+                            <label for="livre-auteur">Auteur *</label>
+                            <input id="livre-auteur" type="text" class="form-control" [(ngModel)]="livreSelectionne.auteur" name="auteur" required />
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Année de publication</label>
-                                <input type="number" class="form-control" [(ngModel)]="livreSelectionne.annee_publication" name="annee_publication" />
+                                <label for="livre-annee">Année de publication</label>
+                                <input id="livre-annee" type="number" class="form-control" [(ngModel)]="livreSelectionne.annee_publication" name="annee_publication" />
                             </div>
 
                             <div class="form-group">
-                                <label>Catégorie</label>
-                                <input type="text" class="form-control" [(ngModel)]="livreSelectionne.categorie" name="categorie" />
+                                <label for="livre-categorie">Catégorie</label>
+                                <input id="livre-categorie" type="text" class="form-control" [(ngModel)]="livreSelectionne.categorie" name="categorie" />
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label>Description</label>
-                            <textarea class="form-control" rows="3" [(ngModel)]="livreSelectionne.description" name="description"></textarea>
+                            <label for="livre-description">Description</label>
+                            <textarea id="livre-description" class="form-control" rows="3" [(ngModel)]="livreSelectionne.description" name="description"></textarea>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Nombre d'exemplaires</label>
-                                <input type="number" min="0" class="form-control" [(ngModel)]="livreSelectionne.nb_exemplaires" name="nb_exemplaires" />
+                                <label for="livre-nb-exemplaires">Nombre d'exemplaires</label>
+                                <input id="livre-nb-exemplaires" type="number" min="0" class="form-control" [(ngModel)]="livreSelectionne.nb_exemplaires" name="nb_exemplaires" />
                             </div>
 
                             <div class="form-group">
-                                <label>Nombre disponibles</label>
-                                <input type="number" min="0" class="form-control" [(ngModel)]="livreSelectionne.nb_disponibles" name="nb_disponibles" />
+                                <label for="livre-nb-disponibles">Nombre disponibles</label>
+                                <input id="livre-nb-disponibles" type="number" min="0" class="form-control" [(ngModel)]="livreSelectionne.nb_disponibles" name="nb_disponibles" />
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label>Image de couverture</label>
+                            <label for="livre-image">Image de couverture</label>
 
                             @if (previewImageLivre) {
                             <div class="preview-image-container">
-                                <img [src]="previewImageLivre" alt="Aperçu couverture" class="preview-image" />
-                                <button type="button" class="btn-remove-image" (click)="supprimerImageLivre()">
-                                    <i class="bi bi-x-lg"></i>
+                                <img [src]="previewImageLivre" alt="Aperçu de la couverture sélectionnée" class="preview-image" />
+                                <button type="button" class="btn-remove-image" aria-label="Supprimer l'image de couverture" (click)="supprimerImageLivre()">
+                                    <i class="bi bi-x-lg" aria-hidden="true"></i>
                                 </button>
                             </div>
                             }
 
-                            <input type="file" accept="image/*" class="form-control" (change)="onFichierImageSelectionne($event)" />
+                            <input id="livre-image" type="file" accept="image/*" class="form-control" (change)="onFichierImageSelectionne($event)" />
                         </div>
 
                         <div class="modal-footer">
@@ -610,11 +620,11 @@
         <!-- MODAL CONFIRMATION SUPPRESSION -->
         @if (showModalSuppressionLivre) {
         <div class="modal-overlay" (click)="annulerSuppressionLivre()">
-            <div class="modal-content modal-small" (click)="$event.stopPropagation()">
+            <div class="modal-content modal-small" role="dialog" aria-modal="true" aria-labelledby="modal-suppression-titre" (click)="$event.stopPropagation()">
                 <div class="modal-header">
-                    <h3><i class="bi bi-exclamation-triangle"></i> Confirmer la suppression</h3>
-                    <button class="btn-close-modal" (click)="annulerSuppressionLivre()">
-                        <i class="bi bi-x-lg"></i>
+                    <h2 id="modal-suppression-titre"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> Confirmer la suppression</h2>
+                    <button class="btn-close-modal" aria-label="Fermer la fenêtre" (click)="annulerSuppressionLivre()">
+                        <i class="bi bi-x-lg" aria-hidden="true"></i>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -633,21 +643,23 @@
         @if (activeSection === 'membres') {
         <div class="section-page">
             <div class="page-header">
-            <h1><i class="bi bi-people"></i>Gestion Membres</h1>
+            <h1><i class="bi bi-people" aria-hidden="true"></i> Gestion Membres</h1>
             <p>Gestion des membres de la bibliothèque.</p>
             <hr/>
             </div>
-            <div class="admin-bloc">
+            <div class="admin-bloc" aria-labelledby="liste-membres">
             <div class="section-title">
-                <h3><i class="bi bi-list-ul"></i> Liste des membres</h3>
+                <h2 id="liste-membres"><i class="bi bi-list-ul" aria-hidden="true"></i> Liste des membres</h2>
                 <span class="ligne"></span>
             </div>
 
             <button class="btn btn-save w-100" routerLink="/inscription">
-                <i class="bi bi-plus-lg"></i> Ajouter un membre
+                <i class="bi bi-plus-lg" aria-hidden="true"></i> Ajouter un membre
             </button>
 
+            <label for="recherche-membre" class="visually-hidden">Rechercher un membre</label>
             <input
+                id="recherche-membre"
                 type="text"
                 class="input-recherche"
                 placeholder="Rechercher..."
@@ -655,23 +667,24 @@
                 (ngModelChange)="onRecherche()"
             />
 
-            <div class="filtres-bar">
-                <button class="btn-filtre" [class.active]="filtreActuel === 'tous'" (click)="setFiltre('tous')">Tous les membres</button>
-                <button class="btn-filtre" [class.active]="filtreActuel === 'actif'" (click)="setFiltre('actif')"> Membre(s) actif(s)</button>
-                <button class="btn-filtre" [class.active]="filtreActuel === 'inactif'" (click)="setFiltre('inactif')">Membre(s) inactif(s)</button>
+            <div class="filtres-bar" role="group" aria-label="Filtrer les membres par statut">
+                <button class="btn-filtre" [class.active]="filtreActuel === 'tous'" [attr.aria-pressed]="filtreActuel === 'tous'" (click)="setFiltre('tous')">Tous les membres</button>
+                <button class="btn-filtre" [class.active]="filtreActuel === 'actif'" [attr.aria-pressed]="filtreActuel === 'actif'" (click)="setFiltre('actif')"> Membre(s) actif(s)</button>
+                <button class="btn-filtre" [class.active]="filtreActuel === 'inactif'" [attr.aria-pressed]="filtreActuel === 'inactif'" (click)="setFiltre('inactif')">Membre(s) inactif(s)</button>
             </div>
 
             @if (loading) {
-                <p>Chargement...</p>
+                <p role="status" aria-live="polite">Chargement...</p>
             }
             @if (errorMsg) {
-                <p class="text-danger">{{ errorMsg }}</p>
+                <p class="text-danger" role="alert">{{ errorMsg }}</p>
             }
 
             <div class="table-responsive">
                 <table>
+                <caption class="visually-hidden">Liste des membres de la bibliothèque</caption>
                 <thead>
-                    <tr><th>Nom</th><th>Email</th><th>Rôle</th><th>Statut</th><th>Actions</th></tr>
+                    <tr><th scope="col">Nom</th><th scope="col">Email</th><th scope="col">Rôle</th><th scope="col">Statut</th><th scope="col">Actions</th></tr>
                 </thead>
                 <tbody>
                     @for (membre of membresFiltres; track membre.id_membre) {
@@ -691,10 +704,11 @@
                             <label class="switch">
                             <input
                                 type="checkbox"
+                                [attr.aria-label]="'Changer le statut de ' + membre.prenom + ' ' + membre.nom"
                                 [checked]="membre.is_actif"
                                 (change)="toggleStatut(membre)"
                             />
-                            <span class="slider"></span>
+                            <span class="slider" aria-hidden="true"></span>
                             </label>
                         </div>
                         </td>
@@ -711,25 +725,27 @@
         @if (activeSection === 'emprunts') {
             <div class="section-page">
                 <div class="page-header">
-                    <h1><i class="bi bi-clock-history"></i> Gestion des emprunts</h1>
+                    <h1><i class="bi bi-clock-history" aria-hidden="true"></i> Gestion des emprunts</h1>
                     <p>Suivi et gestion de tous les emprunts de la bibliothèque.</p>
                     <hr/>
                 </div>
 
                 <!-- LISTE DES EMPRUNTS -->
-                <div class="admin-bloc">
+                <div class="admin-bloc" aria-labelledby="liste-emprunts">
                     <div class="section-title">
-                        <h3><i class="bi bi-journal-bookmark"></i> Liste des emprunts</h3>
+                        <h2 id="liste-emprunts"><i class="bi bi-journal-bookmark" aria-hidden="true"></i> Liste des emprunts</h2>
                         <span class="ligne"></span>
                     </div>
 
                     <!-- Bouton ajouter -->
                     <button class="btn btn-save w-100" (click)="ouvrirModalEmprunt()">
-                        <i class="bi bi-plus-lg"></i> Nouvel emprunt
+                        <i class="bi bi-plus-lg" aria-hidden="true"></i> Nouvel emprunt
                     </button>
 
                     <!-- Recherche -->
+                    <label for="recherche-emprunt" class="visually-hidden">Rechercher un emprunt par membre ou livre</label>
                     <input
+                        id="recherche-emprunt"
                         type="text"
                         class="input-recherche"
                         placeholder="Rechercher par membre ou livre..."
@@ -738,33 +754,35 @@
                     />
 
                     <!-- Filtres -->
-                    <div class="filtres-bar">
+                    <div class="filtres-bar" role="group" aria-label="Filtrer les emprunts">
                         @for (f of filtresEmprunt; track f.valeur) {
                             <button
                                 class="btn-filtre"
                                 [class.active]="filtreActifEmprunt === f.valeur"
+                                [attr.aria-pressed]="filtreActifEmprunt === f.valeur"
                                 (click)="filtrerEmprunts(f.valeur)"
                             >{{ f.libelle }}</button>
                         }
                     </div>
 
                     @if (chargementEmprunt) {
-                        <p>Chargement...</p>
+                        <p role="status" aria-live="polite">Chargement...</p>
                     }
                     @if (errorMsgEmprunt) {
-                        <p class="text-danger">{{ errorMsgEmprunt }}</p>
+                        <p class="text-danger" role="alert">{{ errorMsgEmprunt }}</p>
                     }
 
                     <div class="table-responsive">
                         <table>
+                            <caption class="visually-hidden">Liste de tous les emprunts</caption>
                             <thead>
                                 <tr>
-                                    <th>Membre</th>
-                                    <th>Livre</th>
-                                    <th>Date emprunt</th>
-                                    <th>Date retour prévue</th>
-                                    <th>Statut</th>
-                                    <th>Actions</th>
+                                    <th scope="col">Membre</th>
+                                    <th scope="col">Livre</th>
+                                    <th scope="col">Date emprunt</th>
+                                    <th scope="col">Date retour prévue</th>
+                                    <th scope="col">Statut</th>
+                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -782,12 +800,12 @@
                                     <td class="actions-cell">
                                         <div class="actions-wrapper">
                                             @if (!emprunt.date_retour_effective) {
-                                                <button class="btn-icon" title="Marquer rendu" (click)="demanderRetourLivre(emprunt)">
-                                                    <i class="bi bi-check-lg"></i>
+                                                <button class="btn-icon" [attr.aria-label]="'Marquer comme rendu : ' + emprunt.titre_livre" title="Marquer rendu" (click)="demanderRetourLivre(emprunt)">
+                                                    <i class="bi bi-check-lg" aria-hidden="true"></i>
                                                 </button>
                                             }
-                                            <button class="btn-icon" title="Voir l'historique" (click)="ouvrirModalHistorique(emprunt)">
-                                                <i class="bi bi-clock-history"></i>
+                                            <button class="btn-icon" [attr.aria-label]="'Voir l\'historique de ' + emprunt.titre_livre" title="Voir l'historique" (click)="ouvrirModalHistorique(emprunt)">
+                                                <i class="bi bi-clock-history" aria-hidden="true"></i>
                                             </button>
                                         </div>
                                     </td>
@@ -806,84 +824,84 @@
 
         <!-- MODAL CONFIRMATION RETOUR EMPRUNT -->
         @if (showModalRetourEmprunt) {
-        <div class="modal-overlay" (click)="annulerRetourLivre()">
-            <div class="modal-content modal-small" (click)="$event.stopPropagation()">
-                <div class="modal-header">
-                    <h3><i class="bi bi-check-circle"></i> Confirmer le retour</h3>
-                    <button class="btn-close-modal" (click)="annulerRetourLivre()">
-                        <i class="bi bi-x-lg"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Confirmer le retour du livre <strong>{{ empruntARetourner?.titre_livre }}</strong> ?</p>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-cancel" (click)="annulerRetourLivre()">Annuler</button>
-                    <button class="btn btn-primary" (click)="confirmerRetourLivre()">Confirmer</button>
+            <div class="modal-overlay" (click)="annulerRetourLivre()">
+                <div class="modal-content modal-small" role="dialog" aria-modal="true" aria-labelledby="modal-retour-titre" (click)="$event.stopPropagation()">
+                    <div class="modal-header">
+                        <h2 id="modal-retour-titre"><i class="bi bi-check-circle" aria-hidden="true"></i> Confirmer le retour</h2>
+                        <button class="btn-close-modal" aria-label="Fermer la fenêtre" (click)="annulerRetourLivre()">
+                            <i class="bi bi-x-lg" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Confirmer le retour du livre <strong>{{ empruntARetourner?.titre_livre }}</strong> ?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-cancel" (click)="annulerRetourLivre()">Annuler</button>
+                        <button class="btn btn-primary" (click)="confirmerRetourLivre()">Confirmer</button>
+                    </div>
                 </div>
             </div>
-        </div>
         }
 
         <!-- MODAL NOUVEL EMPRUNT -->
         @if (showModalEmprunt) {
-        <div class="modal-overlay" (click)="fermerModalEmprunt()">
-            <div class="modal-content modal-small" (click)="$event.stopPropagation()">
-                <div class="modal-header">
-                    <h3><i class="bi bi-plus-lg"></i> Nouvel emprunt</h3>
-                    <button class="btn-close-modal" (click)="fermerModalEmprunt()">
-                        <i class="bi bi-x-lg"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    @if (messageErreurEmprunt) {
-                        <p class="text-danger">{{ messageErreurEmprunt }}</p>
-                    }
-
-                    <div class="form-group">
-                        <label>Membre</label>
-                        <select class="form-control" [(ngModel)]="nouvelEmprunt.id_membre" name="id_membre">
-                            <option [ngValue]="null">-- Sélectionner un membre --</option>
-                            @for (m of membres; track m.id_membre) {
-                                <option [ngValue]="m.id_membre">{{ m.prenom }} {{ m.nom }} ({{ m.email }})</option>
-                            }
-                        </select>
+            <div class="modal-overlay" (click)="fermerModalEmprunt()">
+                <div class="modal-content modal-small" role="dialog" aria-modal="true" aria-labelledby="modal-nouvel-emprunt-titre" (click)="$event.stopPropagation()">
+                    <div class="modal-header">
+                        <h2 id="modal-nouvel-emprunt-titre"><i class="bi bi-plus-lg" aria-hidden="true"></i> Nouvel emprunt</h2>
+                        <button class="btn-close-modal" aria-label="Fermer la fenêtre" (click)="fermerModalEmprunt()">
+                            <i class="bi bi-x-lg" aria-hidden="true"></i>
+                        </button>
                     </div>
-
-                    <div class="form-group">
-                        <label>Livre</label>
-                        <select class="form-control" [(ngModel)]="nouvelEmprunt.id_livre" name="id_livre">
-                            <option [ngValue]="null">-- Sélectionner un livre --</option>
-                            @for (l of livres; track l.id_livre) {
-                                <option [ngValue]="l.id_livre" [disabled]="l.nb_disponibles === 0">
-                                    {{ l.titre }} ({{ l.nb_disponibles }} disponible(s))
-                                </option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-cancel" (click)="fermerModalEmprunt()">Annuler</button>
-                    <button type="button" class="btn btn-save" [disabled]="chargementEmprunt" (click)="soumettreEmprunt()">
-                        @if (chargementEmprunt) {
-                            <span>Création...</span>
-                        } @else {
-                            <span>Créer l'emprunt</span>
+                    <div class="modal-body">
+                        @if (messageErreurEmprunt) {
+                            <p class="text-danger" role="alert">{{ messageErreurEmprunt }}</p>
                         }
-                    </button>
+
+                        <div class="form-group">
+                            <label for="emprunt-membre">Membre</label>
+                            <select id="emprunt-membre" class="form-control" [(ngModel)]="nouvelEmprunt.id_membre" name="id_membre">
+                                <option [ngValue]="null">-- Sélectionner un membre --</option>
+                                @for (m of membres; track m.id_membre) {
+                                    <option [ngValue]="m.id_membre">{{ m.prenom }} {{ m.nom }} ({{ m.email }})</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emprunt-livre">Livre</label>
+                            <select id="emprunt-livre" class="form-control" [(ngModel)]="nouvelEmprunt.id_livre" name="id_livre">
+                                <option [ngValue]="null">-- Sélectionner un livre --</option>
+                                @for (l of livres; track l.id_livre) {
+                                    <option [ngValue]="l.id_livre" [disabled]="l.nb_disponibles === 0">
+                                        {{ l.titre }} ({{ l.nb_disponibles }} disponible(s))
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-cancel" (click)="fermerModalEmprunt()">Annuler</button>
+                        <button type="button" class="btn btn-save" [disabled]="chargementEmprunt" (click)="soumettreEmprunt()">
+                            @if (chargementEmprunt) {
+                                <span>Création...</span>
+                            } @else {
+                                <span>Créer l'emprunt</span>
+                            }
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
         }
 
         <!-- MODAL HISTORIQUE EMPRUNT -->
         @if (modalHistoriqueOuverte) {
             <div class="modal-overlay" (click)="fermerModalHistorique()">
-                <div class="modal-content modal-historique" (click)="$event.stopPropagation()">
+                <div class="modal-content modal-historique" role="dialog" aria-modal="true" aria-labelledby="modal-historique-titre" (click)="$event.stopPropagation()">
                     <div class="modal-header">
-                        <h3><i class="bi bi-clock-history"></i> Historique de l'emprunt</h3>
-                        <button class="btn-close-modal" (click)="fermerModalHistorique()">
-                            <i class="bi bi-x-lg"></i>
+                        <h2 id="modal-historique-titre"><i class="bi bi-clock-history" aria-hidden="true"></i> Historique de l'emprunt</h2>
+                        <button class="btn-close-modal" aria-label="Fermer la fenêtre" (click)="fermerModalHistorique()">
+                            <i class="bi bi-x-lg" aria-hidden="true"></i>
                         </button>
                     </div>
 
@@ -896,7 +914,7 @@
                         }
 
                         @if (chargementHistorique) {
-                            <div class="text-center">
+                            <div class="text-center" role="status" aria-live="polite">
                                 <span>Chargement...</span>
                             </div>
                         }
@@ -911,13 +929,13 @@
                             <div class="timeline">
                                 @for (event of historiqueEmprunt; track event.date_changement) {
                                     <div class="timeline-item">
-                                        <div class="timeline-dot" [ngClass]="getStatutClass(event.nouveau_statut)"></div>
+                                        <div class="timeline-dot" [ngClass]="getStatutClass(event.nouveau_statut)" aria-hidden="true"></div>
                                         <div class="timeline-content">
                                             <div class="timeline-header">
                                                 <span class="badge" [ngClass]="getStatutClass(event.ancien_statut)">
                                                     {{ getStatutLabel(event.ancien_statut) }}
                                                 </span>
-                                                <i class="bi bi-arrow-right"></i>
+                                                <i class="bi bi-arrow-right" aria-hidden="true"></i>
                                                 <span class="badge" [ngClass]="getStatutClass(event.nouveau_statut)">
                                                     {{ getStatutLabel(event.nouveau_statut) }}
                                                 </span>
@@ -939,45 +957,45 @@
         @if (activeSection === 'statistiques') {
             <div class="section-page">
                 <div class="page-header">
-                    <h1><i class="bi bi-bar-chart"></i> Statistiques</h1>
+                    <h1><i class="bi bi-bar-chart" aria-hidden="true"></i> Statistiques</h1>
                     <p>Vue d'ensemble des activités de la bibliothèque.</p>
                     <hr/>
                 </div>
 
                 @if (chargementStats) {
-                    <p>Chargement des statistiques...</p>
+                    <p role="status" aria-live="polite">Chargement des statistiques...</p>
                 }
 
                 @if (errorMsgStats) {
-                    <p class="error-msg">{{ errorMsgStats }}</p>
+                    <p class="error-msg" role="alert">{{ errorMsgStats }}</p>
                 }
 
                 @if (statistiques && !chargementStats) {
                     <!-- Chiffres clés généraux -->
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="stat-icon blue"><i class="bi bi-book"></i></div>
+                            <div class="stat-icon blue"><i class="bi bi-book" aria-hidden="true"></i></div>
                             <div class="stat-info">
                                 <div class="stat-value">{{ statistiques.general.livresTotal }}</div>
                                 <div class="stat-label">Livres total</div>
                             </div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon green"><i class="bi bi-people"></i></div>
+                            <div class="stat-icon green"><i class="bi bi-people" aria-hidden="true"></i></div>
                             <div class="stat-info">
                                 <div class="stat-value">{{ statistiques.general.membresTotal }}</div>
                                 <div class="stat-label">Membres</div>
                             </div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon orange"><i class="bi bi-clock-history"></i></div>
+                            <div class="stat-icon orange"><i class="bi bi-clock-history" aria-hidden="true"></i></div>
                             <div class="stat-info">
                                 <div class="stat-value">{{ statistiques.general.empruntsEnCours }}</div>
                                 <div class="stat-label">Emprunts en cours</div>
                             </div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon red"><i class="bi bi-exclamation-circle"></i></div>
+                            <div class="stat-icon red"><i class="bi bi-exclamation-circle" aria-hidden="true"></i></div>
                             <div class="stat-info">
                                 <div class="stat-value">{{ statistiques.general.empruntsEnRetard }}</div>
                                 <div class="stat-label">En retard</div>
@@ -988,21 +1006,21 @@
                     <!-- Activité du mois -->
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <div class="stat-icon blue"><i class="bi bi-arrow-down-circle"></i></div>
+                            <div class="stat-icon blue"><i class="bi bi-arrow-down-circle" aria-hidden="true"></i></div>
                             <div class="stat-info">
                                 <div class="stat-value">{{ statistiques.activite.empruntsCeMois }}</div>
                                 <div class="stat-label">Emprunts ce mois</div>
                             </div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon green"><i class="bi bi-arrow-up-circle"></i></div>
+                            <div class="stat-icon green"><i class="bi bi-arrow-up-circle" aria-hidden="true"></i></div>
                             <div class="stat-info">
                                 <div class="stat-value">{{ statistiques.activite.retoursCeMois }}</div>
                                 <div class="stat-label">Retours ce mois</div>
                             </div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-icon red"><i class="bi bi-graph-down"></i></div>
+                            <div class="stat-icon red"><i class="bi bi-graph-down" aria-hidden="true"></i></div>
                             <div class="stat-info">
                                 <div class="stat-value">{{ statistiques.activite.tauxDeRetard }}%</div>
                                 <div class="stat-label">Taux de retard</div>
@@ -1011,15 +1029,16 @@
                     </div>
 
                     <!-- Top livres empruntés -->
-                    <div class="admin-bloc">
+                    <div class="admin-bloc" aria-labelledby="top-livres">
                         <div class="section-title">
-                            <h3><i class="bi bi-trophy"></i> Top livres empruntés</h3>
+                            <h2 id="top-livres"><i class="bi bi-trophy" aria-hidden="true"></i> Top livres empruntés</h2>
                             <span class="ligne"></span>
                         </div>
                         <div class="table-responsive">
                             <table>
+                                <caption class="visually-hidden">Classement des livres les plus empruntés</caption>
                                 <thead>
-                                    <tr><th>#</th><th>Livre</th><th>Auteur</th><th>Nb emprunts</th></tr>
+                                    <tr><th scope="col">#</th><th scope="col">Livre</th><th scope="col">Auteur</th><th scope="col">Nb emprunts</th></tr>
                                 </thead>
                                 <tbody>
                                     @for (livre of statistiques.topLivres; track livre.titre; let i = $index) {
@@ -1039,15 +1058,15 @@
                     </div>
 
                     <!-- Répartition par genre -->
-                    <div class="admin-bloc">
+                    <div class="admin-bloc" aria-labelledby="repartition-genre">
                         <div class="section-title">
-                            <h3><i class="bi bi-tags"></i> Répartition par genre</h3>
+                            <h2 id="repartition-genre"><i class="bi bi-tags" aria-hidden="true"></i> Répartition par genre</h2>
                             <span class="ligne"></span>
                         </div>
 
                         <!-- Camembert -->
                         @if (pieChartData) {
-                            <div class="chart-container" style="max-width: 400px; margin: 0 auto 2rem;">
+                            <div class="chart-container" style="max-width: 400px; margin: 0 auto 2rem;" role="img" aria-label="Diagramme circulaire de répartition des livres par genre">
                                 <c-chart
                                     type="pie"
                                     [data]="pieChartData"
@@ -1057,13 +1076,15 @@
                         }
                     </div>
 
-                    <div class="chart-card">
+                    <div class="chart-card" aria-labelledby="connexions-titre">
                         <div class="chart-header">
-                            <h3>
-                                <i class="icon-clock"></i> Connexions des 7 derniers jours
-                            </h3>
+                            <h2 id="connexions-titre">
+                                <i class="icon-clock" aria-hidden="true"></i> Connexions des 7 derniers jours
+                            </h2>
 
+                            <label for="select-membre-connexion" class="visually-hidden">Filtrer par membre</label>
                             <select
+                                id="select-membre-connexion"
                                 class="membre-select"
                                 [(ngModel)]="membreSelectionneConnexion"
                                 (change)="onChangementMembreConnexion()">
@@ -1078,26 +1099,28 @@
 
                         <div class="chart-wrapper">
                             @if (lineChartData?.labels?.length) {
-                                <c-chart
-                                    type="line"
-                                    [data]="lineChartData"
-                                    [options]="lineChartOptions">
-                                </c-chart>
+                                <div role="img" aria-label="Graphique des connexions sur les 7 derniers jours">
+                                    <c-chart
+                                        type="line"
+                                        [data]="lineChartData"
+                                        [options]="lineChartOptions">
+                                    </c-chart>
+                                </div>
                             } @else {
                                 <p class="no-data">Aucune donnée de connexion disponible.</p>
                             }
                         </div>
                     </div>
-                    
+
                     <!-- Nouveaux membres -->
-                    <div class="admin-bloc">
+                    <div class="admin-bloc" aria-labelledby="nouveaux-membres">
                         <div class="section-title">
-                            <h3><i class="bi bi-person-plus"></i> Nouveaux membres ce mois-ci</h3>
+                            <h2 id="nouveaux-membres"><i class="bi bi-person-plus" aria-hidden="true"></i> Nouveaux membres ce mois-ci</h2>
                             <span class="ligne"></span>
                         </div>
                         @for (m of statistiques.nouveauxMembres; track m.nom_complet) {
                             <div class="bientot-item">
-                                <i class="bi bi-person-check-fill"></i>
+                                <i class="bi bi-person-check-fill" aria-hidden="true"></i>
                                 <div>
                                     <p>{{ m.nom_complet }}</p>
                                     <span>Inscrit(e) le {{ m.date_inscription }}</span>
@@ -1114,4 +1137,4 @@
 
     </div>
 
-</div>
+</div>        
